@@ -1,6 +1,7 @@
 package com.example.itemmanager.ui.onboarding
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -84,6 +85,7 @@ private val pages = listOf(
  * 左右滑动浏览，支持"跳过"，最后一页点"开始使用"进入主页
  * @param onFinished 跳过或完成时回调（由外层标记已完成并进入主界面）
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(onFinished: () -> Unit) {
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { pages.size })

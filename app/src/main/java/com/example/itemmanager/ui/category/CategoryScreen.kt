@@ -63,12 +63,12 @@ fun CategoryScreen(
     dashboardViewModel: DashboardViewModel,
     onItemClick: (Long) -> Unit
 ) {
-    val items by dashboardViewModel.items.collectAsState()
+    val allItems by dashboardViewModel.items.collectAsState()
     // 当前展开的分类，null 表示显示分类网格
     var selectedCategory by remember { mutableStateOf<String?>(null) }
 
     // 按分类分组
-    val grouped: Map<String, List<ItemEntity>> = items.groupBy { it.category }
+    val grouped: Map<String, List<ItemEntity>> = allItems.groupBy { it.category }
 
     Scaffold(
         topBar = {
