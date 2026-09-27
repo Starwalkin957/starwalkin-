@@ -2,6 +2,7 @@ package com.example.itemmanager.util
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -10,9 +11,48 @@ import java.util.Locale
 
 /**
  * 图片工具类
- * 负责将用户选择的图片复制到 App 私有目录，确保图片持久化存储
+ * 负责将用户选择/拍摄的图片复制到 App 私有目录，确保图片持久化存储
  */
 object ImageUtils {
+
+    /**
+     * 创建用于相机拍照的临时图片文件
+     * @param context 上下文
+     * @return 临时文件，失败返回 null
+     */
+    fun createCameraImageFile(context: Context): File? {
+        return try {
+            val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+            val fileName = "camera_${timeStamp}.jpg"
+            val directory = File(context.filesDir, "images")
+            if (!directory.exists()) {
+                directory.mkdirs()
+            }
+            File(directory, fileName)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    /**
+     * 获取文件的 FileProvider Uri，用于向相机应用共享文件
+     * @param context 上下文
+     * @param file 要共享的文件
+     * @return 对应的 content Uri
+     */
+    fun getUriForFile(context: Context, file: File): Uri? {
+        return try {
+            FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                file
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 
     /**
      * 将外部 Uri 指向的图片复制到 App 内部存储

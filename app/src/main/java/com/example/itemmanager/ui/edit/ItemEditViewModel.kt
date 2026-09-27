@@ -49,6 +49,10 @@ class ItemEditViewModel(
     private val _tempImageUri = MutableStateFlow<Uri?>(null)
     val tempImageUri: StateFlow<Uri?> = _tempImageUri
 
+    // 相机拍照后的图片文件路径（照片已直接保存到内部存储）
+    private val _cameraImagePath = MutableStateFlow<String?>(null)
+    val cameraImagePath: StateFlow<String?> = _cameraImagePath
+
     // 是否为编辑模式
     val isEditing: Boolean = editingItemId != null
 
@@ -77,6 +81,7 @@ class ItemEditViewModel(
                 _location.value = it.location
                 _quantity.value = it.quantity.toString()
                 _imagePath.value = it.imagePath
+                _cameraImagePath.value = it.imagePath
             }
         }
     }
@@ -97,11 +102,28 @@ class ItemEditViewModel(
     /** 用户从相册选择图片后，记录临时 Uri */
     fun onImageSelected(uri: Uri?) {
         _tempImageUri.value = uri
+        _cameraImagePath.value = null
+    }
+
+    /**
+     * 相机拍照完成后调用
+     * @param path 拍摄照片的文件绝对路径（已保存到 App 内部存储）
+     */
+    fun onPhotoTaken(path: String?) {
+        _cameraImagePath.value = path
+        _tempImageUri.value = null
     }
 
     /** 清除已选图片 */
     fun clearImage() {
+        // 如果是刚拍的照片（还没保存），删除临时文件
+        _cameraImagePath.value?.let { path ->
+            if (_imagePath.value != path) {
+                ImageUtils.deleteImageFile(path)
+            }
+        }
         _tempImageUri.value = null
+        _cameraImagePath.value = null
         _imagePath.value = null
     }
 
@@ -122,8 +144,19 @@ class ItemEditViewModel(
         }
 
         viewModelScope.launch {
-            // 处理图片：如果有新选择的图片，复制到内部存储
+            // 处理图片
             var finalImagePath = _imagePath.value
+
+            // 情况1：相机拍摄的照片（已直接保存到内部存储）
+            _cameraImagePath.value?.let { cameraPath ->
+                // 如果是编辑且有旧图片，删除旧图片
+                if (isEditing && _imagePath.value != null && _imagePath.value != cameraPath) {
+                    ImageUtils.deleteImageFile(_imagePath.value)
+                }
+                finalImagePath = cameraPath
+            }
+
+            // 情况2：从相册选择的图片，需要复制到内部存储
             _tempImageUri.value?.let { uri ->
                 val savedPath = ImageUtils.copyImageToInternalStorage(application, uri)
                 if (savedPath != null) {

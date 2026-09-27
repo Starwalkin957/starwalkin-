@@ -39,7 +39,8 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun ItemManagerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    // 关闭动态取色，确保所有设备显示统一的蓝色品牌主题
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

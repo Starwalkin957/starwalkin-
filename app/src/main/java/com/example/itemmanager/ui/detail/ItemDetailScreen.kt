@@ -27,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -193,15 +194,18 @@ fun ItemDetailContent(item: ItemEntity) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 分类标签
-        Text(
-            text = item.category,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .clip(CircleShape)
-                .padding(horizontal = 12.dp, vertical = 4.dp)
-        )
+        // 分类标签（带品牌色背景，避免白字不可见）
+        Surface(
+            color = MaterialTheme.colorScheme.primary,
+            shape = CircleShape
+        ) {
+            Text(
+                text = item.category,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 

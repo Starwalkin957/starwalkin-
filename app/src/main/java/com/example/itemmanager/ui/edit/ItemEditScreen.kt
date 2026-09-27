@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,11 +23,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -39,21 +42,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.itemmanager.navigation.CategoryPresets
+import com.example.itemmanager.util.ImageUtils
 import java.io.File
 
 /**
  * 物品添加/编辑页
- * 包含图片选择、名称、分类快捷标签、描述、位置、数量等表单字段
+ * 支持调用系统相机拍照（使用手机原生相机算法）和从相册选择图片
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,10 +76,17 @@ fun ItemEditScreen(
     val quantity by viewModel.quantity.collectAsState()
     val imagePath by viewModel.imagePath.collectAsState()
     val tempImageUri by viewModel.tempImageUri.collectAsState()
+    val cameraImagePath by viewModel.cameraImagePath.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val saveCompleted by viewModel.saveCompleted.collectAsState()
 
+    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // 保存拍照输出的 Uri（拍照前创建）
+    var pendingPhotoUri by remember { mutableStateOf<Uri?>(null) }
+    // 临时保存相机文件对象（用于拍照成功后获取路径）
+    var cameraTempFile by remember { mutableStateOf<File?>(null) }
 
     // 保存完成后返回
     LaunchedEffect(saveCompleted) {
@@ -89,15 +103,46 @@ fun ItemEditScreen(
         }
     }
 
-    // 图片选择启动器
-    val imagePickerLauncher = rememberLauncherForActivityResult(
+    // 相册选择启动器
+    val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         viewModel.onImageSelected(uri)
     }
 
-    // 决定显示哪张图片：新选的优先，否则显示已保存的
+    // 系统相机拍照启动器（调用手机原生相机应用，使用原厂相机算法）
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success: Boolean ->
+        if (success && cameraTempFile != null) {
+            // 拍照成功，照片已直接写入内部存储文件
+            viewModel.onPhotoTaken(cameraTempFile?.absolutePath)
+        }
+        pendingPhotoUri = null
+        cameraTempFile = null
+    }
+
+    /**
+     * 启动系统相机
+     * 1. 创建临时图片文件（在 App 内部存储）
+     * 2. 通过 FileProvider 获取 content Uri 并授权
+     * 3. 调用系统相机应用，拍照后写入该 Uri
+     */
+    fun launchCamera() {
+        val photoFile = ImageUtils.createCameraImageFile(context)
+        if (photoFile != null) {
+            val photoUri = ImageUtils.getUriForFile(context, photoFile)
+            if (photoUri != null) {
+                cameraTempFile = photoFile
+                pendingPhotoUri = photoUri
+                cameraLauncher.launch(photoUri)
+            }
+        }
+    }
+
+    // 决定显示哪张图片：新拍的 > 相册选的 > 已保存的
     val displayImage: Any? = when {
+        cameraImagePath != null -> File(cameraImagePath!!)
         tempImageUri != null -> tempImageUri
         imagePath != null -> File(imagePath!!)
         else -> null
@@ -135,12 +180,11 @@ fun ItemEditScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ---- 图片选择区域 ----
+            // ---- 图片预览区域 ----
             Box(
                 modifier = Modifier
-                    .size(160.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .clickable { imagePickerLauncher.launch("image/*") },
+                    .size(180.dp)
+                    .clip(RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 if (displayImage != null) {
@@ -151,38 +195,95 @@ fun ItemEditScreen(
                         contentScale = ContentScale.Crop
                     )
                     // 清除图片按钮
-                    IconButton(
-                        onClick = { viewModel.clearImage() },
+                    Surface(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(4.dp)
+                            .padding(6.dp)
+                            .size(28.dp)
+                            .clickable { viewModel.clearImage() },
+                        shape = CircleShape,
+                        color = Color.Black.copy(alpha = 0.5f)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "移除图片",
                             tint = Color.White,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .size(20.dp)
                         )
                     }
                 } else {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            imageVector = Icons.Default.PhotoCamera,
-                            contentDescription = null,
-                            modifier = Modifier.size(48.dp),
-                            tint = Color.Gray
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "点击添加图片",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Gray
-                        )
+                    // 无图片时的占位
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = Color(0xFFF1F5F9),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.PhotoCamera,
+                                contentDescription = null,
+                                modifier = Modifier.size(48.dp),
+                                tint = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "暂无图片",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Gray
+                            )
+                        }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // ---- 拍照 / 相册 两个按钮 ----
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // 调用系统相机拍照（使用手机原厂相机算法）
+                Button(
+                    onClick = { launchCamera() },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(44.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PhotoCamera,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.size(6.dp))
+                    Text(text = "拍照", style = MaterialTheme.typography.labelLarge)
+                }
+
+                // 从相册选择
+                OutlinedButton(
+                    onClick = { galleryLauncher.launch("image/*") },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(44.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PhotoLibrary,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.size(6.dp))
+                    Text(text = "相册", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             // ---- 表单字段 ----
 
@@ -224,7 +325,7 @@ fun ItemEditScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 CategoryPresets.forEach { cat ->
                     val isSelected = category == cat

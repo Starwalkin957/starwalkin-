@@ -43,6 +43,10 @@ interface ItemDao {
     @Query("SELECT * FROM items WHERE name LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%' ORDER BY updatedAt DESC")
     fun searchItems(query: String): Flow<List<ItemEntity>>
 
+    /** 在指定分类下按名称或描述模糊搜索（搜索 + 分类组合） */
+    @Query("SELECT * FROM items WHERE (name LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%') AND category = :category ORDER BY updatedAt DESC")
+    fun searchItemsInCategory(query: String, category: String): Flow<List<ItemEntity>>
+
     /** 获取所有不重复的分类名称，用于筛选下拉 */
     @Query("SELECT DISTINCT category FROM items ORDER BY category ASC")
     fun getAllCategories(): Flow<List<String>>

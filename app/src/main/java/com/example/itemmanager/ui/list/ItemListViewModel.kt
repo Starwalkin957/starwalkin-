@@ -34,12 +34,18 @@ class ItemListViewModel(
     val categories: StateFlow<List<String>> = repository.getAllCategories()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    // 根据搜索和筛选条件动态切换数据源
+    // 根据搜索和筛选条件动态切换数据源（支持搜索与分类组合）
     val items: StateFlow<List<ItemEntity>> = _searchQuery
         .combineWith(_selectedCategory) { query, category ->
             when {
+                // 同时有关键词和分类：在该分类下模糊搜索
+                query.isNotBlank() && category != null ->
+                    repository.searchItemsInCategory(query, category)
+                // 只有关键词：全局模糊搜索
                 query.isNotBlank() -> repository.searchItems(query)
+                // 只有分类：按分类筛选
                 category != null -> repository.getItemsByCategory(category)
+                // 都没有：全部物品
                 else -> repository.getAllItems()
             }
         }

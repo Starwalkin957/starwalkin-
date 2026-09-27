@@ -22,6 +22,10 @@ class ItemRepository(private val itemDao: ItemDao) {
     fun searchItems(query: String): Flow<List<ItemEntity>> =
         itemDao.searchItems(query)
 
+    /** 在指定分类下搜索物品 */
+    fun searchItemsInCategory(query: String, category: String): Flow<List<ItemEntity>> =
+        itemDao.searchItemsInCategory(query, category)
+
     /** 获取所有分类 */
     fun getAllCategories(): Flow<List<String>> = itemDao.getAllCategories()
 
