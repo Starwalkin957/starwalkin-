@@ -62,7 +62,10 @@ fun AppNavigation() {
         composable(Routes.ITEM_LIST) { backStackEntry ->
             val viewModel: ItemListViewModel = viewModel(
                 viewModelStoreOwner = backStackEntry,
-                factory = ItemListViewModel.provideFactory(repository)
+                factory = ItemListViewModel.provideFactory(
+                    context.applicationContext as android.app.Application,
+                    repository
+                )
             )
             ItemListScreen(
                 viewModel = viewModel,

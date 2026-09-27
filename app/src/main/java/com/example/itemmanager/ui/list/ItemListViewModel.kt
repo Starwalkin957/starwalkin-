@@ -1,10 +1,15 @@
 package com.example.itemmanager.ui.list
 
+import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.data.repository.ItemRepository
+import com.example.itemmanager.util.BackupUtils
+import com.example.itemmanager.util.ImageUtils
+import com.example.itemmanager.util.ShareUtils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,10 +20,11 @@ import kotlinx.coroutines.launch
 
 /**
  * 物品列表页 ViewModel
- * 管理搜索关键词、分类筛选，以及物品列表数据
+ * 管理搜索关键词、分类筛选、物品列表，以及备份导出/导入恢复
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class ItemListViewModel(
+    private val application: Application,
     private val repository: ItemRepository
 ) : ViewModel() {
 
@@ -38,19 +44,21 @@ class ItemListViewModel(
     val items: StateFlow<List<ItemEntity>> = _searchQuery
         .combineWith(_selectedCategory) { query, category ->
             when {
-                // 同时有关键词和分类：在该分类下模糊搜索
                 query.isNotBlank() && category != null ->
                     repository.searchItemsInCategory(query, category)
-                // 只有关键词：全局模糊搜索
                 query.isNotBlank() -> repository.searchItems(query)
-                // 只有分类：按分类筛选
                 category != null -> repository.getItemsByCategory(category)
-                // 都没有：全部物品
                 else -> repository.getAllItems()
             }
         }
         .flatMapLatest { it }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    // 一次性操作提示消息（导出/导入结果）
+    private val _message = MutableStateFlow<String?>(null)
+    val message: StateFlow<String?> = _message
+
+    fun consumeMessage() { _message.value = null }
 
     /** 更新搜索关键词 */
     fun onSearchQueryChanged(query: String) {
@@ -66,17 +74,49 @@ class ItemListViewModel(
     fun deleteItem(item: ItemEntity) {
         viewModelScope.launch {
             repository.deleteItem(item)
-            com.example.itemmanager.util.ImageUtils.deleteImageFile(item.imagePath)
+            ImageUtils.deleteImageFile(item.imagePath)
+        }
+    }
+
+    /**
+     * 导出备份并调起系统分享（可上传到云盘/发送他人）
+     */
+    fun exportAndShare() {
+        viewModelScope.launch {
+            val file = BackupUtils.exportBackup(application, repository)
+            if (file != null) {
+                _message.value = "备份已生成，选择应用上传云端"
+                ShareUtils.shareFile(application, file, "上传/分享备份到…")
+            } else {
+                _message.value = "导出失败，请重试"
+            }
+        }
+    }
+
+    /**
+     * 从用户选择的备份文件导入恢复
+     */
+    fun importFrom(uri: Uri) {
+        viewModelScope.launch {
+            val count = BackupUtils.importBackup(application, repository, uri)
+            _message.value = when {
+                count > 0 -> "成功恢复 $count 件物品"
+                count == 0 -> "备份中没有物品"
+                else -> "导入失败：文件格式不正确"
+            }
         }
     }
 
     companion object {
-        /** 提供 Factory 以便注入 Repository */
-        fun provideFactory(repository: ItemRepository): ViewModelProvider.Factory =
+        /** 提供 Factory，注入 Application 和 Repository */
+        fun provideFactory(
+            application: Application,
+            repository: ItemRepository
+        ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ItemListViewModel(repository) as T
+                    return ItemListViewModel(application, repository) as T
                 }
             }
     }

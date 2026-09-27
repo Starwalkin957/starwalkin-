@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.data.repository.ItemRepository
+import com.example.itemmanager.util.DraftManager
 import com.example.itemmanager.util.ImageUtils
+import com.example.itemmanager.util.ItemDraft
 import com.example.itemmanager.util.SelectedItemHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,14 +17,15 @@ import kotlinx.coroutines.launch
 
 /**
  * 物品添加/编辑页 ViewModel
- * 从全局 SelectedItemHolder 读取编辑模式的物品 ID（添加模式为 null）
+ * - 编辑模式：从 SelectedItemHolder 读取物品 ID 并回填
+ * - 添加模式：表单自动保存为草稿，关闭/杀掉应用后可恢复继续编辑
  */
 class ItemEditViewModel(
     private val application: Application,
     private val repository: ItemRepository
 ) : ViewModel() {
 
-    // 从全局持有者获取编辑模式的物品 ID
+    // 从全局持有者获取编辑模式的物品 ID（添加模式为 null）
     private val editingItemId: Long? = SelectedItemHolder.consume()
 
     // 表单字段状态
@@ -41,33 +44,36 @@ class ItemEditViewModel(
     private val _quantity = MutableStateFlow("1")
     val quantity: StateFlow<String> = _quantity
 
-    // 图片路径（已保存到内部存储的路径）
+    // 已保存到内部存储的图片路径（编辑回填用）
     private val _imagePath = MutableStateFlow<String?>(null)
     val imagePath: StateFlow<String?> = _imagePath
 
-    // 临时选中的图片 Uri（尚未复制到内部存储）
+    // 相册临时 Uri（尚未复制到内部存储）
     private val _tempImageUri = MutableStateFlow<Uri?>(null)
     val tempImageUri: StateFlow<Uri?> = _tempImageUri
 
-    // 相机拍照后的图片文件路径（照片已直接保存到内部存储）
+    // 相机拍照后的图片路径（已直接保存到内部存储）
     private val _cameraImagePath = MutableStateFlow<String?>(null)
     val cameraImagePath: StateFlow<String?> = _cameraImagePath
 
-    // 是否为编辑模式
     val isEditing: Boolean = editingItemId != null
 
-    // 保存完成回调标志
     private val _saveCompleted = MutableStateFlow(false)
     val saveCompleted: StateFlow<Boolean> = _saveCompleted
 
-    // 错误信息
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
 
+    // 启动时检测到的待恢复草稿（仅添加模式），非 null 时 UI 弹窗询问
+    private val _pendingDraft = MutableStateFlow<ItemDraft?>(null)
+    val pendingDraft: StateFlow<ItemDraft?> = _pendingDraft
+
     init {
-        // 编辑模式下加载已有数据
         if (editingItemId != null) {
             loadExistingItem(editingItemId)
+        } else {
+            // 添加模式：检查是否有上次未完成的草稿
+            DraftManager.loadDraft(application)?.let { _pendingDraft.value = it }
         }
     }
 
@@ -86,81 +92,112 @@ class ItemEditViewModel(
         }
     }
 
-    // ---- 表单更新函数 ----
+    // ---- 草稿：自动保存 ----
 
-    fun onNameChanged(value: String) { _name.value = value }
-    fun onCategoryChanged(value: String) { _category.value = value }
-    fun onDescriptionChanged(value: String) { _description.value = value }
-    fun onLocationChanged(value: String) { _location.value = value }
+    /**
+     * 自动保存草稿（仅添加模式，且没有待处理的恢复询问时）
+     * 图片只持久化相机拍摄的（已在内部存储），相册临时 Uri 不持久化
+     */
+    private fun autoSaveDraft() {
+        if (isEditing) return
+        if (_pendingDraft.value != null) return
+        val draft = ItemDraft(
+            name = _name.value,
+            category = _category.value,
+            description = _description.value,
+            location = _location.value,
+            quantity = _quantity.value,
+            imagePath = _cameraImagePath.value
+        )
+        DraftManager.saveDraft(application, draft)
+    }
+
+    /** 恢复草稿到表单 */
+    fun restoreDraft() {
+        val d = _pendingDraft.value ?: return
+        _name.value = d.name
+        _category.value = d.category
+        _description.value = d.description
+        _location.value = d.location
+        _quantity.value = d.quantity
+        _imagePath.value = d.imagePath
+        _cameraImagePath.value = d.imagePath
+        _tempImageUri.value = null
+        _pendingDraft.value = null
+    }
+
+    /** 丢弃草稿 */
+    fun discardDraft() {
+        DraftManager.clearDraft(application)
+        _pendingDraft.value = null
+    }
+
+    // ---- 表单更新 ----
+
+    fun onNameChanged(value: String) { _name.value = value; autoSaveDraft() }
+    fun onCategoryChanged(value: String) { _category.value = value; autoSaveDraft() }
+    fun onDescriptionChanged(value: String) { _description.value = value; autoSaveDraft() }
+    fun onLocationChanged(value: String) { _location.value = value; autoSaveDraft() }
     fun onQuantityChanged(value: String) {
-        // 只允许数字输入
         if (value.all { it.isDigit() }) {
             _quantity.value = value
+            autoSaveDraft()
         }
     }
 
-    /** 用户从相册选择图片后，记录临时 Uri */
+    /** 相册选图 */
     fun onImageSelected(uri: Uri?) {
         _tempImageUri.value = uri
         _cameraImagePath.value = null
+        autoSaveDraft()
     }
 
-    /**
-     * 相机拍照完成后调用
-     * @param path 拍摄照片的文件绝对路径（已保存到 App 内部存储）
-     */
+    /** 相机拍照完成 */
     fun onPhotoTaken(path: String?) {
         _cameraImagePath.value = path
         _tempImageUri.value = null
+        autoSaveDraft()
     }
 
-    /** 清除已选图片 */
+    /** 清除图片 */
     fun clearImage() {
-        // 如果是刚拍的照片（还没保存），删除临时文件
         _cameraImagePath.value?.let { path ->
-            if (_imagePath.value != path) {
-                ImageUtils.deleteImageFile(path)
-            }
+            if (_imagePath.value != path) ImageUtils.deleteImageFile(path)
         }
         _tempImageUri.value = null
         _cameraImagePath.value = null
         _imagePath.value = null
+        autoSaveDraft()
     }
 
     /**
      * 保存物品
-     * 先校验必填项，再将图片复制到内部存储，最后写入数据库
      */
     fun saveItem() {
-        // 校验名称
         if (_name.value.isBlank()) {
             _errorMessage.value = "请输入物品名称"
             return
         }
-        // 校验分类
         if (_category.value.isBlank()) {
             _errorMessage.value = "请输入物品分类"
             return
         }
 
         viewModelScope.launch {
-            // 处理图片
             var finalImagePath = _imagePath.value
 
-            // 情况1：相机拍摄的照片（已直接保存到内部存储）
+            // 相机图片（已在内部存储）
             _cameraImagePath.value?.let { cameraPath ->
-                // 如果是编辑且有旧图片，删除旧图片
                 if (isEditing && _imagePath.value != null && _imagePath.value != cameraPath) {
                     ImageUtils.deleteImageFile(_imagePath.value)
                 }
                 finalImagePath = cameraPath
             }
 
-            // 情况2：从相册选择的图片，需要复制到内部存储
+            // 相册图片：复制到内部存储
             _tempImageUri.value?.let { uri ->
                 val savedPath = ImageUtils.copyImageToInternalStorage(application, uri)
                 if (savedPath != null) {
-                    // 如果是编辑且有旧图片，删除旧图片
                     if (isEditing && _imagePath.value != null) {
                         ImageUtils.deleteImageFile(_imagePath.value)
                     }
@@ -172,7 +209,6 @@ class ItemEditViewModel(
             val now = System.currentTimeMillis()
 
             if (isEditing && editingItemId != null) {
-                // 更新已有物品
                 val existing = repository.getItemById(editingItemId)
                 val updatedItem = existing?.copy(
                     name = _name.value.trim(),
@@ -183,11 +219,8 @@ class ItemEditViewModel(
                     imagePath = finalImagePath,
                     updatedAt = now
                 )
-                if (updatedItem != null) {
-                    repository.updateItem(updatedItem)
-                }
+                if (updatedItem != null) repository.updateItem(updatedItem)
             } else {
-                // 插入新物品
                 val newItem = ItemEntity(
                     name = _name.value.trim(),
                     category = _category.value.trim(),
@@ -201,6 +234,8 @@ class ItemEditViewModel(
                 repository.insertItem(newItem)
             }
 
+            // 保存成功，清除草稿
+            DraftManager.clearDraft(application)
             SelectedItemHolder.clear()
             _saveCompleted.value = true
         }

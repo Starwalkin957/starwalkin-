@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Inventory2
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,11 +52,12 @@ import coil.compose.AsyncImage
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.ui.theme.TextSecondary
 import com.example.itemmanager.util.ImageUtils
+import com.example.itemmanager.util.ShareUtils
 import java.io.File
 
 /**
  * 物品详情页
- * 展示物品的完整信息，支持编辑和删除操作
+ * 展示物品完整信息，支持分享（云端分享）、编辑和删除
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,6 +69,7 @@ fun ItemDetailScreen(
     val item by viewModel.item.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     var showDeleteDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -84,6 +88,10 @@ fun ItemDetailScreen(
                 },
                 actions = {
                     if (item != null) {
+                        // 分享按钮：把物品图文分享到微信/QQ/云盘/邮件等
+                        IconButton(onClick = { ShareUtils.shareItem(context, item!!) }) {
+                            Icon(Icons.Default.Share, contentDescription = "分享", tint = Color.White)
+                        }
                         IconButton(onClick = { onEdit(item!!.id) }) {
                             Icon(Icons.Default.Edit, contentDescription = "编辑", tint = Color.White)
                         }

@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,6 +37,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -79,6 +81,7 @@ fun ItemEditScreen(
     val cameraImagePath by viewModel.cameraImagePath.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val saveCompleted by viewModel.saveCompleted.collectAsState()
+    val pendingDraft by viewModel.pendingDraft.collectAsState()
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -405,5 +408,24 @@ fun ItemEditScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
         }
+    }
+
+    // 草稿恢复对话框：添加模式下检测到上次未完成内容时弹出
+    if (pendingDraft != null) {
+        AlertDialog(
+            onDismissRequest = { viewModel.discardDraft() },
+            title = { Text("恢复上次内容？") },
+            text = { Text("检测到有未完成的物品信息，是否恢复继续编辑？") },
+            confirmButton = {
+                TextButton(onClick = { viewModel.restoreDraft() }) {
+                    Text("恢复")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.discardDraft() }) {
+                    Text("丢弃")
+                }
+            }
+        )
     }
 }

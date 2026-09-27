@@ -1,5 +1,7 @@
 package com.example.itemmanager.ui.list
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,11 +20,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Inventory2
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -33,10 +39,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,9 +66,8 @@ import java.io.File
 
 /**
  * 物品列表页
- * 顶部：搜索栏 + 分类筛选下拉
- * 中部：物品卡片列表
- * 右下角：添加按钮
+ * 顶部：标题 + 备份/恢复菜单；搜索栏 + 分类筛选
+ * 中部：物品卡片列表；右下角：添加按钮
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,6 +80,25 @@ fun ItemListScreen(
     val searchQuery by viewModel.searchQuery.collectAsState()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val categories by viewModel.categories.collectAsState()
+    val message by viewModel.message.collectAsState()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    var menuExpanded by remember { mutableStateOf(false) }
+
+    // 操作结果提示
+    LaunchedEffect(message) {
+        message?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.consumeMessage()
+        }
+    }
+
+    // 选择备份文件（zip）用于导入恢复
+    val backupPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let { viewModel.importFrom(it) }
+    }
 
     Scaffold(
         topBar = {
@@ -82,6 +109,43 @@ fun ItemListScreen(
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
+                },
+                actions = {
+                    // 溢出菜单：导出备份（云端分享）/ 导入恢复
+                    Box {
+                        IconButton(onClick = { menuExpanded = true }) {
+                            Icon(
+                                Icons.Default.MoreVert,
+                                contentDescription = "更多",
+                                tint = Color.White
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = menuExpanded,
+                            onDismissRequest = { menuExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("导出备份并分享") },
+                                leadingIcon = {
+                                    Icon(Icons.Default.CloudUpload, contentDescription = null)
+                                },
+                                onClick = {
+                                    menuExpanded = false
+                                    viewModel.exportAndShare()
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("导入备份恢复") },
+                                leadingIcon = {
+                                    Icon(Icons.Default.Restore, contentDescription = null)
+                                },
+                                onClick = {
+                                    menuExpanded = false
+                                    backupPicker.launch(arrayOf("application/zip"))
+                                }
+                            )
+                        }
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -95,7 +159,8 @@ fun ItemListScreen(
             ) {
                 Icon(Icons.Default.Add, contentDescription = "添加物品", tint = Color.White)
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -105,7 +170,7 @@ fun ItemListScreen(
         ) {
             Spacer(modifier = Modifier.height(12.dp))
 
-            // 搜索框
+            // 搜索框（模糊搜索名称或描述）
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = viewModel::onSearchQueryChanged,
@@ -269,7 +334,6 @@ fun ItemCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    // 分类标签
                     Text(
                         text = item.category,
                         style = MaterialTheme.typography.labelMedium,
