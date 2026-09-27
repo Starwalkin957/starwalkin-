@@ -1,6 +1,5 @@
 package com.example.itemmanager.ui.detail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -13,15 +12,12 @@ import kotlinx.coroutines.launch
 
 /**
  * 物品详情页 ViewModel
- * 根据导航参数中的物品 ID 加载物品详情
+ * 直接接收物品 ID，不依赖 SavedStateHandle，避免参数传递问题
  */
 class ItemDetailViewModel(
     private val repository: ItemRepository,
-    savedStateHandle: SavedStateHandle
+    private val itemId: Long
 ) : ViewModel() {
-
-    // 从导航参数中获取物品 ID
-    private val itemId: Long = savedStateHandle.get<Long>("itemId") ?: -1L
 
     private val _item = MutableStateFlow<ItemEntity?>(null)
     val item: StateFlow<ItemEntity?> = _item
@@ -56,12 +52,12 @@ class ItemDetailViewModel(
     companion object {
         fun provideFactory(
             repository: ItemRepository,
-            savedStateHandle: SavedStateHandle
+            itemId: Long
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ItemDetailViewModel(repository, savedStateHandle) as T
+                    return ItemDetailViewModel(repository, itemId) as T
                 }
             }
     }

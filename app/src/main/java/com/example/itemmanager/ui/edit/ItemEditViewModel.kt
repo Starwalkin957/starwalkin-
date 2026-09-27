@@ -2,7 +2,6 @@ package com.example.itemmanager.ui.edit
 
 import android.app.Application
 import android.net.Uri
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -15,16 +14,13 @@ import kotlinx.coroutines.launch
 
 /**
  * 物品添加/编辑页 ViewModel
- * 管理表单状态，处理图片选择和保存逻辑
+ * 直接接收编辑模式的物品 ID（添加模式为 null），不依赖 SavedStateHandle
  */
 class ItemEditViewModel(
     private val application: Application,
     private val repository: ItemRepository,
-    savedStateHandle: SavedStateHandle
+    private val editingItemId: Long?
 ) : ViewModel() {
-
-    // 如果是编辑模式，从导航参数获取物品 ID
-    private val editingItemId: Long? = savedStateHandle.get<Long>("itemId")
 
     // 表单字段状态
     private val _name = MutableStateFlow("")
@@ -181,12 +177,12 @@ class ItemEditViewModel(
         fun provideFactory(
             application: Application,
             repository: ItemRepository,
-            savedStateHandle: SavedStateHandle
+            editingItemId: Long?
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ItemEditViewModel(application, repository, savedStateHandle) as T
+                    return ItemEditViewModel(application, repository, editingItemId) as T
                 }
             }
     }

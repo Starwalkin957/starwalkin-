@@ -31,8 +31,24 @@ object Routes {
 }
 
 /**
+ * 预设分类示例，供添加物品时快速选择
+ */
+val CategoryPresets = listOf(
+    "电子产品",
+    "衣物",
+    "书籍",
+    "食品",
+    "日用品",
+    "工具",
+    "化妆品",
+    "运动器材",
+    "证件文件",
+    "其他"
+)
+
+/**
  * 应用主导航图
- * 定义三个页面之间的跳转关系
+ * 物品 ID 直接从 backStackEntry.arguments 读取并传给 ViewModel，彻底避免 SavedStateHandle 参数丢失问题
  */
 @Composable
 fun AppNavigation() {
@@ -48,8 +64,9 @@ fun AppNavigation() {
         startDestination = Routes.ITEM_LIST
     ) {
         // 物品列表页
-        composable(Routes.ITEM_LIST) {
+        composable(Routes.ITEM_LIST) { backStackEntry ->
             val viewModel: ItemListViewModel = viewModel(
+                viewModelStoreOwner = backStackEntry,
                 factory = ItemListViewModel.provideFactory(repository)
             )
             ItemListScreen(
@@ -66,15 +83,17 @@ fun AppNavigation() {
             route = Routes.ITEM_DETAIL,
             arguments = listOf(navArgument("itemId") { type = NavType.LongType })
         ) { backStackEntry ->
+            // 直接从 arguments 读取物品 ID，不经过 SavedStateHandle
+            val itemId = backStackEntry.arguments?.getLong("itemId") ?: -1L
             val viewModel: ItemDetailViewModel = viewModel(
                 viewModelStoreOwner = backStackEntry,
-                factory = ItemDetailViewModel.provideFactory(repository, backStackEntry.savedStateHandle)
+                factory = ItemDetailViewModel.provideFactory(repository, itemId)
             )
             ItemDetailScreen(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
-                onEdit = { itemId ->
-                    navController.navigate(Routes.itemEdit(itemId))
+                onEdit = { id ->
+                    navController.navigate(Routes.itemEdit(id))
                 }
             )
         }
@@ -86,7 +105,7 @@ fun AppNavigation() {
                 factory = ItemEditViewModel.provideFactory(
                     context.applicationContext as android.app.Application,
                     repository,
-                    backStackEntry.savedStateHandle
+                    null
                 )
             )
             ItemEditScreen(
@@ -101,19 +120,20 @@ fun AppNavigation() {
             route = Routes.ITEM_EDIT_WITH_ID,
             arguments = listOf(navArgument("itemId") { type = NavType.LongType })
         ) { backStackEntry ->
+            // 直接从 arguments 读取物品 ID
+            val itemId = backStackEntry.arguments?.getLong("itemId") ?: -1L
             val viewModel: ItemEditViewModel = viewModel(
                 viewModelStoreOwner = backStackEntry,
                 factory = ItemEditViewModel.provideFactory(
                     context.applicationContext as android.app.Application,
                     repository,
-                    backStackEntry.savedStateHandle
+                    itemId
                 )
             )
             ItemEditScreen(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
                 onSaveComplete = {
-                    // 保存后返回到详情页（如果是从详情页进入的）或列表页
                     navController.popBackStack()
                 }
             )

@@ -4,8 +4,10 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -28,6 +31,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -44,11 +48,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.itemmanager.navigation.CategoryPresets
 import java.io.File
 
 /**
  * 物品添加/编辑页
- * 包含图片选择、名称、分类、描述、位置、数量等表单字段
+ * 包含图片选择、名称、分类快捷标签、描述、位置、数量等表单字段
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -200,10 +205,45 @@ fun ItemEditScreen(
                 onValueChange = viewModel::onCategoryChanged,
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("分类 *") },
-                placeholder = { Text("例如：电子产品、衣物、书籍") },
+                placeholder = { Text("输入或从下方选择分类") },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 分类快捷标签（横向滚动）
+            Text(
+                text = "快捷分类：",
+                style = MaterialTheme.typography.labelMedium,
+                color = Color.Gray,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+            ) {
+                CategoryPresets.forEach { cat ->
+                    val isSelected = category == cat
+                    Surface(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable { viewModel.onCategoryChanged(cat) },
+                        color = if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFFF1F5F9),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = cat,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = if (isSelected) Color.White else Color.Gray,
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
