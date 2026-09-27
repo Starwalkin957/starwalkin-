@@ -67,6 +67,7 @@ fun AppNavigation() {
             arguments = listOf(navArgument("itemId") { type = NavType.LongType })
         ) { backStackEntry ->
             val viewModel: ItemDetailViewModel = viewModel(
+                viewModelStoreOwner = backStackEntry,
                 factory = ItemDetailViewModel.provideFactory(repository, backStackEntry.savedStateHandle)
             )
             ItemDetailScreen(
@@ -81,6 +82,7 @@ fun AppNavigation() {
         // 添加新物品（无 ID）
         composable(Routes.ITEM_EDIT) { backStackEntry ->
             val viewModel: ItemEditViewModel = viewModel(
+                viewModelStoreOwner = backStackEntry,
                 factory = ItemEditViewModel.provideFactory(
                     context.applicationContext as android.app.Application,
                     repository,
@@ -100,6 +102,7 @@ fun AppNavigation() {
             arguments = listOf(navArgument("itemId") { type = NavType.LongType })
         ) { backStackEntry ->
             val viewModel: ItemEditViewModel = viewModel(
+                viewModelStoreOwner = backStackEntry,
                 factory = ItemEditViewModel.provideFactory(
                     context.applicationContext as android.app.Application,
                     repository,
