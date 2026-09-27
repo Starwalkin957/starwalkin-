@@ -50,9 +50,9 @@ object DateUtils {
         if (timestamp == null) return null
         val days = daysUntil(timestamp)
         return when {
-            days < 0 -> "$label已过期 ${-days} 天"
-            days == 0L -> "$label今天到期"
-            else -> "$label剩余 $days 天"
+            days < 0 -> "${label}已过期 ${-days} 天"
+            days == 0L -> "${label}今天到期"
+            else -> "${label}剩余 $days 天"
         }
     }
 }
