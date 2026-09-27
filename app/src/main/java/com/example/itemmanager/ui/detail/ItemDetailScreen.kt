@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.itemmanager.data.local.ItemEntity
@@ -249,7 +250,7 @@ fun DetailRow(label: String, value: String) {
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.End
+            textAlign = TextAlign.End
         )
     }
 }
