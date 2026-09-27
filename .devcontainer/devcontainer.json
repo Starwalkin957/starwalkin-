@@ -1,0 +1,39 @@
+{
+  "name": "ItemManager Android Dev",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "jdkDistribution": "temurin"
+    },
+    "ghcr.io/devcontainers/features/android:1": {
+      "platformVersions": "34",
+      "buildTools": "34.0.0",
+      "ndkVersion": ""
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Google LLC.android-tools",
+        "mathiasfrohlich.Kotlin",
+        "naco-siren.gradle-language",
+        "esafirm.kotlin-formatter"
+      ],
+      "settings": {
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-17",
+            "path": "/usr/lib/jvm/msopenjdk-17",
+            "default": true
+          }
+        ],
+        "java.import.gradle.enabled": true,
+        "java.import.gradle.wrapper.enabled": true
+      }
+    }
+  },
+  "postCreateCommand": "chmod +x gradlew && ./gradlew --version",
+  "remoteUser": "vscode",
+  "forwardPorts": [8080]
+}
