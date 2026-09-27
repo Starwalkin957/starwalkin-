@@ -6,17 +6,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.data.repository.ItemRepository
 import com.example.itemmanager.util.ImageUtils
+import com.example.itemmanager.util.SelectedItemHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 /**
  * 物品详情页 ViewModel
- * 直接接收物品 ID，不依赖 SavedStateHandle，避免参数传递问题
+ * 从全局 SelectedItemHolder 读取物品 ID，彻底避免导航参数丢失问题
  */
 class ItemDetailViewModel(
-    private val repository: ItemRepository,
-    private val itemId: Long
+    private val repository: ItemRepository
 ) : ViewModel() {
 
     private val _item = MutableStateFlow<ItemEntity?>(null)
@@ -24,6 +24,9 @@ class ItemDetailViewModel(
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
+
+    // 从全局持有者获取当前选中的物品 ID
+    private val currentItemId: Long? = SelectedItemHolder.consume()
 
     init {
         loadItem()
@@ -33,7 +36,12 @@ class ItemDetailViewModel(
     fun loadItem() {
         viewModelScope.launch {
             _isLoading.value = true
-            _item.value = repository.getItemById(itemId)
+            val id = currentItemId
+            _item.value = if (id != null && id > 0) {
+                repository.getItemById(id)
+            } else {
+                null
+            }
             _isLoading.value = false
         }
     }
@@ -44,6 +52,7 @@ class ItemDetailViewModel(
             _item.value?.let { item ->
                 repository.deleteItem(item)
                 ImageUtils.deleteImageFile(item.imagePath)
+                SelectedItemHolder.clear()
                 onDeleted()
             }
         }
@@ -51,13 +60,12 @@ class ItemDetailViewModel(
 
     companion object {
         fun provideFactory(
-            repository: ItemRepository,
-            itemId: Long
+            repository: ItemRepository
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ItemDetailViewModel(repository, itemId) as T
+                    return ItemDetailViewModel(repository) as T
                 }
             }
     }

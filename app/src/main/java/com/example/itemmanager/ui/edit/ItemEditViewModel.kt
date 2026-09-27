@@ -8,19 +8,22 @@ import androidx.lifecycle.viewModelScope
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.data.repository.ItemRepository
 import com.example.itemmanager.util.ImageUtils
+import com.example.itemmanager.util.SelectedItemHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 /**
  * 物品添加/编辑页 ViewModel
- * 直接接收编辑模式的物品 ID（添加模式为 null），不依赖 SavedStateHandle
+ * 从全局 SelectedItemHolder 读取编辑模式的物品 ID（添加模式为 null）
  */
 class ItemEditViewModel(
     private val application: Application,
-    private val repository: ItemRepository,
-    private val editingItemId: Long?
+    private val repository: ItemRepository
 ) : ViewModel() {
+
+    // 从全局持有者获取编辑模式的物品 ID
+    private val editingItemId: Long? = SelectedItemHolder.consume()
 
     // 表单字段状态
     private val _name = MutableStateFlow("")
@@ -165,6 +168,7 @@ class ItemEditViewModel(
                 repository.insertItem(newItem)
             }
 
+            SelectedItemHolder.clear()
             _saveCompleted.value = true
         }
     }
@@ -176,13 +180,12 @@ class ItemEditViewModel(
     companion object {
         fun provideFactory(
             application: Application,
-            repository: ItemRepository,
-            editingItemId: Long?
+            repository: ItemRepository
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ItemEditViewModel(application, repository, editingItemId) as T
+                    return ItemEditViewModel(application, repository) as T
                 }
             }
     }
