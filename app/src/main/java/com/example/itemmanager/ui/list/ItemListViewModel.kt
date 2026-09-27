@@ -74,7 +74,7 @@ class ItemListViewModel(
     fun deleteItem(item: ItemEntity) {
         viewModelScope.launch {
             repository.deleteItem(item)
-            ImageUtils.deleteImageFile(item.imagePath)
+            item.imagePaths.forEach { ImageUtils.deleteImageFile(it) }
         }
     }
 

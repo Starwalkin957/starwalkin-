@@ -1,5 +1,6 @@
 package com.example.itemmanager.ui.detail
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,14 +53,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.itemmanager.data.local.ItemEntity
+import com.example.itemmanager.ui.theme.ErrorColor
+import com.example.itemmanager.ui.theme.SuccessColor
 import com.example.itemmanager.ui.theme.TextSecondary
+import com.example.itemmanager.util.DateUtils
 import com.example.itemmanager.util.ImageUtils
 import com.example.itemmanager.util.ShareUtils
 import java.io.File
 
+private val WarningColor = Color(0xFFF59E0B)
+
 /**
  * 物品详情页
- * 展示物品完整信息，支持分享（云端分享）、编辑和删除
+ * 展示多张图片、有效期信息（含到期状态），支持分享、编辑和删除
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,29 +82,22 @@ fun ItemDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = "物品详情",
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                },
+                title = { Text("物品详情", fontWeight = FontWeight.Bold, color = Color.White) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "返回", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, "返回", tint = Color.White)
                     }
                 },
                 actions = {
                     if (item != null) {
-                        // 分享按钮：把物品图文分享到微信/QQ/云盘/邮件等
                         IconButton(onClick = { ShareUtils.shareItem(context, item!!) }) {
-                            Icon(Icons.Default.Share, contentDescription = "分享", tint = Color.White)
+                            Icon(Icons.Default.Share, "分享", tint = Color.White)
                         }
                         IconButton(onClick = { onEdit(item!!.id) }) {
-                            Icon(Icons.Default.Edit, contentDescription = "编辑", tint = Color.White)
+                            Icon(Icons.Default.Edit, "编辑", tint = Color.White)
                         }
                         IconButton(onClick = { showDeleteDialog = true }) {
-                            Icon(Icons.Default.Delete, contentDescription = "删除", tint = Color.White)
+                            Icon(Icons.Default.Delete, "删除", tint = Color.White)
                         }
                     }
                 },
@@ -112,24 +113,17 @@ fun ItemDetailScreen(
                 .padding(paddingValues)
         ) {
             when {
-                isLoading -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
+                isLoading -> Box(Modifier.fillMaxSize(), Alignment.Center) {
+                    CircularProgressIndicator()
                 }
-                item == null -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("物品不存在或已被删除", color = TextSecondary)
-                    }
+                item == null -> Box(Modifier.fillMaxSize(), Alignment.Center) {
+                    Text("物品不存在或已被删除", color = TextSecondary)
                 }
-                else -> {
-                    ItemDetailContent(item = item!!)
-                }
+                else -> ItemDetailContent(item = item!!)
             }
         }
     }
 
-    // 删除确认对话框
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
@@ -139,22 +133,19 @@ fun ItemDetailScreen(
                 TextButton(onClick = {
                     showDeleteDialog = false
                     viewModel.deleteCurrentItem(onBack)
-                }) {
-                    Text("删除", color = Color.Red)
-                }
+                }) { Text("删除", color = Color.Red) }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("取消")
-                }
+                TextButton(onClick = { showDeleteDialog = false }) { Text("取消") }
             }
         )
     }
 }
 
 /**
- * 详情内容区域
+ * 详情内容
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemDetailContent(item: ItemEntity) {
     Column(
@@ -163,17 +154,49 @@ fun ItemDetailContent(item: ItemEntity) {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        // 物品图片
-        if (item.imagePath != null && File(item.imagePath).exists()) {
-            AsyncImage(
-                model = File(item.imagePath),
-                contentDescription = item.name,
+        // ---- 多图轮播 ----
+        if (item.imagePaths.isNotEmpty()) {
+            val pagerState = rememberPagerState(
+                pageCount = { item.imagePaths.size }
+            )
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(220.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Crop
-            )
+                    .height(240.dp)
+            ) {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(16.dp))
+                ) { index ->
+                    val path = item.imagePaths[index]
+                    AsyncImage(
+                        model = File(path),
+                        contentDescription = item.name,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                // 多张时显示计数
+                if (item.imagePaths.size > 1) {
+                    Surface(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(10.dp),
+                        shape = CircleShape,
+                        color = Color.Black.copy(alpha = 0.5f)
+                    ) {
+                        Text(
+                            "${pagerState.currentPage + 1}/${item.imagePaths.size}",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
+                        )
+                    }
+                }
+            }
         } else {
             Box(
                 modifier = Modifier
@@ -183,57 +206,50 @@ fun ItemDetailContent(item: ItemEntity) {
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Inventory2,
-                    contentDescription = null,
-                    modifier = Modifier.size(80.dp),
-                    tint = Color.LightGray
+                    Icons.Default.Inventory2, null,
+                    modifier = Modifier.size(80.dp), tint = Color.LightGray
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(Modifier.height(20.dp))
 
-        // 物品名称
-        Text(
-            text = item.name,
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
+        Text(item.name, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(8.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 分类标签（带品牌色背景，避免白字不可见）
-        Surface(
-            color = MaterialTheme.colorScheme.primary,
-            shape = CircleShape
-        ) {
+        Surface(color = MaterialTheme.colorScheme.primary, shape = CircleShape) {
             Text(
-                text = item.category,
+                item.category,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
             )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(Modifier.height(20.dp))
 
-        // 详细信息列表
-        DetailRow(label = "数量", value = item.quantity.toString())
-        DetailRow(label = "存放位置", value = item.location.ifBlank { "未设置" })
-        DetailRow(label = "创建时间", value = ImageUtils.formatDate(item.createdAt))
-        DetailRow(label = "更新时间", value = ImageUtils.formatDate(item.updatedAt))
+        // ---- 基本信息 ----
+        DetailRow("数量", item.quantity.toString())
+        DetailRow("存放位置", item.location.ifBlank { "未设置" })
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(Modifier.height(8.dp))
 
-        // 描述
+        // ---- 有效期信息 ----
+        DetailRow("购买日期", DateUtils.formatDate(item.purchaseDate).ifBlank { "未设置" })
+        ExpiryStatusRow("保质期", item.expiryDate)
+        ExpiryStatusRow("保修期", item.warrantyDate)
+
+        Spacer(Modifier.height(8.dp))
+
+        DetailRow("创建时间", ImageUtils.formatDate(item.createdAt))
+        DetailRow("更新时间", ImageUtils.formatDate(item.updatedAt))
+
+        Spacer(Modifier.height(20.dp))
+
+        Text("描述", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+        Spacer(Modifier.height(8.dp))
         Text(
-            text = "描述",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = item.description.ifBlank { "暂无描述" },
+            item.description.ifBlank { "暂无描述" },
             style = MaterialTheme.typography.bodyLarge,
             color = if (item.description.isBlank()) TextSecondary else Color.Unspecified
         )
@@ -241,7 +257,7 @@ fun ItemDetailContent(item: ItemEntity) {
 }
 
 /**
- * 详情信息行
+ * 基本信息行
  */
 @Composable
 fun DetailRow(label: String, value: String) {
@@ -251,18 +267,63 @@ fun DetailRow(label: String, value: String) {
             .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        Text(label, style = MaterialTheme.typography.bodyLarge, color = TextSecondary)
+        Spacer(Modifier.width(16.dp))
         Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = TextSecondary
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = value,
+            value,
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.End
         )
+    }
+}
+
+/**
+ * 有效期状态行：显示日期与有效/临期/过期状态（彩色）
+ */
+@Composable
+fun ExpiryStatusRow(label: String, timestamp: Long?) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(label, style = MaterialTheme.typography.bodyLarge, color = TextSecondary)
+        Spacer(Modifier.width(16.dp))
+        if (timestamp == null) {
+            Text(
+                "未设置",
+                style = MaterialTheme.typography.bodyLarge,
+                color = TextSecondary,
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.End
+            )
+        } else {
+            val days = DateUtils.daysUntil(timestamp)
+            val (status, color) = when {
+                days < 0 -> "已过期" to ErrorColor
+                days <= 7 -> "即将到期" to WarningColor
+                else -> "有效" to SuccessColor
+            }
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(
+                    DateUtils.formatDate(timestamp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    status,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = color,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
     }
 }

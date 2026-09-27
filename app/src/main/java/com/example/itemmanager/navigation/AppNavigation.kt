@@ -8,16 +8,22 @@ import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -40,6 +46,7 @@ import com.example.itemmanager.ui.profile.ProfileScreen
 import com.example.itemmanager.ui.stats.StatsScreen
 import com.example.itemmanager.util.OnboardingManager
 import com.example.itemmanager.util.SelectedItemHolder
+import com.example.itemmanager.util.ThemeManager
 
 /**
  * 应用导航路由定义
@@ -108,6 +115,11 @@ fun AppNavigation() {
     val context = androidx.compose.ui.platform.LocalContext.current
     val application = context.applicationContext as Application
 
+    // 初始化并监听主题，切换即时生效并持久记住
+    LaunchedEffect(Unit) { ThemeManager.init(context) }
+    val themeId by ThemeManager.themeId.collectAsState()
+    val appColorScheme = remember(themeId) { buildAppColorScheme(themeId) }
+
     // 初始化数据库和仓库（单例）
     val database = ItemDatabase.getDatabase(context)
     val repository = ItemRepository(database.itemDao())
@@ -125,6 +137,7 @@ fun AppNavigation() {
     val currentRoute = navBackStackEntry?.destination?.route
     val showBottomBar = currentRoute in bottomTabs.map { it.route }
 
+    MaterialTheme(colorScheme = appColorScheme) {
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
@@ -252,4 +265,67 @@ fun AppNavigation() {
             }
         }
     }
+    }
+}
+
+/**
+ * 根据主题 id 构建配色方案：蓝（默认）、白（简约）、黑（深色）、紫
+ */
+private fun buildAppColorScheme(themeId: Int) = when (themeId) {
+    ThemeManager.THEME_BLUE -> lightColorScheme(
+        primary = Color(0xFF2563EB),
+        onPrimary = Color.White,
+        primaryContainer = Color(0xFFDBEAFE),
+        onPrimaryContainer = Color(0xFF1E3A8A),
+        secondary = Color(0xFF3B82F6),
+        background = Color(0xFFF8FAFC),
+        onBackground = Color(0xFF1E293B),
+        surface = Color.White,
+        onSurface = Color(0xFF1E293B),
+        error = Color(0xFFEF4444)
+    )
+    ThemeManager.THEME_WHITE -> lightColorScheme(
+        primary = Color(0xFF1E293B),
+        onPrimary = Color.White,
+        primaryContainer = Color(0xFFF1F5F9),
+        onPrimaryContainer = Color(0xFF1E293B),
+        secondary = Color(0xFF64748B),
+        background = Color.White,
+        onBackground = Color(0xFF1E293B),
+        surface = Color.White,
+        onSurface = Color(0xFF1E293B),
+        error = Color(0xFFEF4444)
+    )
+    ThemeManager.THEME_BLACK -> darkColorScheme(
+        primary = Color(0xFF60A5FA),
+        onPrimary = Color(0xFF0F172A),
+        primaryContainer = Color(0xFF1E3A5F),
+        onPrimaryContainer = Color(0xFFDBEAFE),
+        secondary = Color(0xFF94A3B8),
+        background = Color(0xFF0F172A),
+        onBackground = Color(0xFFE2E8F0),
+        surface = Color(0xFF1E293B),
+        onSurface = Color(0xFFE2E8F0),
+        error = Color(0xFFF87171)
+    )
+    ThemeManager.THEME_PURPLE -> lightColorScheme(
+        primary = Color(0xFF7C3AED),
+        onPrimary = Color.White,
+        primaryContainer = Color(0xFFEDE9FE),
+        onPrimaryContainer = Color(0xFF4C1D95),
+        secondary = Color(0xFFA78BFA),
+        background = Color(0xFFFAF5FF),
+        onBackground = Color(0xFF1E1B2E),
+        surface = Color.White,
+        onSurface = Color(0xFF1E1B2E),
+        error = Color(0xFFEF4444)
+    )
+    else -> lightColorScheme(
+        primary = Color(0xFF2563EB),
+        onPrimary = Color.White,
+        background = Color(0xFFF8FAFC),
+        onBackground = Color(0xFF1E293B),
+        surface = Color.White,
+        onSurface = Color(0xFF1E293B)
+    )
 }

@@ -51,7 +51,7 @@ class ItemDetailViewModel(
         viewModelScope.launch {
             _item.value?.let { item ->
                 repository.deleteItem(item)
-                ImageUtils.deleteImageFile(item.imagePath)
+                item.imagePaths.forEach { ImageUtils.deleteImageFile(it) }
                 SelectedItemHolder.clear()
                 onDeleted()
             }

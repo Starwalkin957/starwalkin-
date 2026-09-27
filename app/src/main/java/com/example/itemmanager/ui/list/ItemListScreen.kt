@@ -296,9 +296,10 @@ fun ItemCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // 物品图片或占位图标
-            if (item.imagePath != null && File(item.imagePath).exists()) {
+            val firstImagePath = item.imagePaths.firstOrNull()
+            if (firstImagePath != null && File(firstImagePath).exists()) {
                 AsyncImage(
-                    model = File(item.imagePath),
+                    model = File(firstImagePath),
                     contentDescription = item.name,
                     modifier = Modifier
                         .size(64.dp)

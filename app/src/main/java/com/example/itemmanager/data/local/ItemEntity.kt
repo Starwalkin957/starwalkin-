@@ -21,14 +21,23 @@ data class ItemEntity(
     /** 物品描述/备注 */
     val description: String = "",
 
-    /** 物品图片的本地文件路径，可为空 */
-    val imagePath: String? = null,
+    /** 物品的多张图片本地路径（支持多张照片） */
+    val imagePaths: List<String> = emptyList(),
 
     /** 存放位置 */
     val location: String = "",
 
     /** 数量 */
     val quantity: Int = 1,
+
+    /** 购买日期（毫秒），可为空 */
+    val purchaseDate: Long? = null,
+
+    /** 保质期/有效期截止（毫秒），可为空 */
+    val expiryDate: Long? = null,
+
+    /** 保修期截止（毫秒），可为空 */
+    val warrantyDate: Long? = null,
 
     /** 创建时间戳（毫秒） */
     val createdAt: Long = System.currentTimeMillis(),

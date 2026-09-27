@@ -15,22 +15,17 @@ import java.util.zip.ZipOutputStream
 
 /**
  * 备份工具类
- * 把整个物品库导出为一个 zip 备份文件（items.json 数据 + images/ 图片），
- * 用户可将该文件上传到任意网盘/云端或发送给他人；也支持从备份 zip 导入恢复。
- * 这样即使卸载应用或更换手机，数据也能找回。
+ * 把整个物品库导出为一个 zip 备份文件（items.json 数据 + images/ 多张图片），
+ * 用户可上传到任意网盘/云端或发送给他人；也支持从备份 zip 导入恢复。
  */
 object BackupUtils {
 
     private const val JSON_NAME = "items.json"
     private const val IMAGE_DIR = "images/"
 
-    /**
-     * 导出全部物品为备份 zip
-     * @return 生成的备份文件，失败返回 null
-     */
+    /** 导出全部物品为备份 zip，失败返回 null */
     suspend fun exportBackup(context: Context, repository: ItemRepository): File? {
         return try {
-            // 一次性读取当前全部物品
             val items: List<ItemEntity> = repository.getAllItems().first()
 
             val backupDir = File(context.filesDir, "backup")
@@ -41,18 +36,17 @@ object BackupUtils {
             val zipFile = File(backupDir, "item_backup_$timeStamp.zip")
 
             ZipOutputStream(FileOutputStream(zipFile)).use { zos ->
-                // 1. 写入图片，并记录每个物品对应的图片在 zip 内的文件名
-                val idToImageName = HashMap<Long, String>()
+                // 1. 写入所有图片，记录物品 ID -> zip 内图片名列表
+                val idToImageNames = HashMap<Long, MutableList<String>>()
                 items.forEachIndexed { index, item ->
-                    item.imagePath?.let { path ->
+                    item.imagePaths.forEachIndexed { imgIndex, path ->
                         val src = File(path)
                         if (src.exists()) {
-                            // 用 序号+原文件名 保证唯一
-                            val imageName = "img_$index" + "_" + src.name
+                            val imageName = "img_${index}_${imgIndex}_" + src.name
                             zos.putNextEntry(ZipEntry(IMAGE_DIR + imageName))
                             src.inputStream().use { it.copyTo(zos) }
                             zos.closeEntry()
-                            idToImageName[item.id] = imageName
+                            idToImageNames.getOrPut(item.id) { mutableListOf() }.add(imageName)
                         }
                     }
                 }
@@ -66,9 +60,14 @@ object BackupUtils {
                     obj.put("description", item.description)
                     obj.put("location", item.location)
                     obj.put("quantity", item.quantity)
+                    item.purchaseDate?.let { obj.put("purchaseDate", it) }
+                    item.expiryDate?.let { obj.put("expiryDate", it) }
+                    item.warrantyDate?.let { obj.put("warrantyDate", it) }
                     obj.put("createdAt", item.createdAt)
                     obj.put("updatedAt", item.updatedAt)
-                    idToImageName[item.id]?.let { obj.put("imageName", it) }
+                    idToImageNames[item.id]?.let { names ->
+                        obj.put("imageNames", JSONArray(names))
+                    }
                     jsonArray.put(obj)
                 }
                 zos.putNextEntry(ZipEntry(JSON_NAME))
@@ -82,38 +81,34 @@ object BackupUtils {
         }
     }
 
-    /**
-     * 从备份 zip 导入物品
-     * @param zipUri 用户选择的备份文件 Uri
-     * @return 成功导入的物品数量，失败返回 -1
-     */
+    /** 从备份 zip 导入，返回导入数量，失败 -1 */
     suspend fun importBackup(
         context: Context,
         repository: ItemRepository,
         zipUri: Uri
     ): Int {
         return try {
-            // 先把 zip 中图片解压到临时映射：imageName -> 本地新路径
             val imageNameToPath = HashMap<String, String>()
             var jsonText: String? = null
+            var restoreCounter = 0L
 
             context.contentResolver.openInputStream(zipUri)?.use { input ->
                 ZipInputStream(input).use { zis ->
                     var entry = zis.nextEntry
                     while (entry != null) {
                         when {
-                            // 图片文件
                             entry.name.startsWith(IMAGE_DIR) && !entry.isDirectory -> {
                                 val imageName = entry.name.removePrefix(IMAGE_DIR)
                                 val imagesDir = File(context.filesDir, "images")
                                 if (!imagesDir.exists()) imagesDir.mkdirs()
-                                // 加时间戳避免重名
-                                val ts = System.currentTimeMillis()
-                                val dest = File(imagesDir, "restored_${ts}_$imageName")
+                                restoreCounter++
+                                val dest = File(
+                                    imagesDir,
+                                    "restored_${System.currentTimeMillis()}_${restoreCounter}_$imageName"
+                                )
                                 dest.outputStream().use { zis.copyTo(it) }
                                 imageNameToPath[imageName] = dest.absolutePath
                             }
-                            // 数据文件
                             entry.name == JSON_NAME -> {
                                 jsonText = zis.bufferedReader(Charsets.UTF_8).readText()
                             }
@@ -126,12 +121,21 @@ object BackupUtils {
 
             if (jsonText == null) return -1
 
-            // 解析并插入（作为新物品，id 自动生成，避免与现有数据冲突）
             val jsonArray = JSONArray(jsonText)
             var count = 0
             for (i in 0 until jsonArray.length()) {
                 val obj = jsonArray.getJSONObject(i)
-                val imageName = if (obj.has("imageName")) obj.getString("imageName") else null
+
+                val paths: List<String> = if (obj.has("imageNames")) {
+                    val arr = obj.getJSONArray("imageNames")
+                    (0 until arr.length()).mapNotNull {
+                        imageNameToPath[arr.getString(it)]
+                    }
+                } else emptyList()
+
+                fun optDate(key: String): Long? =
+                    if (obj.has(key) && !obj.isNull(key)) obj.getLong(key) else null
+
                 val now = System.currentTimeMillis()
                 val item = ItemEntity(
                     name = obj.getString("name"),
@@ -139,7 +143,10 @@ object BackupUtils {
                     description = obj.optString("description", ""),
                     location = obj.optString("location", ""),
                     quantity = obj.optInt("quantity", 1),
-                    imagePath = imageName?.let { imageNameToPath[it] },
+                    imagePaths = paths,
+                    purchaseDate = optDate("purchaseDate"),
+                    expiryDate = optDate("expiryDate"),
+                    warrantyDate = optDate("warrantyDate"),
                     createdAt = obj.optLong("createdAt", now),
                     updatedAt = now
                 )

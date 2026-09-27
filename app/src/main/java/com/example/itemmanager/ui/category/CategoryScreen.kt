@@ -206,9 +206,10 @@ private fun CategoryItemRow(
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (item.imagePath != null && File(item.imagePath).exists()) {
+            val firstImagePath = item.imagePaths.firstOrNull()
+            if (firstImagePath != null && File(firstImagePath).exists()) {
                 AsyncImage(
-                    model = File(item.imagePath),
+                    model = File(firstImagePath),
                     contentDescription = item.name,
                     modifier = Modifier
                         .size(48.dp)
