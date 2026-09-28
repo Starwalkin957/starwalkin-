@@ -5,21 +5,25 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.itemmanager.R
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.data.repository.ItemRepository
+import com.example.itemmanager.util.DateUtils
 import com.example.itemmanager.util.DraftManager
 import com.example.itemmanager.util.ImageUtils
 import com.example.itemmanager.util.ItemDraft
 import com.example.itemmanager.util.SelectedItemHolder
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 物品添加/编辑页 ViewModel
  * - 支持为同一物品添加多张照片（相册/相机），可单独删除
- * - 支持购买日期、保质期、保修期
+ * - 支持购买日期、保质期、保修期，日期可手动输入或日历选择
  * - 编辑模式从 SelectedItemHolder 读取 ID；添加模式自动保存草稿
  */
 class ItemEditViewModel(
@@ -46,22 +50,27 @@ class ItemEditViewModel(
     private val _quantity = MutableStateFlow("1")
     val quantity: StateFlow<String> = _quantity
 
-    // ---- 多张图片（统一为内部存储路径列表）----
+    // ---- 多张图片 ----
     private val _imagePaths = MutableStateFlow<List<String>>(emptyList())
     val imagePaths: StateFlow<List<String>> = _imagePaths
 
-    // 编辑模式下原有的图片（用于判断新增/删除）
     private var originalPaths: List<String> = emptyList()
 
-    // ---- 日期字段 ----
+    // ---- 日期：时间戳 + 输入框文本（两者同步）----
     private val _purchaseDate = MutableStateFlow<Long?>(null)
     val purchaseDate: StateFlow<Long?> = _purchaseDate
+    private val _purchaseDateText = MutableStateFlow("")
+    val purchaseDateText: StateFlow<String> = _purchaseDateText
 
     private val _expiryDate = MutableStateFlow<Long?>(null)
     val expiryDate: StateFlow<Long?> = _expiryDate
+    private val _expiryDateText = MutableStateFlow("")
+    val expiryDateText: StateFlow<String> = _expiryDateText
 
     private val _warrantyDate = MutableStateFlow<Long?>(null)
     val warrantyDate: StateFlow<Long?> = _warrantyDate
+    private val _warrantyDateText = MutableStateFlow("")
+    val warrantyDateText: StateFlow<String> = _warrantyDateText
 
     // ---- 其他状态 ----
     private val _saveCompleted = MutableStateFlow(false)
@@ -91,48 +100,85 @@ class ItemEditViewModel(
                 _quantity.value = item.quantity.toString()
                 _imagePaths.value = item.imagePaths
                 originalPaths = item.imagePaths
-                _purchaseDate.value = item.purchaseDate
-                _expiryDate.value = item.expiryDate
-                _warrantyDate.value = item.warrantyDate
+                setPurchaseDate(item.purchaseDate)
+                setExpiryDate(item.expiryDate)
+                setWarrantyDate(item.warrantyDate)
             }
         }
     }
 
     // ---- 多图管理 ----
 
-    /** 从相册选择图片：复制到内部存储后加入列表 */
     fun addImageFromUri(uri: Uri?) {
         if (uri == null) return
         viewModelScope.launch {
-            val savedPath = ImageUtils.copyImageToInternalStorage(application, uri)
+            val savedPath = withContext(Dispatchers.IO) {
+                ImageUtils.copyImageToInternalStorage(application, uri)
+            }
             if (savedPath != null) {
                 _imagePaths.update { it + savedPath }
                 autoSaveDraft()
             } else {
-                _errorMessage.value = "图片添加失败，请重试"
+                _errorMessage.value = application.getString(R.string.photo_failed)
             }
         }
     }
 
-    /** 相机拍照完成：照片已在内部存储，加入列表 */
     fun addPhotoPath(path: String?) {
         if (path == null) return
         _imagePaths.update { if (path in it) it else it + path }
         autoSaveDraft()
     }
 
-    /** 删除某张图片：新增的图片同时删除文件 */
     fun removeImage(path: String) {
         _imagePaths.update { it - path }
-        if (path !in originalPaths) ImageUtils.deleteImageFile(path)
+        if (path !in originalPaths) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) { ImageUtils.deleteImageFile(path) }
+            }
+        }
         autoSaveDraft()
     }
 
-    // ---- 日期设置 ----
+    // ---- 日期：日历选择/清除（同步文本）----
 
-    fun setPurchaseDate(ts: Long?) { _purchaseDate.value = ts; autoSaveDraft() }
-    fun setExpiryDate(ts: Long?) { _expiryDate.value = ts; autoSaveDraft() }
-    fun setWarrantyDate(ts: Long?) { _warrantyDate.value = ts; autoSaveDraft() }
+    fun setPurchaseDate(ts: Long?) {
+        _purchaseDate.value = ts
+        _purchaseDateText.value = DateUtils.formatDate(ts)
+        autoSaveDraft()
+    }
+
+    fun setExpiryDate(ts: Long?) {
+        _expiryDate.value = ts
+        _expiryDateText.value = DateUtils.formatDate(ts)
+        autoSaveDraft()
+    }
+
+    fun setWarrantyDate(ts: Long?) {
+        _warrantyDate.value = ts
+        _warrantyDateText.value = DateUtils.formatDate(ts)
+        autoSaveDraft()
+    }
+
+    // ---- 日期：手动文本输入（实时尝试解析）----
+
+    fun onPurchaseDateTextChange(text: String) {
+        _purchaseDateText.value = text
+        _purchaseDate.value = DateUtils.parseDate(text)
+        autoSaveDraft()
+    }
+
+    fun onExpiryDateTextChange(text: String) {
+        _expiryDateText.value = text
+        _expiryDate.value = DateUtils.parseDate(text)
+        autoSaveDraft()
+    }
+
+    fun onWarrantyDateTextChange(text: String) {
+        _warrantyDateText.value = text
+        _warrantyDate.value = DateUtils.parseDate(text)
+        autoSaveDraft()
+    }
 
     // ---- 草稿 ----
 
@@ -152,7 +198,6 @@ class ItemEditViewModel(
         DraftManager.saveDraft(application, draft)
     }
 
-    /** 恢复草稿 */
     fun restoreDraft() {
         val d = _pendingDraft.value ?: return
         _name.value = d.name
@@ -161,13 +206,12 @@ class ItemEditViewModel(
         _location.value = d.location
         _quantity.value = d.quantity
         _imagePaths.value = d.imagePaths
-        _purchaseDate.value = d.purchaseDate
-        _expiryDate.value = d.expiryDate
-        _warrantyDate.value = d.warrantyDate
+        setPurchaseDate(d.purchaseDate)
+        setExpiryDate(d.expiryDate)
+        setWarrantyDate(d.warrantyDate)
         _pendingDraft.value = null
     }
 
-    /** 丢弃草稿 */
     fun discardDraft() {
         DraftManager.clearDraft(application)
         _pendingDraft.value = null
@@ -190,17 +234,22 @@ class ItemEditViewModel(
      * 保存物品
      */
     fun saveItem() {
-        if (_name.value.isBlank()) { _errorMessage.value = "请输入物品名称"; return }
-        if (_category.value.isBlank()) { _errorMessage.value = "请输入物品分类"; return }
+        if (_name.value.isBlank()) {
+            _errorMessage.value = application.getString(R.string.enter_name); return
+        }
+        if (_category.value.isBlank()) {
+            _errorMessage.value = application.getString(R.string.enter_category); return
+        }
 
         viewModelScope.launch {
             val qty = _quantity.value.toIntOrNull() ?: 1
             val now = System.currentTimeMillis()
 
             if (isEditing && editingItemId != null) {
-                // 清理被移除的原有图片文件
-                (originalPaths - _imagePaths.value.toSet()).forEach {
-                    ImageUtils.deleteImageFile(it)
+                withContext(Dispatchers.IO) {
+                    (originalPaths - _imagePaths.value.toSet()).forEach {
+                        ImageUtils.deleteImageFile(it)
+                    }
                 }
                 val existing = repository.getItemById(editingItemId)
                 val updated = existing?.copy(

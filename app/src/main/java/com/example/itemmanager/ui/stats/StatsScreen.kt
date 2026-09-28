@@ -36,8 +36,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.itemmanager.R
 import com.example.itemmanager.ui.dashboard.DashboardViewModel
 import com.example.itemmanager.ui.theme.TextSecondary
 
@@ -66,7 +68,7 @@ fun StatsScreen(dashboardViewModel: DashboardViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("统计", fontWeight = FontWeight.Bold, color = Color.White) },
+                title = { Text(stringResource(R.string.stats), fontWeight = FontWeight.Bold, color = Color.White) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
@@ -80,7 +82,7 @@ fun StatsScreen(dashboardViewModel: DashboardViewModel) {
                     .padding(padding),
                 contentAlignment = Alignment.Center
             ) {
-                Text("暂无数据，添加物品后查看统计", color = TextSecondary)
+                Text(stringResource(R.string.no_stats), color = TextSecondary)
             }
             return@Scaffold
         }
@@ -98,21 +100,21 @@ fun StatsScreen(dashboardViewModel: DashboardViewModel) {
                     modifier = Modifier.weight(1f),
                     icon = Icons.Default.Inventory2,
                     value = totalKinds.toString(),
-                    label = "物品种类",
+                    label = stringResource(R.string.stat_kinds),
                     color = Color(0xFF2563EB)
                 )
                 StatCard(
                     modifier = Modifier.weight(1f),
                     icon = Icons.Default.Tag,
                     value = totalQuantity.toString(),
-                    label = "物品总数",
+                    label = stringResource(R.string.total_items),
                     color = Color(0xFF10B981)
                 )
                 StatCard(
                     modifier = Modifier.weight(1f),
                     icon = Icons.Default.Category,
                     value = categoryCount.toString(),
-                    label = "分类数量",
+                    label = stringResource(R.string.category_count),
                     color = Color(0xFFF59E0B)
                 )
             }
@@ -127,7 +129,7 @@ fun StatsScreen(dashboardViewModel: DashboardViewModel) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "分类分布",
+                        text = stringResource(R.string.category_distribution),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -223,7 +225,7 @@ private fun CategoryBar(
         }
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-            text = "${count}件 ${(fraction * 100).toInt()}%",
+            text = stringResource(R.string.category_bar_text, count, (fraction * 100).toInt()),
             style = MaterialTheme.typography.labelMedium,
             color = TextSecondary,
             modifier = Modifier.width(64.dp)

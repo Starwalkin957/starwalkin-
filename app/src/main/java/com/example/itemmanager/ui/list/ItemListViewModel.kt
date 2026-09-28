@@ -5,11 +5,13 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.itemmanager.R
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.data.repository.ItemRepository
 import com.example.itemmanager.util.BackupUtils
 import com.example.itemmanager.util.ImageUtils
 import com.example.itemmanager.util.ShareUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 物品列表页 ViewModel
@@ -74,7 +77,9 @@ class ItemListViewModel(
     fun deleteItem(item: ItemEntity) {
         viewModelScope.launch {
             repository.deleteItem(item)
-            item.imagePaths.forEach { ImageUtils.deleteImageFile(it) }
+            withContext(Dispatchers.IO) {
+                item.imagePaths.forEach { ImageUtils.deleteImageFile(it) }
+            }
         }
     }
 
@@ -85,10 +90,12 @@ class ItemListViewModel(
         viewModelScope.launch {
             val file = BackupUtils.exportBackup(application, repository)
             if (file != null) {
-                _message.value = "备份已生成，选择应用上传云端"
-                ShareUtils.shareFile(application, file, "上传/分享备份到…")
+                _message.value = application.getString(R.string.backup_ready)
+                ShareUtils.shareFile(
+                    application, file, application.getString(R.string.share_backup_title)
+                )
             } else {
-                _message.value = "导出失败，请重试"
+                _message.value = application.getString(R.string.export_failed)
             }
         }
     }
@@ -100,9 +107,9 @@ class ItemListViewModel(
         viewModelScope.launch {
             val count = BackupUtils.importBackup(application, repository, uri)
             _message.value = when {
-                count > 0 -> "成功恢复 $count 件物品"
-                count == 0 -> "备份中没有物品"
-                else -> "导入失败：文件格式不正确"
+                count > 0 -> application.getString(R.string.restore_success, count)
+                count == 0 -> application.getString(R.string.restore_empty)
+                else -> application.getString(R.string.import_failed)
             }
         }
     }

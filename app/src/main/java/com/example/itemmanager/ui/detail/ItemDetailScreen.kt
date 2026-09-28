@@ -48,10 +48,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.itemmanager.R
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.ui.theme.ErrorColor
 import com.example.itemmanager.ui.theme.SuccessColor
@@ -82,22 +84,22 @@ fun ItemDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("物品详情", fontWeight = FontWeight.Bold, color = Color.White) },
+                title = { Text(stringResource(R.string.item_detail), fontWeight = FontWeight.Bold, color = Color.White) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, "返回", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                     }
                 },
                 actions = {
                     if (item != null) {
                         IconButton(onClick = { ShareUtils.shareItem(context, item!!) }) {
-                            Icon(Icons.Default.Share, "分享", tint = Color.White)
+                            Icon(Icons.Default.Share, null, tint = Color.White)
                         }
                         IconButton(onClick = { onEdit(item!!.id) }) {
-                            Icon(Icons.Default.Edit, "编辑", tint = Color.White)
+                            Icon(Icons.Default.Edit, null, tint = Color.White)
                         }
                         IconButton(onClick = { showDeleteDialog = true }) {
-                            Icon(Icons.Default.Delete, "删除", tint = Color.White)
+                            Icon(Icons.Default.Delete, stringResource(R.string.delete), tint = Color.White)
                         }
                     }
                 },
@@ -117,7 +119,7 @@ fun ItemDetailScreen(
                     CircularProgressIndicator()
                 }
                 item == null -> Box(Modifier.fillMaxSize(), Alignment.Center) {
-                    Text("物品不存在或已被删除", color = TextSecondary)
+                    Text(stringResource(R.string.not_exist), color = TextSecondary)
                 }
                 else -> ItemDetailContent(item = item!!)
             }
@@ -127,16 +129,16 @@ fun ItemDetailScreen(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("确认删除") },
-            text = { Text("确定要删除「${item?.name ?: ""}」吗？此操作不可撤销。") },
+            title = { Text(stringResource(R.string.delete_confirm)) },
+            text = { Text(stringResource(R.string.delete_text, item?.name ?: "")) },
             confirmButton = {
                 TextButton(onClick = {
                     showDeleteDialog = false
                     viewModel.deleteCurrentItem(onBack)
-                }) { Text("删除", color = Color.Red) }
+                }) { Text(stringResource(R.string.delete), color = Color.Red) }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) { Text("取消") }
+                TextButton(onClick = { showDeleteDialog = false }) { Text(stringResource(R.string.cancel)) }
             }
         )
     }
@@ -229,27 +231,27 @@ fun ItemDetailContent(item: ItemEntity) {
         Spacer(Modifier.height(20.dp))
 
         // ---- 基本信息 ----
-        DetailRow("数量", item.quantity.toString())
-        DetailRow("存放位置", item.location.ifBlank { "未设置" })
+        DetailRow(stringResource(R.string.quantity), item.quantity.toString())
+        DetailRow(stringResource(R.string.location), item.location.ifBlank { stringResource(R.string.not_set) })
 
         Spacer(Modifier.height(8.dp))
 
         // ---- 有效期信息 ----
-        DetailRow("购买日期", DateUtils.formatDate(item.purchaseDate).ifBlank { "未设置" })
-        ExpiryStatusRow("保质期", item.expiryDate)
-        ExpiryStatusRow("保修期", item.warrantyDate)
+        DetailRow(stringResource(R.string.purchase_date), DateUtils.formatDate(item.purchaseDate).ifBlank { stringResource(R.string.not_set) })
+        ExpiryStatusRow(stringResource(R.string.label_expiry), item.expiryDate)
+        ExpiryStatusRow(stringResource(R.string.label_warranty), item.warrantyDate)
 
         Spacer(Modifier.height(8.dp))
 
-        DetailRow("创建时间", ImageUtils.formatDate(item.createdAt))
-        DetailRow("更新时间", ImageUtils.formatDate(item.updatedAt))
+        DetailRow(stringResource(R.string.created_time), ImageUtils.formatDate(item.createdAt))
+        DetailRow(stringResource(R.string.updated_time), ImageUtils.formatDate(item.updatedAt))
 
         Spacer(Modifier.height(20.dp))
 
-        Text("描述", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+        Text(stringResource(R.string.description_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(8.dp))
         Text(
-            item.description.ifBlank { "暂无描述" },
+            item.description.ifBlank { stringResource(R.string.no_description) },
             style = MaterialTheme.typography.bodyLarge,
             color = if (item.description.isBlank()) TextSecondary else Color.Unspecified
         )
@@ -295,7 +297,7 @@ fun ExpiryStatusRow(label: String, timestamp: Long?) {
         Spacer(Modifier.width(16.dp))
         if (timestamp == null) {
             Text(
-                "未设置",
+                stringResource(R.string.not_set),
                 style = MaterialTheme.typography.bodyLarge,
                 color = TextSecondary,
                 modifier = Modifier.weight(1f),
@@ -304,9 +306,9 @@ fun ExpiryStatusRow(label: String, timestamp: Long?) {
         } else {
             val days = DateUtils.daysUntil(timestamp)
             val (status, color) = when {
-                days < 0 -> "已过期" to ErrorColor
-                days <= 7 -> "即将到期" to WarningColor
-                else -> "有效" to SuccessColor
+                days < 0 -> stringResource(R.string.status_expired) to ErrorColor
+                days <= 7 -> stringResource(R.string.status_expiring) to WarningColor
+                else -> stringResource(R.string.status_valid) to SuccessColor
             }
             Column(
                 modifier = Modifier.weight(1f),

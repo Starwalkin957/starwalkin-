@@ -1,0 +1,144 @@
+<resources>
+    <string name="app_name">Gegenstandsmanager</string>
+
+    <string name="tab_items">Gegenstände</string>
+    <string name="tab_category">Kategorien</string>
+    <string name="tab_stats">Statistik</string>
+    <string name="tab_profile">Profil</string>
+
+    <string name="my_items">Meine Gegenstände</string>
+    <string name="search_hint">Name oder Beschreibung suchen…</string>
+    <string name="export_share">Backup exportieren und teilen</string>
+    <string name="import_restore">Backup importieren</string>
+    <string name="item_count">%1$d Gegenstände insgesamt</string>
+    <string name="all_categories">Alle Kategorien</string>
+    <string name="quantity_label">Anz.: %1$d</string>
+    <string name="location_label">Ort: %1$s</string>
+    <string name="empty_title">Noch keine Gegenstände</string>
+    <string name="empty_desc">Tippe unten rechts auf die Schaltfläche, um den ersten Gegenstand hinzuzufügen</string>
+
+    <string name="edit_item">Gegenstand bearbeiten</string>
+    <string name="add_item">Gegenstand hinzufügen</string>
+    <string name="item_photos">Fotos des Gegenstands (%1$d)</string>
+    <string name="add_photo">Foto hinzufügen</string>
+    <string name="item_name">Name des Gegenstands</string>
+    <string name="item_name_hint">z. B. iPhone 15 Pro</string>
+    <string name="category">Kategorie</string>
+    <string name="category_hint">Kategorie eingeben oder unten wählen</string>
+    <string name="quick_category">Schnellkategorien:</string>
+    <string name="quantity">Anzahl</string>
+    <string name="location">Aufbewahrungsort</string>
+    <string name="location_hint">z. B. Schreibtischschublade, Wohnzimmerschrank</string>
+    <string name="validity_info">Gültigkeitsinformationen</string>
+    <string name="purchase_date">Kaufdatum</string>
+    <string name="expiry_date">Verfallsdatum / Haltbarkeit</string>
+    <string name="warranty_date">Garantie bis</string>
+    <string name="date_hint">JJJJ-MM-TT, direkte Eingabe möglich</string>
+    <string name="description">Beschreibung / Notizen</string>
+    <string name="description_hint">Details zum Gegenstand festhalten usw.</string>
+    <string name="save_changes">Änderungen speichern</string>
+    <string name="choose_method">Quelle wählen</string>
+    <string name="take_photo">Foto aufnehmen</string>
+    <string name="choose_gallery">Aus der Galerie wählen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="confirm">OK</string>
+    <string name="restore_title">Vorherigen Inhalt wiederherstellen?</string>
+    <string name="restore_text">Unvollständige Daten gefunden. Wiederherstellen und weiter bearbeiten?</string>
+    <string name="restore">Wiederherstellen</string>
+    <string name="discard">Verwerfen</string>
+
+    <string name="item_detail">Gegenstandsdetails</string>
+    <string name="not_exist">Gegenstand existiert nicht oder wurde gelöscht</string>
+    <string name="delete_confirm">Löschen bestätigen</string>
+    <string name="delete_text">„%1$s“ löschen? Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="delete">Löschen</string>
+    <string name="not_set">Nicht festgelegt</string>
+    <string name="created_time">Erstellt am</string>
+    <string name="updated_time">Aktualisiert am</string>
+    <string name="description_title">Beschreibung</string>
+    <string name="no_description">Keine Beschreibung</string>
+    <string name="status_valid">Gültig</string>
+    <string name="label_expiry">Haltbarkeit</string>
+    <string name="label_warranty">Garantie</string>
+    <string name="status_expiring">Läuft bald ab</string>
+    <string name="status_expired">Abgelaufen</string>
+
+    <string name="category_browse">Nach Kategorie durchsuchen</string>
+    <string name="no_category">Noch keine Kategorien. Zuerst einen Gegenstand hinzufügen.</string>
+    <string name="items_count">%1$d Gegenstände</string>
+
+    <string name="stats">Statistik</string>
+    <string name="total_items">Gegenstände insgesamt</string>
+    <string name="total_quantity">Gesamtanzahl</string>
+    <string name="category_count">Kategorien</string>
+    <string name="no_stats">Keine Daten. Gegenstände hinzufügen, um Statistiken zu sehen.</string>
+    <string name="stat_kinds">Artikelarten</string>
+    <string name="category_distribution">Kategorienverteilung</string>
+    <string name="category_bar_text">%1$d  %2$d%%</string>
+
+    <string name="profile">Profil</string>
+    <string name="app_title">Gegenstandsmanager</string>
+    <string name="recorded_items">%1$d Gegenstände erfasst</string>
+    <string name="theme_color">Designfarbe</string>
+    <string name="custom_color">Eigene Farbe</string>
+    <string name="theme_blue">Blau</string>
+    <string name="theme_white">Weiß</string>
+    <string name="theme_black">Schwarz</string>
+    <string name="theme_purple">Lila</string>
+    <string name="app_background">App-Hintergrund</string>
+    <string name="choose_background">Hintergrund wählen</string>
+    <string name="clear_background">Hintergrund entfernen</string>
+    <string name="language">Sprache</string>
+    <string name="export_cloud">Backup in die Cloud exportieren</string>
+    <string name="export_cloud_desc">Alle Gegenstände packen und in die Cloud hochladen</string>
+    <string name="import_backup">Backup importieren</string>
+    <string name="import_backup_desc">Gegenstände aus einer Backup-Datei wiederherstellen</string>
+    <string name="replay_guide">Einführung wiederholen</string>
+    <string name="replay_guide_desc">Erneut ansehen, wie die App funktioniert</string>
+    <string name="about">Über</string>
+    <string name="about_desc">Gegenstandsmanager v1.0</string>
+    <string name="about_msg">Gegenstandsmanager v1.0 · Lokale Gegenstandsverwaltung</string>
+
+    <string name="reminder_title">Ablauf-Erinnerungen</string>
+    <string name="got_it">Verstanden</string>
+    <string name="expiry_tomorrow">Läuft morgen ab</string>
+    <string name="expiry_today">Läuft heute ab</string>
+    <string name="warranty_days">Garantie läuft in %1$d Tagen ab</string>
+    <string name="warranty_today">Garantie läuft heute ab</string>
+
+    <string name="skip">Überspringen</string>
+    <string name="next">Weiter</string>
+    <string name="get_started">Loslegen</string>
+    <string name="ob1_title">Willkommen beim Gegenstandsmanager</string>
+    <string name="ob1_desc">Erfasse jeden Gegenstand um dich,\nund verliere nie wieder etwas.</string>
+    <string name="ob2_title">Fotos, automatisch gespeichert</string>
+    <string name="ob2_desc">Mache Fotos mit der Kamera.\nDaten bleiben lokal erhalten, nichts geht verloren.</string>
+    <string name="ob3_title">Suche &amp; Kategorien</string>
+    <string name="ob3_desc">Ein paar Wörter genügen zum Finden,\nund filtere schnell nach Kategorie.</string>
+    <string name="ob4_title">Backup &amp; Teilen, sicher</string>
+    <string name="ob4_desc">Teile Objekte, exportiere Cloud-Backups,\nund stelle sie auf dem neuen Handy wieder her.</string>
+    <!-- Backup/Wiederherstellen -->
+    <string name="backup_ready">Backup erstellt. App zum Hochladen in die Cloud wählen.</string>
+    <string name="export_failed">Export fehlgeschlagen, bitte erneut versuchen</string>
+    <string name="restore_success">%1$d Gegenstände erfolgreich wiederhergestellt</string>
+    <string name="restore_empty">Keine Gegenstände im Backup</string>
+    <string name="import_failed">Import fehlgeschlagen: falsches Dateiformat</string>
+    <string name="share_backup_title">Backup hochladen/teilen…</string>
+    <!-- Teilen -->
+    <string name="share_item_label">[Objekt]</string>
+    <string name="share_category">Kategorie: </string>
+    <string name="share_quantity">Anzahl: </string>
+    <string name="share_location">Ort: </string>
+    <string name="share_purchase">Kaufdatum: </string>
+    <string name="share_expiry">Haltbar bis: </string>
+    <string name="share_warranty">Garantie bis: </string>
+    <string name="share_note">Notizen: </string>
+    <string name="share_chooser">"%1$s" teilen mit…</string>
+    <string name="share_file_title">Backup-Datei teilen…</string>
+    <!-- Farbauswahl -->
+    <string name="current_hue">Aktuelle Farbe (Farbton %1$d°)</string>
+
+    <string name="enter_name">Bitte den Namen des Gegenstands eingeben</string>
+    <string name="enter_category">Bitte die Kategorie eingeben</string>
+    <string name="photo_failed">Foto konnte nicht hinzugefügt werden, bitte erneut versuchen</string>
+</resources>

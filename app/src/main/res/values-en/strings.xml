@@ -1,0 +1,143 @@
+<resources>
+    <string name="app_name">Item Manager</string>
+
+    <string name="tab_items">Items</string>
+    <string name="tab_category">Categories</string>
+    <string name="tab_stats">Stats</string>
+    <string name="tab_profile">Profile</string>
+
+    <string name="my_items">My Items</string>
+    <string name="search_hint">Search item name or description…</string>
+    <string name="export_share">Export backup &amp; share</string>
+    <string name="import_restore">Import backup</string>
+    <string name="item_count">%1$d items total</string>
+    <string name="all_categories">All Categories</string>
+    <string name="quantity_label">Qty: %1$d</string>
+    <string name="location_label">Loc: %1$s</string>
+    <string name="empty_title">No items yet</string>
+    <string name="empty_desc">Tap the button at the bottom right to add your first item</string>
+
+    <string name="edit_item">Edit Item</string>
+    <string name="add_item">Add Item</string>
+    <string name="item_photos">Item Photos (%1$d)</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="item_name">Item Name</string>
+    <string name="item_name_hint">e.g. iPhone 15 Pro</string>
+    <string name="category">Category</string>
+    <string name="category_hint">Type or pick a category below</string>
+    <string name="quick_category">Quick categories:</string>
+    <string name="quantity">Quantity</string>
+    <string name="location">Location</string>
+    <string name="location_hint">e.g. study drawer, living room cabinet</string>
+    <string name="validity_info">Validity Information</string>
+    <string name="purchase_date">Purchase Date</string>
+    <string name="expiry_date">Expiry / Best Before</string>
+    <string name="warranty_date">Warranty Until</string>
+    <string name="date_hint">YYYY-MM-DD, type directly</string>
+    <string name="description">Description / Notes</string>
+    <string name="description_hint">Record item details, etc.</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="choose_method">Choose Source</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_gallery">Pick from Gallery</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">OK</string>
+    <string name="restore_title">Restore previous content?</string>
+    <string name="restore_text">Unfinished item info found. Restore and continue editing?</string>
+    <string name="restore">Restore</string>
+    <string name="discard">Discard</string>
+
+    <string name="item_detail">Item Details</string>
+    <string name="not_exist">Item does not exist or has been deleted</string>
+    <string name="delete_confirm">Confirm Deletion</string>
+    <string name="delete_text">Delete &quot;%1$s&quot;? This cannot be undone.</string>    <string name="delete">Delete</string>
+    <string name="not_set">Not set</string>
+    <string name="created_time">Created</string>
+    <string name="updated_time">Updated</string>
+    <string name="description_title">Description</string>
+    <string name="no_description">No description</string>
+    <string name="status_valid">Valid</string>
+    <string name="label_expiry">Expiry</string>
+    <string name="label_warranty">Warranty</string>
+    <string name="status_expiring">Expiring soon</string>
+    <string name="status_expired">Expired</string>
+
+    <string name="category_browse">Browse by Category</string>
+    <string name="no_category">No categories yet. Add an item first.</string>
+    <string name="items_count">%1$d items</string>
+
+    <string name="stats">Statistics</string>
+    <string name="total_items">Total Items</string>
+    <string name="total_quantity">Total Quantity</string>
+    <string name="category_count">Categories</string>
+    <string name="no_stats">No data yet. Add items to see statistics.</string>
+    <string name="stat_kinds">Item Kinds</string>
+    <string name="category_distribution">Category Distribution</string>
+    <string name="category_bar_text">%1$d  %2$d%%</string>
+
+    <string name="profile">Profile</string>
+    <string name="app_title">Item Manager</string>
+    <string name="recorded_items">%1$d items recorded</string>
+    <string name="theme_color">Theme Color</string>
+    <string name="custom_color">Custom Color</string>
+    <string name="theme_blue">Blue</string>
+    <string name="theme_white">White</string>
+    <string name="theme_black">Black</string>
+    <string name="theme_purple">Purple</string>
+    <string name="app_background">App Background</string>
+    <string name="choose_background">Choose Background</string>
+    <string name="clear_background">Clear Background</string>
+    <string name="language">Language</string>
+    <string name="export_cloud">Export Backup to Cloud</string>
+    <string name="export_cloud_desc">Pack all items and upload to cloud drive</string>
+    <string name="import_backup">Import Backup</string>
+    <string name="import_backup_desc">Restore items from a backup file</string>
+    <string name="replay_guide">Replay Onboarding</string>
+    <string name="replay_guide_desc">Review how to use the app</string>
+    <string name="about">About</string>
+    <string name="about_desc">Item Manager v1.0</string>
+    <string name="about_msg">Item Manager v1.0 · Local item management</string>
+
+    <string name="reminder_title">Expiry Reminders</string>
+    <string name="got_it">Got it</string>
+    <string name="expiry_tomorrow">Expires tomorrow</string>
+    <string name="expiry_today">Expires today</string>
+    <string name="warranty_days">Warranty expires in %1$d days</string>
+    <string name="warranty_today">Warranty expires today</string>
+
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+    <string name="ob1_title">Welcome to Item Manager</string>
+    <string name="ob1_desc">Record every item around you,\nand never lose track of your things.</string>
+    <string name="ob2_title">Snap Photos, Auto-Saved</string>
+    <string name="ob2_desc">Take photos with your camera.\nData is stored locally and never lost.</string>
+    <string name="ob3_title">Fuzzy Search &amp; Categories</string>
+    <string name="ob3_desc">Type a few words to find items,\nand filter quickly by category.</string>
+    <string name="ob4_title">Backup &amp; Share, Secure</string>
+    <string name="ob4_desc">Share items, export cloud backups,\nand restore on a new phone with ease.</string>
+    <!-- Backup/Restore -->
+    <string name="backup_ready">Backup created. Choose an app to upload to the cloud.</string>
+    <string name="export_failed">Export failed, please try again</string>
+    <string name="restore_success">Restored %1$d items successfully</string>
+    <string name="restore_empty">No items in the backup</string>
+    <string name="import_failed">Import failed: incorrect file format</string>
+    <string name="share_backup_title">Upload/Share backup to…</string>
+    <!-- Share -->
+    <string name="share_item_label">[Item]</string>
+    <string name="share_category">Category: </string>
+    <string name="share_quantity">Quantity: </string>
+    <string name="share_location">Location: </string>
+    <string name="share_purchase">Purchase date: </string>
+    <string name="share_expiry">Expiry date: </string>
+    <string name="share_warranty">Warranty until: </string>
+    <string name="share_note">Notes: </string>
+    <string name="share_chooser">Share "%1$s" to…</string>
+    <string name="share_file_title">Share backup file to…</string>
+    <!-- Color picker -->
+    <string name="current_hue">Current color (hue %1$d°)</string>
+
+    <string name="enter_name">Please enter the item name</string>
+    <string name="enter_category">Please enter the category</string>
+    <string name="photo_failed">Failed to add photo, please try again</string>
+</resources>

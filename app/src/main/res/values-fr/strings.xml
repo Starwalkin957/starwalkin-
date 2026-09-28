@@ -1,0 +1,144 @@
+<resources>
+    <string name="app_name">Gestion d\'objets</string>
+
+    <string name="tab_items">Objets</string>
+    <string name="tab_category">Catégories</string>
+    <string name="tab_stats">Statistiques</string>
+    <string name="tab_profile">Profil</string>
+
+    <string name="my_items">Mes objets</string>
+    <string name="search_hint">Rechercher un nom ou une description…</string>
+    <string name="export_share">Exporter et partager</string>
+    <string name="import_restore">Importer une sauvegarde</string>
+    <string name="item_count">%1$d objets au total</string>
+    <string name="all_categories">Toutes les catégories</string>
+    <string name="quantity_label">Quantité : %1$d</string>
+    <string name="location_label">Lieu : %1$s</string>
+    <string name="empty_title">Aucun objet pour le moment</string>
+    <string name="empty_desc">Touchez le bouton en bas à droite pour ajouter votre premier objet</string>
+
+    <string name="edit_item">Modifier l\'objet</string>
+    <string name="add_item">Ajouter un objet</string>
+    <string name="item_photos">Photos de l\'objet (%1$d)</string>
+    <string name="add_photo">Ajouter une photo</string>
+    <string name="item_name">Nom de l\'objet</string>
+    <string name="item_name_hint">ex. iPhone 15 Pro</string>
+    <string name="category">Catégorie</string>
+    <string name="category_hint">Saisissez ou choisissez une catégorie ci-dessous</string>
+    <string name="quick_category">Catégories rapides :</string>
+    <string name="quantity">Quantité</string>
+    <string name="location">Emplacement</string>
+    <string name="location_hint">ex. tiroir du bureau, placard du salon</string>
+    <string name="validity_info">Informations de validité</string>
+    <string name="purchase_date">Date d\'achat</string>
+    <string name="expiry_date">Date de péremption / DLC</string>
+    <string name="warranty_date">Garantie jusqu\'au</string>
+    <string name="date_hint">AAAA-MM-JJ, saisie directe</string>
+    <string name="description">Description / Notes</string>
+    <string name="description_hint">Notez les détails de l\'objet, etc.</string>
+    <string name="save_changes">Enregistrer les modifications</string>
+    <string name="choose_method">Choisir la source</string>
+    <string name="take_photo">Prendre une photo</string>
+    <string name="choose_gallery">Choisir dans la galerie</string>
+    <string name="cancel">Annuler</string>
+    <string name="confirm">OK</string>
+    <string name="restore_title">Restaurer le contenu précédent ?</string>
+    <string name="restore_text">Contenu inachevé trouvé. Restaurer et continuer l\'édition ?</string>
+    <string name="restore">Restaurer</string>
+    <string name="discard">Ignorer</string>
+
+    <string name="item_detail">Détails de l\'objet</string>
+    <string name="not_exist">L\'objet n\'existe pas ou a été supprimé</string>
+    <string name="delete_confirm">Confirmer la suppression</string>
+    <string name="delete_text">Supprimer « %1$s » ? Cette action est irréversible.</string>
+    <string name="delete">Supprimer</string>
+    <string name="not_set">Non défini</string>
+    <string name="created_time">Créé le</string>
+    <string name="updated_time">Modifié le</string>
+    <string name="description_title">Description</string>
+    <string name="no_description">Aucune description</string>
+    <string name="status_valid">Valide</string>
+    <string name="label_expiry">Péremption</string>
+    <string name="label_warranty">Garantie</string>
+    <string name="status_expiring">Bientôt expiré</string>
+    <string name="status_expired">Expiré</string>
+
+    <string name="category_browse">Parcourir par catégorie</string>
+    <string name="no_category">Aucune catégorie. Ajoutez d\'abord un objet.</string>
+    <string name="items_count">%1$d objets</string>
+
+    <string name="stats">Statistiques</string>
+    <string name="total_items">Nombre total d\'objets</string>
+    <string name="total_quantity">Quantité totale</string>
+    <string name="category_count">Catégories</string>
+    <string name="no_stats">Aucune donnée. Ajoutez des objets pour voir les statistiques.</string>
+    <string name="stat_kinds">Types d\'objets</string>
+    <string name="category_distribution">Répartition par catégorie</string>
+    <string name="category_bar_text">%1$d  %2$d%%</string>
+
+    <string name="profile">Profil</string>
+    <string name="app_title">Gestion d\'objets</string>
+    <string name="recorded_items">%1$d objets enregistrés</string>
+    <string name="theme_color">Couleur du thème</string>
+    <string name="custom_color">Couleur personnalisée</string>
+    <string name="theme_blue">Bleu</string>
+    <string name="theme_white">Blanc</string>
+    <string name="theme_black">Noir</string>
+    <string name="theme_purple">Violet</string>
+    <string name="app_background">Arrière-plan de l\'app</string>
+    <string name="choose_background">Choisir l\'arrière-plan</string>
+    <string name="clear_background">Effacer l\'arrière-plan</string>
+    <string name="language">Langue</string>
+    <string name="export_cloud">Exporter la sauvegarde vers le cloud</string>
+    <string name="export_cloud_desc">Empaqueter tous les objets et envoyer sur le cloud</string>
+    <string name="import_backup">Importer une sauvegarde</string>
+    <string name="import_backup_desc">Restaurer les objets depuis un fichier de sauvegarde</string>
+    <string name="replay_guide">Revoir l\'introduction</string>
+    <string name="replay_guide_desc">Revoir comment utiliser l\'application</string>
+    <string name="about">À propos</string>
+    <string name="about_desc">Gestion d\'objets v1.0</string>
+    <string name="about_msg">Gestion d\'objets v1.0 · Gestion locale des objets</string>
+
+    <string name="reminder_title">Rappels d\'expiration</string>
+    <string name="got_it">Compris</string>
+    <string name="expiry_tomorrow">Expire demain</string>
+    <string name="expiry_today">Expire aujourd\'hui</string>
+    <string name="warranty_days">La garantie expire dans %1$d jours</string>
+    <string name="warranty_today">La garantie expire aujourd\'hui</string>
+
+    <string name="skip">Passer</string>
+    <string name="next">Suivant</string>
+    <string name="get_started">Commencer</string>
+    <string name="ob1_title">Bienvenue dans Gestion d\'objets</string>
+    <string name="ob1_desc">Enregistrez chaque objet autour de vous,\net ne perdez plus rien.</string>
+    <string name="ob2_title">Photos, sauvegarde automatique</string>
+    <string name="ob2_desc">Prenez des photos en un clic.\nDonnées stockées localement, rien ne se perd.</string>
+    <string name="ob3_title">Recherche et catégories</string>
+    <string name="ob3_desc">Quelques mots suffisent pour trouver,\net filtrez vite par catégorie.</string>
+    <string name="ob4_title">Sauvegarde et partage</string>
+    <string name="ob4_desc">Partagez, exportez sur le cloud,\net restaurez sur un nouveau téléphone.</string>
+    <!-- Sauvegarde/Restauration -->
+    <string name="backup_ready">Sauvegarde créée. Choisissez une appli pour le cloud.</string>
+    <string name="export_failed">Échec de l\'export, réessayez</string>
+    <string name="restore_success">%1$d objets restaurés avec succès</string>
+    <string name="restore_empty">Aucun objet dans la sauvegarde</string>
+    <string name="import_failed">Échec de l\'import : format de fichier incorrect</string>
+    <string name="share_backup_title">Téléverser/Partager la sauvegarde…</string>
+    <!-- Partage -->
+    <string name="share_item_label">[Objet]</string>
+    <string name="share_category">Catégorie : </string>
+    <string name="share_quantity">Quantité : </string>
+    <string name="share_location">Emplacement : </string>
+    <string name="share_purchase">Date d\'achat : </string>
+    <string name="share_expiry">Date de péremption : </string>
+    <string name="share_warranty">Garantie jusqu\'au : </string>
+    <string name="share_note">Remarques : </string>
+    <string name="share_chooser">Partager "%1$s" vers…</string>
+    <string name="share_file_title">Partager le fichier de sauvegarde…</string>
+    <!-- Sélecteur de couleur -->
+    <string name="current_hue">Couleur actuelle (teinte %1$d°)</string>
+
+    <string name="enter_name">Veuillez saisir le nom de l\'objet</string>
+    <string name="enter_category">Veuillez saisir la catégorie</string>
+    <string name="photo_failed">Échec de l\'ajout de la photo, veuillez réessayer</string>
+</resources>

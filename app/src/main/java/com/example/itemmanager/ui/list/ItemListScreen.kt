@@ -56,10 +56,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.itemmanager.R
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.ui.theme.TextSecondary
 import java.io.File
@@ -105,7 +107,7 @@ fun ItemListScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "我的物品",
+                        text = stringResource(R.string.my_items),
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
@@ -116,7 +118,7 @@ fun ItemListScreen(
                         IconButton(onClick = { menuExpanded = true }) {
                             Icon(
                                 Icons.Default.MoreVert,
-                                contentDescription = "更多",
+                                contentDescription = null,
                                 tint = Color.White
                             )
                         }
@@ -125,7 +127,7 @@ fun ItemListScreen(
                             onDismissRequest = { menuExpanded = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("导出备份并分享") },
+                                text = { Text(stringResource(R.string.export_share)) },
                                 leadingIcon = {
                                     Icon(Icons.Default.CloudUpload, contentDescription = null)
                                 },
@@ -135,7 +137,7 @@ fun ItemListScreen(
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text("导入备份恢复") },
+                                text = { Text(stringResource(R.string.import_restore)) },
                                 leadingIcon = {
                                     Icon(Icons.Default.Restore, contentDescription = null)
                                 },
@@ -157,7 +159,7 @@ fun ItemListScreen(
                 onClick = onAddClick,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "添加物品", tint = Color.White)
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_item), tint = Color.White)
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -175,7 +177,7 @@ fun ItemListScreen(
                 value = searchQuery,
                 onValueChange = viewModel::onSearchQueryChanged,
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("搜索物品名称或描述") },
+                placeholder = { Text(stringResource(R.string.search_hint)) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
@@ -194,7 +196,7 @@ fun ItemListScreen(
 
             // 物品统计
             Text(
-                text = "共 ${items.size} 件物品",
+                text = stringResource(R.string.item_count, items.size),
                 style = MaterialTheme.typography.labelMedium,
                 color = TextSecondary,
                 modifier = Modifier.padding(vertical = 4.dp)
@@ -238,7 +240,7 @@ fun CategoryFilter(
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = selectedCategory ?: "全部分类",
+            value = selectedCategory ?: stringResource(R.string.all_categories),
             onValueChange = {},
             readOnly = true,
             modifier = Modifier
@@ -253,7 +255,7 @@ fun CategoryFilter(
             onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("全部分类") },
+                text = { Text(stringResource(R.string.all_categories)) },
                 onClick = {
                     onCategorySelected(null)
                     expanded = false
@@ -345,7 +347,7 @@ fun ItemCard(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "数量: ${item.quantity}",
+                        text = stringResource(R.string.quantity_label, item.quantity),
                         style = MaterialTheme.typography.bodyMedium,
                         color = TextSecondary
                     )
@@ -353,7 +355,7 @@ fun ItemCard(
                 if (item.location.isNotBlank()) {
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "位置: ${item.location}",
+                        text = stringResource(R.string.location_label, item.location),
                         style = MaterialTheme.typography.bodyMedium,
                         color = TextSecondary,
                         maxLines = 1,
@@ -366,7 +368,7 @@ fun ItemCard(
             IconButton(onClick = onDelete) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "删除",
+                    contentDescription = stringResource(R.string.delete),
                     tint = Color.Gray
                 )
             }
@@ -392,13 +394,13 @@ fun EmptyState() {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "还没有物品",
+                text = stringResource(R.string.empty_title),
                 style = MaterialTheme.typography.titleLarge,
                 color = TextSecondary
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "点击右下角按钮添加第一件物品",
+                text = stringResource(R.string.empty_desc),
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextSecondary
             )

@@ -25,7 +25,10 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Inventory2
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.SettingsBackupRestore
+import androidx.compose.material.icons.filled.Wallpaper
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,30 +38,40 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.itemmanager.R
 import com.example.itemmanager.ui.dashboard.DashboardViewModel
 import com.example.itemmanager.ui.theme.TextSecondary
+import com.example.itemmanager.util.BackgroundManager
+import com.example.itemmanager.util.ImageUtils
+import com.example.itemmanager.util.LanguageManager
 import com.example.itemmanager.util.ThemeManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 我的页（副页）
- * 提供备份导出、导入恢复、重看新手引导、关于等入口。
+ * 提供主题配色（含自定义调色盘）、应用背景、语言切换，以及备份/引导/关于等入口。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,18 +82,34 @@ fun ProfileScreen(
     val items by dashboardViewModel.items.collectAsState()
     val message by dashboardViewModel.message.collectAsState()
     val themeId by ThemeManager.themeId.collectAsState()
+    val customColor by ThemeManager.customColor.collectAsState()
+    val backgroundPath by BackgroundManager.backgroundPath.collectAsState()
+
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    var showColorPicker by remember { mutableStateOf(false) }
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    val currentLangTag = remember { LanguageManager.currentTag() }
+
     // 选择备份文件（zip）
     val openZipLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
+    ) { uri -> uri?.let { dashboardViewModel.importFrom(it) } }
+
+    // 选择背景图
+    val backgroundLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
     ) { uri ->
         uri?.let {
-            // 申请长期读取权限并交给 ViewModel 导入
-            runCatching {
-                dashboardViewModel.importFrom(it)
+            scope.launch {
+                val path = withContext(Dispatchers.IO) {
+                    ImageUtils.copyImageToInternalStorage(context, it)
+                }
+                if (path != null) withContext(Dispatchers.IO) {
+                    BackgroundManager.setBackground(context, path)
+                }
             }
         }
     }
@@ -95,7 +124,12 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("我的", fontWeight = FontWeight.Bold, color = Color.White) },
+                title = {
+                    Text(
+                        stringResource(R.string.profile),
+                        fontWeight = FontWeight.Bold, color = Color.White
+                    )
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
@@ -119,28 +153,21 @@ fun ProfileScreen(
                     modifier = Modifier.padding(20.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(56.dp)
-                            .padding(4.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            Icons.Default.Inventory2,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(48.dp)
-                        )
-                    }
+                    Icon(
+                        Icons.Default.Inventory2,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(48.dp)
+                    )
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         Text(
-                            text = "物品管家",
+                            text = stringResource(R.string.app_title),
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "已记录 ${items.size} 种物品",
+                            text = stringResource(R.string.recorded_items, items.size),
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextSecondary
                         )
@@ -150,7 +177,7 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ---- 主题配色 ----
+            // ---- 个性化卡片 ----
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -158,7 +185,7 @@ fun ProfileScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        "主题配色",
+                        stringResource(R.string.theme_color),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -167,19 +194,64 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        ThemeDot("蓝", Color(0xFF2563EB), themeId == ThemeManager.THEME_BLUE) {
+                        ThemeDot(stringResource(R.string.theme_blue), Color(0xFF2563EB), themeId == ThemeManager.THEME_BLUE) {
                             ThemeManager.setTheme(context, ThemeManager.THEME_BLUE)
                         }
-                        ThemeDot("白", Color(0xFFFFFFFF), themeId == ThemeManager.THEME_WHITE) {
+                        ThemeDot(stringResource(R.string.theme_white), Color(0xFFFFFFFF), themeId == ThemeManager.THEME_WHITE) {
                             ThemeManager.setTheme(context, ThemeManager.THEME_WHITE)
                         }
-                        ThemeDot("黑", Color(0xFF111827), themeId == ThemeManager.THEME_BLACK) {
+                        ThemeDot(stringResource(R.string.theme_black), Color(0xFF111827), themeId == ThemeManager.THEME_BLACK) {
                             ThemeManager.setTheme(context, ThemeManager.THEME_BLACK)
                         }
-                        ThemeDot("紫", Color(0xFF7C3AED), themeId == ThemeManager.THEME_PURPLE) {
+                        ThemeDot(stringResource(R.string.theme_purple), Color(0xFF7C3AED), themeId == ThemeManager.THEME_PURPLE) {
                             ThemeManager.setTheme(context, ThemeManager.THEME_PURPLE)
                         }
+                        ThemeDot(
+                            stringResource(R.string.custom_color),
+                            customColor,
+                            themeId == ThemeManager.THEME_CUSTOM
+                        ) {
+                            showColorPicker = true
+                        }
                     }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // ---- 显示与语言卡片 ----
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(2.dp)
+            ) {
+                Column {
+                    val hasBackground = backgroundPath != null
+                    ProfileItem(
+                        icon = Icons.Default.Wallpaper,
+                        iconTint = Color(0xFF8B5CF6),
+                        title = stringResource(R.string.app_background),
+                        subtitle = if (hasBackground) stringResource(R.string.clear_background)
+                        else stringResource(R.string.choose_background),
+                        onClick = {
+                            if (hasBackground) scope.launch {
+                                withContext(Dispatchers.IO) {
+                                    BackgroundManager.clearBackground(context)
+                                }
+                            }
+                            else backgroundLauncher.launch("image/*")
+                        }
+                    )
+                    ProfileDivider()
+                    val currentLangName = LanguageManager.languages
+                        .find { it.tag == currentLangTag }?.displayName
+                    ProfileItem(
+                        icon = Icons.Default.Language,
+                        iconTint = Color(0xFF0EA5E9),
+                        title = stringResource(R.string.language),
+                        subtitle = currentLangName ?: "",
+                        onClick = { showLanguageDialog = true }
+                    )
                 }
             }
 
@@ -195,41 +267,97 @@ fun ProfileScreen(
                     ProfileItem(
                         icon = Icons.Default.Backup,
                         iconTint = Color(0xFF2563EB),
-                        title = "导出备份到云端",
-                        subtitle = "打包全部物品，上传网盘保存",
+                        title = stringResource(R.string.export_cloud),
+                        subtitle = stringResource(R.string.export_cloud_desc),
                         onClick = { dashboardViewModel.exportAndShare() }
                     )
                     ProfileDivider()
                     ProfileItem(
                         icon = Icons.Default.SettingsBackupRestore,
                         iconTint = Color(0xFF10B981),
-                        title = "导入备份恢复",
-                        subtitle = "从备份文件恢复物品",
+                        title = stringResource(R.string.import_backup),
+                        subtitle = stringResource(R.string.import_backup_desc),
                         onClick = { openZipLauncher.launch(arrayOf("application/zip", "*/*")) }
                     )
                     ProfileDivider()
                     ProfileItem(
                         icon = Icons.Default.HelpOutline,
                         iconTint = Color(0xFFF59E0B),
-                        title = "重新查看新手引导",
-                        subtitle = "回顾 App 的使用方法",
+                        title = stringResource(R.string.replay_guide),
+                        subtitle = stringResource(R.string.replay_guide_desc),
                         onClick = onShowOnboarding
                     )
                     ProfileDivider()
                     ProfileItem(
                         icon = Icons.Default.Info,
                         iconTint = Color(0xFF64748B),
-                        title = "关于",
-                        subtitle = "物品管家 v1.0",
+                        title = stringResource(R.string.about),
+                        subtitle = stringResource(R.string.about_desc),
                         onClick = {
                             scope.launch {
-                                snackbarHostState.showSnackbar("物品管家 v1.0 · 本地物品管理")
+                                snackbarHostState.showSnackbar(
+                                    context.getString(R.string.about_msg)
+                                )
                             }
                         }
                     )
                 }
             }
         }
+    }
+
+    // ---- 调色盘对话框 ----
+    if (showColorPicker) {
+        ColorPickerDialog(
+            initialColor = customColor,
+            onConfirm = { color ->
+                ThemeManager.setCustomColor(context, color)
+                showColorPicker = false
+            },
+            onDismiss = { showColorPicker = false }
+        )
+    }
+
+    // ---- 语言选择对话框 ----
+    if (showLanguageDialog) {
+        AlertDialog(
+            onDismissRequest = { showLanguageDialog = false },
+            title = { Text(stringResource(R.string.language)) },
+            text = {
+                Column {
+                    LanguageManager.languages.forEach { lang ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    LanguageManager.setLanguage(lang.tag)
+                                    showLanguageDialog = false
+                                }
+                                .padding(horizontal = 4.dp, vertical = 11.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                lang.displayName,
+                                modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                            if (lang.tag == currentLangTag) {
+                                Icon(
+                                    Icons.Default.Check,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showLanguageDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
     }
 }
 

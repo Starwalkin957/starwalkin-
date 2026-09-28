@@ -43,10 +43,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.itemmanager.R
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.ui.dashboard.DashboardViewModel
 import com.example.itemmanager.ui.theme.TextSecondary
@@ -75,7 +77,7 @@ fun CategoryScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = selectedCategory ?: "分类浏览",
+                        text = selectedCategory ?: stringResource(R.string.category_browse),
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
@@ -85,7 +87,7 @@ fun CategoryScreen(
                         IconButton(onClick = { selectedCategory = null }) {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "返回",
+                                contentDescription = null,
                                 tint = Color.White
                             )
                         }
@@ -105,7 +107,7 @@ fun CategoryScreen(
             if (selectedCategory == null) {
                 // ---- 分类网格 ----
                 if (grouped.isEmpty()) {
-                    EmptyHint("还没有分类，先去添加物品吧")
+                    EmptyHint(stringResource(R.string.no_category))
                 } else {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
@@ -177,7 +179,7 @@ private fun CategoryCard(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = "$count 件物品",
+                text = stringResource(R.string.items_count, count),
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextSecondary
             )
@@ -241,7 +243,7 @@ private fun CategoryItemRow(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "数量：${item.quantity}",
+                    text = stringResource(R.string.quantity_label, item.quantity),
                     style = MaterialTheme.typography.bodyMedium,
                     color = TextSecondary
                 )

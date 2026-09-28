@@ -34,25 +34,44 @@ object DateUtils {
             .toEpochMilli()
 
     /**
+     * 解析用户手动输入的日期，支持：
+     * 2026-09-28、2026/9/28、2026.9.28、2026年9月28日、2026 09 28、20260928
+     * 解析失败返回 null
+     */
+    fun parseDate(input: String): Long? {
+        return try {
+            val raw = input.trim()
+            // 纯数字 8 位：20260928
+            if (raw.length == 8 && raw.all { it.isDigit() }) {
+                return dateToMillis(
+                    raw.substring(0, 4).toInt(),
+                    raw.substring(4, 6).toInt(),
+                    raw.substring(6, 8).toInt()
+                )
+            }
+            // 统一分隔符：. / 空格 年 月 -> -，去掉 日
+            val normalized = raw.replace(Regex("[./\\s年月]"), "-")
+                .replace("日", "")
+                .replace(Regex("-+"), "-")
+                .trim('-')
+            val parts = normalized.split("-").filter { it.isNotBlank() }
+            if (parts.size == 3) {
+                val y = parts[0].toIntOrNull() ?: return null
+                val m = parts[1].toIntOrNull() ?: return null
+                val d = parts[2].toIntOrNull() ?: return null
+                dateToMillis(y, m, d)
+            } else null
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    /**
      * 距离目标日期还有多少天
      * 正数=剩余天数，0=今天到期，负数=已过期天数
      */
     fun daysUntil(timestamp: Long): Long {
         val target = toLocalDate(timestamp)
         return ChronoUnit.DAYS.between(LocalDate.now(), target)
-    }
-
-    /**
-     * 有效期状态文案
-     * @return 状态描述，null 表示未设置日期
-     */
-    fun statusText(timestamp: Long?, label: String): String? {
-        if (timestamp == null) return null
-        val days = daysUntil(timestamp)
-        return when {
-            days < 0 -> "${label}已过期 ${-days} 天"
-            days == 0L -> "${label}今天到期"
-            else -> "${label}剩余 $days 天"
-        }
     }
 }

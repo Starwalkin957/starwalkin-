@@ -1,0 +1,144 @@
+<resources>
+    <string name="app_name">持ち物管理</string>
+
+    <string name="tab_items">持ち物</string>
+    <string name="tab_category">カテゴリー</string>
+    <string name="tab_stats">統計</string>
+    <string name="tab_profile">マイページ</string>
+
+    <string name="my_items">マイアイテム</string>
+    <string name="search_hint">名前や説明で検索…</string>
+    <string name="export_share">バックアップを書き出して共有</string>
+    <string name="import_restore">バックアップを取り込む</string>
+    <string name="item_count">合計 %1$d 点</string>
+    <string name="all_categories">すべてのカテゴリー</string>
+    <string name="quantity_label">数量：%1$d</string>
+    <string name="location_label">場所：%1$s</string>
+    <string name="empty_title">まだアイテムがありません</string>
+    <string name="empty_desc">右下のボタンをタップして、最初のアイテムを追加しましょう</string>
+
+    <string name="edit_item">アイテムを編集</string>
+    <string name="add_item">アイテムを追加</string>
+    <string name="item_photos">アイテムの写真（%1$d）</string>
+    <string name="add_photo">写真を追加</string>
+    <string name="item_name">アイテム名</string>
+    <string name="item_name_hint">例：iPhone 15 Pro</string>
+    <string name="category">カテゴリー</string>
+    <string name="category_hint">入力するか下から選択</string>
+    <string name="quick_category">クイックカテゴリー：</string>
+    <string name="quantity">数量</string>
+    <string name="location">保管場所</string>
+    <string name="location_hint">例：書斎の引き出し、リビングの棚</string>
+    <string name="validity_info">有効期限情報</string>
+    <string name="purchase_date">購入日</string>
+    <string name="expiry_date">消費期限 / 有効期限</string>
+    <string name="warranty_date">保証期限</string>
+    <string name="date_hint">YYYY-MM-DD、直接入力できます</string>
+    <string name="description">説明 / メモ</string>
+    <string name="description_hint">アイテムの詳細などを記録</string>
+    <string name="save_changes">変更を保存</string>
+    <string name="choose_method">追加方法を選択</string>
+    <string name="take_photo">写真を撮る</string>
+    <string name="choose_gallery">ギャラリーから選択</string>
+    <string name="cancel">キャンセル</string>
+    <string name="confirm">OK</string>
+    <string name="restore_title">前回の内容を復元しますか？</string>
+    <string name="restore_text">未完了の情報があります。復元して編集を続けますか？</string>
+    <string name="restore">復元</string>
+    <string name="discard">破棄</string>
+
+    <string name="item_detail">アイテム詳細</string>
+    <string name="not_exist">アイテムが存在しないか、削除されました</string>
+    <string name="delete_confirm">削除の確認</string>
+    <string name="delete_text">「%1$s」を削除しますか？この操作は取り消せません。</string>
+    <string name="delete">削除</string>
+    <string name="not_set">未設定</string>
+    <string name="created_time">作成日時</string>
+    <string name="updated_time">更新日時</string>
+    <string name="description_title">説明</string>
+    <string name="no_description">説明がありません</string>
+    <string name="status_valid">有効</string>
+    <string name="label_expiry">消費期限</string>
+    <string name="label_warranty">保証期間</string>
+    <string name="status_expiring">期限切れ間近</string>
+    <string name="status_expired">期限切れ</string>
+
+    <string name="category_browse">カテゴリー別に見る</string>
+    <string name="no_category">まだカテゴリーがありません。先にアイテムを追加してください。</string>
+    <string name="items_count">%1$d 点</string>
+
+    <string name="stats">統計</string>
+    <string name="total_items">アイテム総数</string>
+    <string name="total_quantity">合計数量</string>
+    <string name="category_count">カテゴリー数</string>
+    <string name="no_stats">データがありません。アイテムを追加すると統計が表示されます</string>
+    <string name="stat_kinds">アイテム種類</string>
+    <string name="category_distribution">カテゴリー分布</string>
+    <string name="category_bar_text">%1$d件 %2$d%%</string>
+
+    <string name="profile">マイページ</string>
+    <string name="app_title">持ち物管理</string>
+    <string name="recorded_items">%1$d 点を記録済み</string>
+    <string name="theme_color">テーマカラー</string>
+    <string name="custom_color">カスタムカラー</string>
+    <string name="theme_blue">青</string>
+    <string name="theme_white">白</string>
+    <string name="theme_black">黒</string>
+    <string name="theme_purple">紫</string>
+    <string name="app_background">アプリ背景</string>
+    <string name="choose_background">背景を選択</string>
+    <string name="clear_background">背景をクリア</string>
+    <string name="language">言語</string>
+    <string name="export_cloud">バックアップをクラウドへ</string>
+    <string name="export_cloud_desc">全アイテムをまとめてクラウドにアップロード</string>
+    <string name="import_backup">バックアップを取り込む</string>
+    <string name="import_backup_desc">バックアップファイルから復元</string>
+    <string name="replay_guide">ガイドを見直す</string>
+    <string name="replay_guide_desc">アプリの使い方をおさらい</string>
+    <string name="about">アプリについて</string>
+    <string name="about_desc">持ち物管理 v1.0</string>
+    <string name="about_msg">持ち物管理 v1.0 · ローカル持ち物管理</string>
+
+    <string name="reminder_title">期限のお知らせ</string>
+    <string name="got_it">了解</string>
+    <string name="expiry_tomorrow">明日期限切れです</string>
+    <string name="expiry_today">今日期限切れです</string>
+    <string name="warranty_days">保証期限まであと %1$d 日</string>
+    <string name="warranty_today">保証期限が今日切れます</string>
+
+    <string name="skip">スキップ</string>
+    <string name="next">次へ</string>
+    <string name="get_started">はじめる</string>
+    <string name="ob1_title">持ち物管理へようこそ</string>
+    <string name="ob1_desc">身の回りの物をすべて記録して、\n探し物の悩みから解放されましょう。</string>
+    <string name="ob2_title">写真撮影、自動保存</string>
+    <string name="ob2_desc">カメラでワンタップ撮影。\nデータはローカル保存、閉じても消えません。</string>
+    <string name="ob3_title">あいまい検索と分類</string>
+    <string name="ob3_desc">数文字入力で見つかり、\nカテゴリーですばやく絞り込めます。</string>
+    <string name="ob4_title">バックアップと共有</string>
+    <string name="ob4_desc">共有やクラウド保存に対応、\n機種変更時も復元でき安心です。</string>
+    <!-- バックアップ/復元 -->
+    <string name="backup_ready">バックアップを作成しました。アプリを選んでクラウドへアップロード</string>
+    <string name="export_failed">エクスポート失敗、再試行してください</string>
+    <string name="restore_success">%1$d件のアイテムを復元しました</string>
+    <string name="restore_empty">バックアップにアイテムがありません</string>
+    <string name="import_failed">インポート失敗：ファイル形式が正しくありません</string>
+    <string name="share_backup_title">バックアップをアップロード/共有…</string>
+    <!-- 共有 -->
+    <string name="share_item_label">【アイテム】</string>
+    <string name="share_category">カテゴリー：</string>
+    <string name="share_quantity">数量：</string>
+    <string name="share_location">場所：</string>
+    <string name="share_purchase">購入日：</string>
+    <string name="share_expiry">賞味期限：</string>
+    <string name="share_warranty">保証期限：</string>
+    <string name="share_note">メモ：</string>
+    <string name="share_chooser">「%1$s」を共有…</string>
+    <string name="share_file_title">バックアップファイルを共有…</string>
+    <!-- カラーピッカー -->
+    <string name="current_hue">現在の色（色相 %1$d°）</string>
+
+    <string name="enter_name">アイテム名を入力してください</string>
+    <string name="enter_category">カテゴリーを入力してください</string>
+    <string name="photo_failed">写真の追加に失敗しました。もう一度お試しください</string>
+</resources>

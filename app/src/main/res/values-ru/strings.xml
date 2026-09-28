@@ -1,0 +1,144 @@
+<resources>
+    <string name="app_name">Менеджер вещей</string>
+
+    <string name="tab_items">Вещи</string>
+    <string name="tab_category">Категории</string>
+    <string name="tab_stats">Статистика</string>
+    <string name="tab_profile">Профиль</string>
+
+    <string name="my_items">Мои вещи</string>
+    <string name="search_hint">Поиск по названию или описанию…</string>
+    <string name="export_share">Экспорт и обмен</string>
+    <string name="import_restore">Импорт резервной копии</string>
+    <string name="item_count">Всего вещей: %1$d</string>
+    <string name="all_categories">Все категории</string>
+    <string name="quantity_label">Кол-во: %1$d</string>
+    <string name="location_label">Место: %1$s</string>
+    <string name="empty_title">Пока нет вещей</string>
+    <string name="empty_desc">Нажмите кнопку внизу справа, чтобы добавить первую вещь</string>
+
+    <string name="edit_item">Редактировать вещь</string>
+    <string name="add_item">Добавить вещь</string>
+    <string name="item_photos">Фотографии вещи (%1$d)</string>
+    <string name="add_photo">Добавить фото</string>
+    <string name="item_name">Название вещи</string>
+    <string name="item_name_hint">напр. iPhone 15 Pro</string>
+    <string name="category">Категория</string>
+    <string name="category_hint">Введите или выберите категорию ниже</string>
+    <string name="quick_category">Быстрые категории:</string>
+    <string name="quantity">Количество</string>
+    <string name="location">Место хранения</string>
+    <string name="location_hint">напр. ящик стола, шкаф в гостиной</string>
+    <string name="validity_info">Срок действия</string>
+    <string name="purchase_date">Дата покупки</string>
+    <string name="expiry_date">Срок годности</string>
+    <string name="warranty_date">Гарантия до</string>
+    <string name="date_hint">ГГГГ-ММ-ДД, можно ввести вручную</string>
+    <string name="description">Описание / Заметки</string>
+    <string name="description_hint">Запишите подробности о вещи и т.д.</string>
+    <string name="save_changes">Сохранить изменения</string>
+    <string name="choose_method">Выбрать источник</string>
+    <string name="take_photo">Сделать фото</string>
+    <string name="choose_gallery">Выбрать из галереи</string>
+    <string name="cancel">Отмена</string>
+    <string name="confirm">ОК</string>
+    <string name="restore_title">Восстановить прошлые данные?</string>
+    <string name="restore_text">Найдены незавершённые данные. Восстановить и продолжить редактирование?</string>
+    <string name="restore">Восстановить</string>
+    <string name="discard">Отклонить</string>
+
+    <string name="item_detail">Подробности о вещи</string>
+    <string name="not_exist">Вещь не существует или была удалена</string>
+    <string name="delete_confirm">Подтвердить удаление</string>
+    <string name="delete_text">Удалить «%1$s»? Действие необратимо.</string>
+    <string name="delete">Удалить</string>
+    <string name="not_set">Не указано</string>
+    <string name="created_time">Создано</string>
+    <string name="updated_time">Обновлено</string>
+    <string name="description_title">Описание</string>
+    <string name="no_description">Нет описания</string>
+    <string name="status_valid">Действительно</string>
+    <string name="label_expiry">Срок годности</string>
+    <string name="label_warranty">Гарантия</string>
+    <string name="status_expiring">Скоро истекает</string>
+    <string name="status_expired">Истекло</string>
+
+    <string name="category_browse">Просмотр по категориям</string>
+    <string name="no_category">Пока нет категорий. Сначала добавьте вещь.</string>
+    <string name="items_count">%1$d вещей</string>
+
+    <string name="stats">Статистика</string>
+    <string name="total_items">Всего вещей</string>
+    <string name="total_quantity">Общее количество</string>
+    <string name="category_count">Категорий</string>
+    <string name="no_stats">Нет данных. Добавьте вещи, чтобы увидеть статистику.</string>
+    <string name="stat_kinds">Видов</string>
+    <string name="category_distribution">Распределение по категориям</string>
+    <string name="category_bar_text">%1$d  %2$d%%</string>
+
+    <string name="profile">Профиль</string>
+    <string name="app_title">Менеджер вещей</string>
+    <string name="recorded_items">Записано вещей: %1$d</string>
+    <string name="theme_color">Цвет темы</string>
+    <string name="custom_color">Свой цвет</string>
+    <string name="theme_blue">Син</string>
+    <string name="theme_white">Бел</string>
+    <string name="theme_black">Чёрн</string>
+    <string name="theme_purple">Фиол</string>
+    <string name="app_background">Фон приложения</string>
+    <string name="choose_background">Выбрать фон</string>
+    <string name="clear_background">Убрать фон</string>
+    <string name="language">Язык</string>
+    <string name="export_cloud">Экспорт копии в облако</string>
+    <string name="export_cloud_desc">Упаковать все вещи и загрузить в облако</string>
+    <string name="import_backup">Импорт резервной копии</string>
+    <string name="import_backup_desc">Восстановить вещи из файла копии</string>
+    <string name="replay_guide">Повторить обучение</string>
+    <string name="replay_guide_desc">Вспомнить, как пользоваться приложением</string>
+    <string name="about">О приложении</string>
+    <string name="about_desc">Менеджер вещей v1.0</string>
+    <string name="about_msg">Менеджер вещей v1.0 · Локальное управление вещами</string>
+
+    <string name="reminder_title">Напоминания об истечении</string>
+    <string name="got_it">Понятно</string>
+    <string name="expiry_tomorrow">Истекает завтра</string>
+    <string name="expiry_today">Истекает сегодня</string>
+    <string name="warranty_days">Гарантия истекает через %1$d дн.</string>
+    <string name="warranty_today">Гарантия истекает сегодня</string>
+
+    <string name="skip">Пропустить</string>
+    <string name="next">Далее</string>
+    <string name="get_started">Начать</string>
+    <string name="ob1_title">Добро пожаловать в Менеджер вещей</string>
+    <string name="ob1_desc">Записывайте каждую вещь вокруг,\nи больше ничего не теряйте.</string>
+    <string name="ob2_title">Фото и автосохранение</string>
+    <string name="ob2_desc">Делайте фото камерой.\nДанные хранятся локально и не теряются.</string>
+    <string name="ob3_title">Поиск и категории</string>
+    <string name="ob3_desc">Введите пару слов, чтобы найти,\nи быстро фильтруйте по категориям.</string>
+    <string name="ob4_title">Резерв и обмен, надёжно</string>
+    <string name="ob4_desc">Делитесь, экспортируйте в облако,\nи восстанавливайте на новом телефоне.</string>
+    <!-- Резерв/Восстановление -->
+    <string name="backup_ready">Резерв создан. Выберите приложение для загрузки в облако.</string>
+    <string name="export_failed">Ошибка экспорта, попробуйте снова</string>
+    <string name="restore_success">Успешно восстановлено вещей: %1$d</string>
+    <string name="restore_empty">В резервной копии нет вещей</string>
+    <string name="import_failed">Ошибка импорта: неверный формат файла</string>
+    <string name="share_backup_title">Загрузить/Поделиться резервом…</string>
+    <!-- Поделиться -->
+    <string name="share_item_label">[Вещь]</string>
+    <string name="share_category">Категория: </string>
+    <string name="share_quantity">Количество: </string>
+    <string name="share_location">Место: </string>
+    <string name="share_purchase">Дата покупки: </string>
+    <string name="share_expiry">Годен до: </string>
+    <string name="share_warranty">Гарантия до: </string>
+    <string name="share_note">Заметки: </string>
+    <string name="share_chooser">Поделиться «%1$s»…</string>
+    <string name="share_file_title">Поделиться файлом резерва…</string>
+    <!-- Палитра -->
+    <string name="current_hue">Текущий цвет (оттенок %1$d°)</string>
+
+    <string name="enter_name">Введите название вещи</string>
+    <string name="enter_category">Введите категорию</string>
+    <string name="photo_failed">Не удалось добавить фото, попробуйте снова</string>
+</resources>

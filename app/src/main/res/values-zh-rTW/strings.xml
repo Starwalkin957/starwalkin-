@@ -1,0 +1,144 @@
+<resources>
+    <string name="app_name">物品管家</string>
+
+    <string name="tab_items">物品</string>
+    <string name="tab_category">分類</string>
+    <string name="tab_stats">統計</string>
+    <string name="tab_profile">我的</string>
+
+    <string name="my_items">我的物品</string>
+    <string name="search_hint">搜尋物品名稱或描述…</string>
+    <string name="export_share">匯出備份並分享</string>
+    <string name="import_restore">匯入備份還原</string>
+    <string name="item_count">共 %1$d 件物品</string>
+    <string name="all_categories">全部分類</string>
+    <string name="quantity_label">數量：%1$d</string>
+    <string name="location_label">位置：%1$s</string>
+    <string name="empty_title">還沒有物品</string>
+    <string name="empty_desc">點擊右下角按鈕，新增第一件物品吧</string>
+
+    <string name="edit_item">編輯物品</string>
+    <string name="add_item">新增物品</string>
+    <string name="item_photos">物品照片（%1$d）</string>
+    <string name="add_photo">新增照片</string>
+    <string name="item_name">物品名稱</string>
+    <string name="item_name_hint">例如：iPhone 15 Pro</string>
+    <string name="category">分類</string>
+    <string name="category_hint">輸入或從下方選擇分類</string>
+    <string name="quick_category">快捷分類：</string>
+    <string name="quantity">數量</string>
+    <string name="location">存放位置</string>
+    <string name="location_hint">例如：書房抽屜、客廳櫃子</string>
+    <string name="validity_info">有效期資訊</string>
+    <string name="purchase_date">購買日期</string>
+    <string name="expiry_date">保存期限 / 有效期至</string>
+    <string name="warranty_date">保固期至</string>
+    <string name="date_hint">YYYY-MM-DD，可直接輸入</string>
+    <string name="description">描述/備註</string>
+    <string name="description_hint">記錄物品的詳細資訊等</string>
+    <string name="save_changes">儲存變更</string>
+    <string name="choose_method">選擇新增方式</string>
+    <string name="take_photo">拍照</string>
+    <string name="choose_gallery">從相簿選擇</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">確定</string>
+    <string name="restore_title">還原上次內容？</string>
+    <string name="restore_text">偵測到有未完成的物品資訊，是否還原繼續編輯？</string>
+    <string name="restore">還原</string>
+    <string name="discard">捨棄</string>
+
+    <string name="item_detail">物品詳情</string>
+    <string name="not_exist">物品不存在或已被刪除</string>
+    <string name="delete_confirm">確認刪除</string>
+    <string name="delete_text">確定要刪除「%1$s」嗎？此操作無法復原。</string>
+    <string name="delete">刪除</string>
+    <string name="not_set">未設定</string>
+    <string name="created_time">建立時間</string>
+    <string name="updated_time">更新時間</string>
+    <string name="description_title">描述</string>
+    <string name="no_description">暫無描述</string>
+    <string name="status_valid">有效</string>
+    <string name="label_expiry">保存期限</string>
+    <string name="label_warranty">保固期</string>
+    <string name="status_expiring">即將到期</string>
+    <string name="status_expired">已過期</string>
+
+    <string name="category_browse">分類瀏覽</string>
+    <string name="no_category">還沒有分類，先去新增物品吧</string>
+    <string name="items_count">%1$d 件物品</string>
+
+    <string name="stats">統計</string>
+    <string name="total_items">物品總數</string>
+    <string name="total_quantity">物品總數量</string>
+    <string name="category_count">分類數量</string>
+    <string name="no_stats">暫無資料，新增物品後查看統計</string>
+    <string name="stat_kinds">物品种類</string>
+    <string name="category_distribution">分類分布</string>
+    <string name="category_bar_text">%1$d件 %2$d%%</string>
+
+    <string name="profile">我的</string>
+    <string name="app_title">物品管家</string>
+    <string name="recorded_items">已記錄 %1$d 種物品</string>
+    <string name="theme_color">主題配色</string>
+    <string name="custom_color">自訂顏色</string>
+    <string name="theme_blue">藍</string>
+    <string name="theme_white">白</string>
+    <string name="theme_black">黑</string>
+    <string name="theme_purple">紫</string>
+    <string name="app_background">應用背景</string>
+    <string name="choose_background">選擇背景圖</string>
+    <string name="clear_background">清除背景</string>
+    <string name="language">語言</string>
+    <string name="export_cloud">匯出備份到雲端</string>
+    <string name="export_cloud_desc">打包全部物品，上傳網碟儲存</string>
+    <string name="import_backup">匯入備份還原</string>
+    <string name="import_backup_desc">從備份檔案還原物品</string>
+    <string name="replay_guide">重新檢視新手引導</string>
+    <string name="replay_guide_desc">回顧 App 的使用方法</string>
+    <string name="about">關於</string>
+    <string name="about_desc">物品管家 v1.0</string>
+    <string name="about_msg">物品管家 v1.0 · 本地物品管理</string>
+
+    <string name="reminder_title">到期提醒</string>
+    <string name="got_it">知道了</string>
+    <string name="expiry_tomorrow">保存期限明天到期</string>
+    <string name="expiry_today">保存期限今天到期</string>
+    <string name="warranty_days">保固期 %1$d 天後到期</string>
+    <string name="warranty_today">保固期今天到期</string>
+
+    <string name="skip">跳過</string>
+    <string name="next">下一步</string>
+    <string name="get_started">開始使用</string>
+    <string name="ob1_title">歡迎使用物品管家</string>
+    <string name="ob1_desc">把身邊的每件物品都記錄下來，\n告別找不到東西的煩惱。</string>
+    <string name="ob2_title">拍照記錄，自動儲存</string>
+    <string name="ob2_desc">呼叫手機相機一鍵拍照，\n資料本地持久化，關閉也不遺失。</string>
+    <string name="ob3_title">模糊搜尋，分類管理</string>
+    <string name="ob3_desc">輸入幾個字就能找到物品，\n還能按分類快速篩選瀏覽。</string>
+    <string name="ob4_title">備份分享，資料安全</string>
+    <string name="ob4_desc">支援分享物品、匯出雲端備份，\n換機還原，安心使用。</string>
+    <!-- 備份/還原 -->
+    <string name="backup_ready">備份已產生，選擇應用程式上傳雲端</string>
+    <string name="export_failed">匯出失敗，請重試</string>
+    <string name="restore_success">成功還原 %1$d 件物品</string>
+    <string name="restore_empty">備份中沒有物品</string>
+    <string name="import_failed">匯入失敗：檔案格式不正確</string>
+    <string name="share_backup_title">上傳/分享備份到…</string>
+    <!-- 分享 -->
+    <string name="share_item_label">【物品】</string>
+    <string name="share_category">分類：</string>
+    <string name="share_quantity">數量：</string>
+    <string name="share_location">位置：</string>
+    <string name="share_purchase">購買日期：</string>
+    <string name="share_expiry">保存期限至：</string>
+    <string name="share_warranty">保固期至：</string>
+    <string name="share_note">備註：</string>
+    <string name="share_chooser">分享「%1$s」到…</string>
+    <string name="share_file_title">分享備份檔案到…</string>
+    <!-- 調色盤 -->
+    <string name="current_hue">當前顏色（色相 %1$d°）</string>
+
+    <string name="enter_name">請輸入物品名稱</string>
+    <string name="enter_category">請輸入物品分類</string>
+    <string name="photo_failed">圖片新增失敗，請重試</string>
+</resources>

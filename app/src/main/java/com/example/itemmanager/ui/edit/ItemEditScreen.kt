@@ -18,12 +18,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.AlertDialog
@@ -56,18 +57,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.itemmanager.R
 import com.example.itemmanager.navigation.CategoryPresets
-import com.example.itemmanager.util.DateUtils
 import com.example.itemmanager.util.ImageUtils
 import java.io.File
 
 /**
  * 物品添加/编辑页
  * - 同一物品可添加多张照片（相机/相册），可单独删除
- * - 可设置购买日期、保质期、保修期
+ * - 日期支持直接输入（年-月-日）或点日历图标选择
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,8 +86,11 @@ fun ItemEditScreen(
     val quantity by viewModel.quantity.collectAsState()
     val imagePaths by viewModel.imagePaths.collectAsState()
     val purchaseDate by viewModel.purchaseDate.collectAsState()
+    val purchaseDateText by viewModel.purchaseDateText.collectAsState()
     val expiryDate by viewModel.expiryDate.collectAsState()
+    val expiryDateText by viewModel.expiryDateText.collectAsState()
     val warrantyDate by viewModel.warrantyDate.collectAsState()
+    val warrantyDateText by viewModel.warrantyDateText.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val saveCompleted by viewModel.saveCompleted.collectAsState()
     val pendingDraft by viewModel.pendingDraft.collectAsState()
@@ -130,13 +136,14 @@ fun ItemEditScreen(
             androidx.compose.material3.TopAppBar(
                 title = {
                     Text(
-                        if (viewModel.isEditing) "编辑物品" else "添加物品",
+                        if (viewModel.isEditing) stringResource(R.string.edit_item)
+                        else stringResource(R.string.add_item),
                         fontWeight = FontWeight.Bold, color = Color.White
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, "返回", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -157,7 +164,7 @@ fun ItemEditScreen(
 
             // ---- 多图横向列表 ----
             Text(
-                "物品照片（${imagePaths.size}）",
+                stringResource(R.string.item_photos, imagePaths.size),
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -172,7 +179,7 @@ fun ItemEditScreen(
                     Box(modifier = Modifier.size(100.dp)) {
                         AsyncImage(
                             model = File(path),
-                            contentDescription = "物品图片",
+                            contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clip(RoundedCornerShape(12.dp)),
@@ -188,14 +195,13 @@ fun ItemEditScreen(
                             color = Color.Black.copy(alpha = 0.55f)
                         ) {
                             Icon(
-                                Icons.Default.Close, "移除", tint = Color.White,
+                                Icons.Default.Close, null, tint = Color.White,
                                 modifier = Modifier.padding(3.dp)
                             )
                         }
                     }
                 }
 
-                // 添加照片方块
                 Box(
                     modifier = Modifier
                         .size(100.dp)
@@ -204,8 +210,8 @@ fun ItemEditScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(Icons.Default.Add, "添加照片", tint = MaterialTheme.colorScheme.primary)
-                        Text("添加照片", style = MaterialTheme.typography.labelMedium)
+                        Icon(Icons.Default.Add, null, tint = MaterialTheme.colorScheme.primary)
+                        Text(stringResource(R.string.add_photo), style = MaterialTheme.typography.labelMedium)
                     }
                 }
             }
@@ -217,8 +223,8 @@ fun ItemEditScreen(
                 value = name,
                 onValueChange = viewModel::onNameChanged,
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("物品名称 *") },
-                placeholder = { Text("例如：iPhone 15 Pro") },
+                label = { Text(stringResource(R.string.item_name)) },
+                placeholder = { Text(stringResource(R.string.item_name_hint)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
@@ -229,13 +235,13 @@ fun ItemEditScreen(
                 value = category,
                 onValueChange = viewModel::onCategoryChanged,
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("分类 *") },
-                placeholder = { Text("输入或从下方选择分类") },
+                label = { Text(stringResource(R.string.category)) },
+                placeholder = { Text(stringResource(R.string.category_hint)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
             Spacer(Modifier.height(8.dp))
-            Text("快捷分类：", style = MaterialTheme.typography.labelMedium, color = Color.Gray)
+            Text(stringResource(R.string.quick_category), style = MaterialTheme.typography.labelMedium, color = Color.Gray)
             Spacer(Modifier.height(4.dp))
             Row(
                 modifier = Modifier
@@ -270,7 +276,7 @@ fun ItemEditScreen(
                 value = quantity,
                 onValueChange = viewModel::onQuantityChanged,
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("数量") },
+                label = { Text(stringResource(R.string.quantity)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
@@ -281,8 +287,8 @@ fun ItemEditScreen(
                 value = location,
                 onValueChange = viewModel::onLocationChanged,
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("存放位置") },
-                placeholder = { Text("例如：书房抽屉、客厅柜子") },
+                label = { Text(stringResource(R.string.location)) },
+                placeholder = { Text(stringResource(R.string.location_hint)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
@@ -290,30 +296,34 @@ fun ItemEditScreen(
 
             // ---- 有效期信息 ----
             Text(
-                "有效期信息",
+                stringResource(R.string.validity_info),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(Modifier.height(8.dp))
+
             DateField(
-                label = "购买日期",
-                value = purchaseDate,
-                onClick = { datePickerTarget = 0 },
+                label = stringResource(R.string.purchase_date),
+                text = purchaseDateText,
+                onTextChange = viewModel::onPurchaseDateTextChange,
+                onPick = { datePickerTarget = 0 },
                 onClear = { viewModel.setPurchaseDate(null) }
             )
             Spacer(Modifier.height(8.dp))
             DateField(
-                label = "保质期 / 有效期至",
-                value = expiryDate,
-                onClick = { datePickerTarget = 1 },
+                label = stringResource(R.string.expiry_date),
+                text = expiryDateText,
+                onTextChange = viewModel::onExpiryDateTextChange,
+                onPick = { datePickerTarget = 1 },
                 onClear = { viewModel.setExpiryDate(null) }
             )
             Spacer(Modifier.height(8.dp))
             DateField(
-                label = "保修期至",
-                value = warrantyDate,
-                onClick = { datePickerTarget = 2 },
+                label = stringResource(R.string.warranty_date),
+                text = warrantyDateText,
+                onTextChange = viewModel::onWarrantyDateTextChange,
+                onPick = { datePickerTarget = 2 },
                 onClear = { viewModel.setWarrantyDate(null) }
             )
 
@@ -326,8 +336,8 @@ fun ItemEditScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(110.dp),
-                label = { Text("描述/备注") },
-                placeholder = { Text("记录物品的详细信息等") },
+                label = { Text(stringResource(R.string.description)) },
+                placeholder = { Text(stringResource(R.string.description_hint)) },
                 shape = RoundedCornerShape(12.dp),
                 maxLines = 5
             )
@@ -342,7 +352,8 @@ fun ItemEditScreen(
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
-                    if (viewModel.isEditing) "保存修改" else "添加物品",
+                    if (viewModel.isEditing) stringResource(R.string.save_changes)
+                    else stringResource(R.string.add_item),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -355,32 +366,32 @@ fun ItemEditScreen(
     if (showImageSourceDialog) {
         AlertDialog(
             onDismissRequest = { showImageSourceDialog = false },
-            title = { Text("选择添加方式") },
+            title = { Text(stringResource(R.string.choose_method)) },
             text = {
                 Column {
                     TextButton(onClick = {
                         showImageSourceDialog = false; launchCamera()
                     }) {
                         Icon(Icons.Default.PhotoCamera, null)
-                        Spacer(Modifier.size(8.dp)); Text("拍照")
+                        Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.take_photo))
                     }
                     TextButton(onClick = {
                         showImageSourceDialog = false
                         galleryLauncher.launch("image/*")
                     }) {
                         Icon(Icons.Default.PhotoLibrary, null)
-                        Spacer(Modifier.size(8.dp)); Text("从相册选择")
+                        Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.choose_gallery))
                     }
                 }
             },
             confirmButton = {},
             dismissButton = {
-                TextButton(onClick = { showImageSourceDialog = false }) { Text("取消") }
+                TextButton(onClick = { showImageSourceDialog = false }) { Text(stringResource(R.string.cancel)) }
             }
         )
     }
 
-    // ---- 日期选择器 ----
+    // ---- 日历选择器 ----
     val target = datePickerTarget
     if (target != null) {
         val initial = when (target) {
@@ -402,10 +413,10 @@ fun ItemEditScreen(
                         else -> viewModel.setWarrantyDate(millis)
                     }
                     datePickerTarget = null
-                }) { Text("确定") }
+                }) { Text(stringResource(R.string.confirm)) }
             },
             dismissButton = {
-                TextButton(onClick = { datePickerTarget = null }) { Text("取消") }
+                TextButton(onClick = { datePickerTarget = null }) { Text(stringResource(R.string.cancel)) }
             }
         ) {
             DatePicker(state = datePickerState)
@@ -416,46 +427,57 @@ fun ItemEditScreen(
     if (pendingDraft != null) {
         AlertDialog(
             onDismissRequest = { viewModel.discardDraft() },
-            title = { Text("恢复上次内容？") },
-            text = { Text("检测到有未完成的物品信息，是否恢复继续编辑？") },
-            confirmButton = { TextButton(onClick = { viewModel.restoreDraft() }) { Text("恢复") } },
-            dismissButton = { TextButton(onClick = { viewModel.discardDraft() }) { Text("丢弃") } }
+            title = { Text(stringResource(R.string.restore_title)) },
+            text = { Text(stringResource(R.string.restore_text)) },
+            confirmButton = { TextButton(onClick = { viewModel.restoreDraft() }) { Text(stringResource(R.string.restore)) } },
+            dismissButton = { TextButton(onClick = { viewModel.discardDraft() }) { Text(stringResource(R.string.discard)) } }
         )
     }
 }
 
 /**
- * 日期选择字段（只读，点击弹出日期选择器）
+ * 日期字段：可直接输入（年-月-日），也可点日历图标选择，可清除
  */
 @Composable
 private fun DateField(
     label: String,
-    value: Long?,
-    onClick: () -> Unit,
+    text: String,
+    onTextChange: (String) -> Unit,
+    onPick: () -> Unit,
     onClear: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)) {
-        OutlinedTextField(
-            value = DateUtils.formatDate(value),
-            onValueChange = {},
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text(label) },
-            placeholder = { Text("点击选择日期") },
-            singleLine = true,
-            readOnly = true,
-            enabled = true,
-            shape = RoundedCornerShape(12.dp),
-            trailingIcon = {
-                if (value != null) {
+    OutlinedTextField(
+        value = text,
+        onValueChange = onTextChange,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(label) },
+        placeholder = { Text(stringResource(R.string.date_hint)) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        shape = RoundedCornerShape(12.dp),
+        trailingIcon = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Default.CalendarMonth,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .size(28.dp)
+                        .clickable(onClick = onPick)
+                )
+                if (text.isNotBlank()) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = "清除日期",
-                        modifier = Modifier.clickable(onClick = onClear)
+                        contentDescription = null,
+                        tint = Color.Gray,
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .size(24.dp)
+                            .clickable(onClick = onClear)
                     )
-                } else {
-                    Icon(Icons.Default.Event, contentDescription = null, tint = Color.Gray)
                 }
             }
-        )
-    }
+        }
+    )
 }

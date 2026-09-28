@@ -1,0 +1,144 @@
+<resources>
+    <string name="app_name">물품 관리</string>
+
+    <string name="tab_items">물품</string>
+    <string name="tab_category">카테고리</string>
+    <string name="tab_stats">통계</string>
+    <string name="tab_profile">프로필</string>
+
+    <string name="my_items">내 물품</string>
+    <string name="search_hint">이름이나 설명으로 검색…</string>
+    <string name="export_share">백업 내보내기 및 공유</string>
+    <string name="import_restore">백업 가져오기</string>
+    <string name="item_count">총 %1$d개</string>
+    <string name="all_categories">전체 카테고리</string>
+    <string name="quantity_label">수량: %1$d</string>
+    <string name="location_label">위치: %1$s</string>
+    <string name="empty_title">아직 물품이 없습니다</string>
+    <string name="empty_desc">오른쪽 아래 버튼을 눌러 첫 물품을 추가해 보세요</string>
+
+    <string name="edit_item">물품 편집</string>
+    <string name="add_item">물품 추가</string>
+    <string name="item_photos">물품 사진 (%1$d)</string>
+    <string name="add_photo">사진 추가</string>
+    <string name="item_name">물품 이름</string>
+    <string name="item_name_hint">예: iPhone 15 Pro</string>
+    <string name="category">카테고리</string>
+    <string name="category_hint">입력하거나 아래에서 선택</string>
+    <string name="quick_category">빠른 카테고리:</string>
+    <string name="quantity">수량</string>
+    <string name="location">보관 위치</string>
+    <string name="location_hint">예: 서재 서랍, 거실 장</string>
+    <string name="validity_info">유효기간 정보</string>
+    <string name="purchase_date">구매일</string>
+    <string name="expiry_date">소비기한 / 유효기한</string>
+    <string name="warranty_date">보증기한</string>
+    <string name="date_hint">YYYY-MM-DD, 직접 입력 가능</string>
+    <string name="description">설명 / 메모</string>
+    <string name="description_hint">물품 세부 정보 등을 기록</string>
+    <string name="save_changes">변경사항 저장</string>
+    <string name="choose_method">추가 방법 선택</string>
+    <string name="take_photo">사진 촬영</string>
+    <string name="choose_gallery">갤러리에서 선택</string>
+    <string name="cancel">취소</string>
+    <string name="confirm">확인</string>
+    <string name="restore_title">이전 내용을 복원할까요?</string>
+    <string name="restore_text">완료되지 않은 정보가 있습니다. 복원하고 계속 편집할까요?</string>
+    <string name="restore">복원</string>
+    <string name="discard">버리기</string>
+
+    <string name="item_detail">물품 상세</string>
+    <string name="not_exist">물품이 존재하지 않거나 삭제되었습니다</string>
+    <string name="delete_confirm">삭제 확인</string>
+    <string name="delete_text">&quot;%1$s&quot;을(를) 삭제할까요? 되돌릴 수 없습니다.</string>
+    <string name="delete">삭제</string>
+    <string name="not_set">미설정</string>
+    <string name="created_time">생성일</string>
+    <string name="updated_time">수정일</string>
+    <string name="description_title">설명</string>
+    <string name="no_description">설명 없음</string>
+    <string name="status_valid">유효</string>
+    <string name="label_expiry">소비기한</string>
+    <string name="label_warranty">보증기간</string>
+    <string name="status_expiring">곧 만료</string>
+    <string name="status_expired">만료됨</string>
+
+    <string name="category_browse">카테고리별 보기</string>
+    <string name="no_category">아직 카테고리가 없습니다. 먼저 물품을 추가하세요.</string>
+    <string name="items_count">%1$d개</string>
+
+    <string name="stats">통계</string>
+    <string name="total_items">전체 물품 수</string>
+    <string name="total_quantity">총 수량</string>
+    <string name="category_count">카테고리 수</string>
+    <string name="no_stats">데이터 없음. 물품을 추가하면 통계를 볼 수 있습니다</string>
+    <string name="stat_kinds">물품 종류</string>
+    <string name="category_distribution">카테고리 분포</string>
+    <string name="category_bar_text">%1$d개 %2$d%%</string>
+
+    <string name="profile">프로필</string>
+    <string name="app_title">물품 관리</string>
+    <string name="recorded_items">%1$d개 기록됨</string>
+    <string name="theme_color">테마 색상</string>
+    <string name="custom_color">사용자 지정 색상</string>
+    <string name="theme_blue">파랑</string>
+    <string name="theme_white">하양</string>
+    <string name="theme_black">검정</string>
+    <string name="theme_purple">보라</string>
+    <string name="app_background">앱 배경</string>
+    <string name="choose_background">배경 선택</string>
+    <string name="clear_background">배경 지우기</string>
+    <string name="language">언어</string>
+    <string name="export_cloud">백업을 클라우드로 내보내기</string>
+    <string name="export_cloud_desc">모든 물품을 묶어 클라우드에 업로드</string>
+    <string name="import_backup">백업 가져오기</string>
+    <string name="import_backup_desc">백업 파일에서 물품 복원</string>
+    <string name="replay_guide">안내 다시 보기</string>
+    <string name="replay_guide_desc">앱 사용법 다시 확인</string>
+    <string name="about">정보</string>
+    <string name="about_desc">물품 관리 v1.0</string>
+    <string name="about_msg">물품 관리 v1.0 · 로컬 물품 관리</string>
+
+    <string name="reminder_title">만료 알림</string>
+    <string name="got_it">확인</string>
+    <string name="expiry_tomorrow">내일 만료됩니다</string>
+    <string name="expiry_today">오늘 만료됩니다</string>
+    <string name="warranty_days">보증이 %1$d일 후 만료됩니다</string>
+    <string name="warranty_today">보증이 오늘 만료됩니다</string>
+
+    <string name="skip">건너뛰기</string>
+    <string name="next">다음</string>
+    <string name="get_started">시작하기</string>
+    <string name="ob1_title">물품 관리에 오신 것을 환영합니다</string>
+    <string name="ob1_desc">주변의 모든 물품을 기록하고,\n찾는 물건을 잊어버리지 마세요.</string>
+    <string name="ob2_title">사진 촬영, 자동 저장</string>
+    <string name="ob2_desc">카메라로 한 번에 촬영.\n데이터는 로컬에 저장되어 사라지지 않습니다.</string>
+    <string name="ob3_title">유사 검색과 카테고리</string>
+    <string name="ob3_desc">몇 글자만 입력해도 찾을 수 있고,\n카테고리로 빠르게 필터링합니다.</string>
+    <string name="ob4_title">백업과 공유, 안전</string>
+    <string name="ob4_desc">물품 공유, 클라우드 백업,\n새 휴대폰에서도 복원되어 안심하세요.</string>
+    <!-- 백업/복원 -->
+    <string name="backup_ready">백업 생성됨. 앱을 선택해 클라우드에 업로드하세요</string>
+    <string name="export_failed">내보내기 실패, 다시 시도하세요</string>
+    <string name="restore_success">물품 %1$d개 복원 성공</string>
+    <string name="restore_empty">백업에 물품이 없습니다</string>
+    <string name="import_failed">가져오기 실패: 파일 형식이 올바르지 않습니다</string>
+    <string name="share_backup_title">백업 업로드/공유…</string>
+    <!-- 공유 -->
+    <string name="share_item_label">[물품]</string>
+    <string name="share_category">카테고리: </string>
+    <string name="share_quantity">수량: </string>
+    <string name="share_location">위치: </string>
+    <string name="share_purchase">구매일: </string>
+    <string name="share_expiry">소비기한: </string>
+    <string name="share_warranty">보증기한: </string>
+    <string name="share_note">비고: </string>
+    <string name="share_chooser">"%1$s" 공유…</string>
+    <string name="share_file_title">백업 파일 공유…</string>
+    <!-- 색상 선택 -->
+    <string name="current_hue">현재 색상(색조 %1$d°)</string>
+
+    <string name="enter_name">물품 이름을 입력하세요</string>
+    <string name="enter_category">카테고리를 입력하세요</string>
+    <string name="photo_failed">사진 추가 실패, 다시 시도하세요</string>
+</resources>
