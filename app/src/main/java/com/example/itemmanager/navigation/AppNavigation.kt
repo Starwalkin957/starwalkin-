@@ -136,8 +136,11 @@ fun AppNavigation() {
     val themeId by ThemeManager.themeId.collectAsState()
     val customColor by ThemeManager.customColor.collectAsState()
     val backgroundPath by BackgroundManager.backgroundPath.collectAsState()
-    val appColorScheme = remember(themeId, customColor) {
-        buildAppColorScheme(themeId, customColor)
+    val appColorScheme = remember(themeId, customColor, backgroundPath) {
+        val base = buildAppColorScheme(themeId, customColor)
+        // 有自定义背景图时，把页面背景色改为透明，
+        // 使各子页面 Scaffold（默认 containerColor=background）露出底层背景图
+        if (backgroundPath != null) base.copy(background = Color.Transparent) else base
     }
 
     // 数据库和仓库（单例）
@@ -181,10 +184,14 @@ fun AppNavigation() {
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
+                // 半透明遮罩保证前景文字可读（深色主题用黑色遮罩，其余用白色）
+                val scrim = if (themeId == ThemeManager.THEME_BLACK)
+                    Color.Black.copy(alpha = 0.5f)
+                else Color.White.copy(alpha = 0.5f)
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.White.copy(alpha = 0.74f))
+                        .background(scrim)
                 )
             }
 
