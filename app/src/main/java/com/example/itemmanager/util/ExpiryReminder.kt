@@ -30,6 +30,7 @@ object ExpiryReminder {
                 when (days) {
                     1L -> result.add(Reminder(item.name, Kind.EXPIRY_TOMORROW))
                     0L -> result.add(Reminder(item.name, Kind.EXPIRY_TODAY))
+                    else -> {}
                 }
             }
             // 保修期：前一周内（0..7 天）
