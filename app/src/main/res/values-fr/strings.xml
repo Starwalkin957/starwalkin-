@@ -181,7 +181,7 @@
     <string name="cat_pet">Articles pour animaux</string>
     <string name="cat_jewelry">Bijoux et accessoires</string>
     <string name="cat_medicine">Médicaments</string>
-    <string name="cat_documents">Documents et pièces d\'identité</string>
+    <string name="cat_documents">Documents et pièces d’identité</string>
     <string name="cat_automotive">Articles automobiles</string>
     <string name="cat_other">Autres</string>
 </resources>
