@@ -7,9 +7,11 @@ import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.data.repository.ItemRepository
 import com.example.itemmanager.util.ImageUtils
 import com.example.itemmanager.util.SelectedItemHolder
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 物品详情页 ViewModel
@@ -51,10 +53,44 @@ class ItemDetailViewModel(
         viewModelScope.launch {
             _item.value?.let { item ->
                 repository.deleteItem(item)
-                item.imagePaths.forEach { ImageUtils.deleteImageFile(it) }
+                withContext(Dispatchers.IO) {
+                    item.imagePaths.forEach { ImageUtils.deleteImageFile(it) }
+                }
                 SelectedItemHolder.clear()
                 onDeleted()
             }
+        }
+    }
+
+    /** 标记为借出：记录借出人、借出日期、预计归还日期 */
+    fun lendItem(borrower: String, expectedReturnDate: Long?) {
+        viewModelScope.launch {
+            val current = _item.value ?: return@launch
+            val now = System.currentTimeMillis()
+            val updated = current.copy(
+                borrower = borrower.trim().ifBlank { null },
+                borrowDate = now,
+                expectedReturnDate = expectedReturnDate,
+                updatedAt = now
+            )
+            repository.updateItem(updated)
+            _item.value = updated
+        }
+    }
+
+    /** 标记为已归还：清空借出信息 */
+    fun returnItem() {
+        viewModelScope.launch {
+            val current = _item.value ?: return@launch
+            val now = System.currentTimeMillis()
+            val updated = current.copy(
+                borrower = null,
+                borrowDate = null,
+                expectedReturnDate = null,
+                updatedAt = now
+            )
+            repository.updateItem(updated)
+            _item.value = updated
         }
     }
 

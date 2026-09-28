@@ -2,6 +2,7 @@ package com.example.itemmanager.ui.list
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,12 +21,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -83,9 +87,11 @@ fun ItemListScreen(
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val categories by viewModel.categories.collectAsState()
     val message by viewModel.message.collectAsState()
+    val sortMode by viewModel.sortMode.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
     var menuExpanded by remember { mutableStateOf(false) }
+    var sortExpanded by remember { mutableStateOf(false) }
 
     // 操作结果提示
     LaunchedEffect(message) {
@@ -146,6 +152,16 @@ fun ItemListScreen(
                                     backupPicker.launch(arrayOf("application/zip"))
                                 }
                             )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.export_csv)) },
+                                leadingIcon = {
+                                    Icon(Icons.Default.Description, contentDescription = null)
+                                },
+                                onClick = {
+                                    menuExpanded = false
+                                    viewModel.exportCsvAndShare()
+                                }
+                            )
                         }
                     }
                 },
@@ -194,13 +210,43 @@ fun ItemListScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // 物品统计
-            Text(
-                text = stringResource(R.string.item_count, items.size),
-                style = MaterialTheme.typography.labelMedium,
-                color = TextSecondary,
-                modifier = Modifier.padding(vertical = 4.dp)
-            )
+            // 物品统计 + 排序
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.item_count, items.size),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = TextSecondary,
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .weight(1f)
+                )
+                Box {
+                    IconButton(onClick = { sortExpanded = true }) {
+                        Icon(Icons.Default.Sort, contentDescription = null, tint = TextSecondary)
+                    }
+                    DropdownMenu(
+                        expanded = sortExpanded,
+                        onDismissRequest = { sortExpanded = false }
+                    ) {
+                        ItemListViewModel.SortMode.values().forEach { mode ->
+                            val selected = sortMode == mode
+                            DropdownMenuItem(
+                                text = { Text(sortLabel(mode)) },
+                                onClick = {
+                                    viewModel.setSortMode(mode)
+                                    sortExpanded = false
+                                },
+                                leadingIcon = {
+                                    if (selected) Icon(Icons.Default.Check, contentDescription = null)
+                                }
+                            )
+                        }
+                    }
+                }
+            }
 
             // 列表内容
             if (items.isEmpty()) {
@@ -351,6 +397,18 @@ fun ItemCard(
                         style = MaterialTheme.typography.bodyMedium,
                         color = TextSecondary
                     )
+                    if (!item.borrower.isNullOrBlank()) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(R.string.borrowed),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color(0xFFD97706),
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(Color(0xFFFEF3C7))
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        )
+                    }
                 }
                 if (item.location.isNotBlank()) {
                     Spacer(modifier = Modifier.height(2.dp))
@@ -406,4 +464,16 @@ fun EmptyState() {
             )
         }
     }
+}
+
+/**
+ * 排序模式对应的多语言标签
+ */
+@Composable
+private fun sortLabel(mode: ItemListViewModel.SortMode): String = when (mode) {
+    ItemListViewModel.SortMode.DATE_DESC -> stringResource(R.string.sort_date_desc)
+    ItemListViewModel.SortMode.DATE_ASC -> stringResource(R.string.sort_date_asc)
+    ItemListViewModel.SortMode.NAME_ASC -> stringResource(R.string.sort_name)
+    ItemListViewModel.SortMode.PRICE_DESC -> stringResource(R.string.sort_price)
+    ItemListViewModel.SortMode.EXPIRY_ASC -> stringResource(R.string.sort_expiry)
 }

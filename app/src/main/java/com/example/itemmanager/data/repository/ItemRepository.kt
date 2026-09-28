@@ -43,4 +43,10 @@ class ItemRepository(private val itemDao: ItemDao) {
 
     /** 获取物品总数 */
     suspend fun getItemCount(): Int = itemDao.getItemCount()
+
+    /** 获取借出中的物品 */
+    fun getBorrowedItems(): Flow<List<ItemEntity>> = itemDao.getBorrowedItems()
+
+    /** 物品总价值 */
+    fun getTotalValue(): Flow<Double?> = itemDao.getTotalValue()
 }

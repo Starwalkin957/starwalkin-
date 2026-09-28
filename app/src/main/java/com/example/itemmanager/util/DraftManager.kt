@@ -16,7 +16,10 @@ data class ItemDraft(
     val imagePaths: List<String> = emptyList(),
     val purchaseDate: Long? = null,
     val expiryDate: Long? = null,
-    val warrantyDate: Long? = null
+    val warrantyDate: Long? = null,
+    val price: String = "",
+    val borrower: String = "",
+    val expectedReturnDate: Long? = null
 ) {
     /** 草稿是否包含有效内容 */
     fun isNotEmpty(): Boolean =
@@ -41,6 +44,9 @@ object DraftManager {
     private const val KEY_PURCHASE = "purchase_date"
     private const val KEY_EXPIRY = "expiry_date"
     private const val KEY_WARRANTY = "warranty_date"
+    private const val KEY_PRICE = "price"
+    private const val KEY_BORROWER = "borrower"
+    private const val KEY_EXPECTED_RETURN = "expected_return_date"
     private const val KEY_HAS_DRAFT = "has_draft"
     private const val NONE = Long.MIN_VALUE
 
@@ -59,6 +65,9 @@ object DraftManager {
             putLong(KEY_PURCHASE, draft.purchaseDate ?: NONE)
             putLong(KEY_EXPIRY, draft.expiryDate ?: NONE)
             putLong(KEY_WARRANTY, draft.warrantyDate ?: NONE)
+            putString(KEY_PRICE, draft.price)
+            putString(KEY_BORROWER, draft.borrower)
+            putLong(KEY_EXPECTED_RETURN, draft.expectedReturnDate ?: NONE)
             putBoolean(KEY_HAS_DRAFT, true)
             apply()
         }
@@ -82,7 +91,10 @@ object DraftManager {
             else pathsStr.split("|").filter { it.isNotBlank() },
             purchaseDate = date(KEY_PURCHASE),
             expiryDate = date(KEY_EXPIRY),
-            warrantyDate = date(KEY_WARRANTY)
+            warrantyDate = date(KEY_WARRANTY),
+            price = p.getString(KEY_PRICE, "") ?: "",
+            borrower = p.getString(KEY_BORROWER, "") ?: "",
+            expectedReturnDate = date(KEY_EXPECTED_RETURN)
         )
         return if (draft.isNotEmpty()) draft else null
     }

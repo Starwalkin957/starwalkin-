@@ -151,4 +151,44 @@
     <string name="enter_name">请输入物品名称</string>
     <string name="enter_category">请输入物品分类</string>
     <string name="photo_failed">图片添加失败，请重试</string>
+
+    <!-- 价格与资产 -->
+    <string name="price">价格</string>
+    <string name="price_hint">0.00</string>
+    <string name="price_format">¥%1$.2f</string>
+    <string name="asset_stats">资产与借出</string>
+    <string name="total_value">总价值</string>
+    <string name="avg_value">平均价值</string>
+
+    <!-- 借出管理 -->
+    <string name="borrow_info">借出信息</string>
+    <string name="borrower">借出人</string>
+    <string name="borrower_hint">借给谁了？</string>
+    <string name="borrow_date">借出日期</string>
+    <string name="expected_return">预计归还</string>
+    <string name="expected_return_hint">点击选择预计归还日期（可选）</string>
+    <string name="lend_item">借出物品</string>
+    <string name="mark_returned">标记已归还</string>
+    <string name="borrowed">借出中</string>
+    <string name="borrowed_count">借出中</string>
+    <string name="return_tomorrow">明天需归还</string>
+    <string name="return_today">今天需归还</string>
+    <string name="return_overdue">已逾期 %1$d 天</string>
+
+    <!-- 排序 -->
+    <string name="sort_date_desc">添加时间（新→旧）</string>
+    <string name="sort_date_asc">添加时间（旧→新）</string>
+    <string name="sort_name">按名称</string>
+    <string name="sort_price">价格（高→低）</string>
+    <string name="sort_expiry">保质期（近→远）</string>
+
+    <!-- CSV 导出 -->
+    <string name="export_csv">导出 CSV 清单</string>
+    <string name="csv_ready">CSV 已生成，选择应用保存或分享</string>
+    <string name="share_csv_title">分享 CSV 清单到…</string>
+
+    <!-- 分享（价格/借出） -->
+    <string name="share_price">价格：</string>
+    <string name="share_borrower">借出人：</string>
+    <string name="share_expected_return">预计归还：</string>
 </resources>

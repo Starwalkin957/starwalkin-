@@ -13,6 +13,7 @@ import com.example.itemmanager.util.ShareUtils
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -33,6 +34,16 @@ class DashboardViewModel(
     // 已有分类
     val categories: StateFlow<List<String>> = repository.getAllCategories()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    // 物品总价值（price 求和，全为空则 0）
+    val totalValue: StateFlow<Double> = repository.getTotalValue()
+        .map { it ?: 0.0 }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.0)
+
+    // 借出中的物品数量
+    val borrowedCount: StateFlow<Int> = repository.getBorrowedItems()
+        .map { it.size }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
     // 操作提示
     private val _message = MutableStateFlow<String?>(null)

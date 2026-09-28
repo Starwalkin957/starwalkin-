@@ -39,6 +39,18 @@ data class ItemEntity(
     /** 保修期截止（毫秒），可为空 */
     val warrantyDate: Long? = null,
 
+    /** 物品价格/价值（元），可为空 */
+    val price: Double? = null,
+
+    /** 当前借出人（为空表示未借出） */
+    val borrower: String? = null,
+
+    /** 借出日期（毫秒），可为空 */
+    val borrowDate: Long? = null,
+
+    /** 预计归还日期（毫秒），可为空 */
+    val expectedReturnDate: Long? = null,
+
     /** 创建时间戳（毫秒） */
     val createdAt: Long = System.currentTimeMillis(),
 

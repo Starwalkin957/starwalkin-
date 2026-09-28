@@ -9,6 +9,7 @@ import com.example.itemmanager.R
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.data.repository.ItemRepository
 import com.example.itemmanager.util.BackupUtils
+import com.example.itemmanager.util.CsvExporter
 import com.example.itemmanager.util.ImageUtils
 import com.example.itemmanager.util.ShareUtils
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -39,6 +41,11 @@ class ItemListViewModel(
     private val _selectedCategory = MutableStateFlow<String?>(null)
     val selectedCategory: StateFlow<String?> = _selectedCategory
 
+    // 排序方式
+    enum class SortMode { DATE_DESC, DATE_ASC, NAME_ASC, PRICE_DESC, EXPIRY_ASC }
+    private val _sortMode = MutableStateFlow(SortMode.DATE_DESC)
+    val sortMode: StateFlow<SortMode> = _sortMode
+
     // 所有可用分类（从数据库动态获取）
     val categories: StateFlow<List<String>> = repository.getAllCategories()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
@@ -55,6 +62,7 @@ class ItemListViewModel(
             }
         }
         .flatMapLatest { it }
+        .combine(_sortMode) { list, mode -> sortList(list, mode) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // 一次性操作提示消息（导出/导入结果）
@@ -71,6 +79,11 @@ class ItemListViewModel(
     /** 切换分类筛选 */
     fun onCategorySelected(category: String?) {
         _selectedCategory.value = category
+    }
+
+    /** 切换排序方式 */
+    fun setSortMode(mode: SortMode) {
+        _sortMode.value = mode
     }
 
     /** 删除物品（同时删除关联图片） */
@@ -101,6 +114,23 @@ class ItemListViewModel(
     }
 
     /**
+     * 导出当前列表为 CSV 并调起系统分享
+     */
+    fun exportCsvAndShare() {
+        viewModelScope.launch {
+            val file = CsvExporter.export(application, items.value)
+            if (file != null) {
+                _message.value = application.getString(R.string.csv_ready)
+                ShareUtils.shareFile(
+                    application, file, application.getString(R.string.share_csv_title)
+                )
+            } else {
+                _message.value = application.getString(R.string.export_failed)
+            }
+        }
+    }
+
+    /**
      * 从用户选择的备份文件导入恢复
      */
     fun importFrom(uri: Uri) {
@@ -112,6 +142,15 @@ class ItemListViewModel(
                 else -> application.getString(R.string.import_failed)
             }
         }
+    }
+
+    /** 按排序模式对列表排序 */
+    private fun sortList(list: List<ItemEntity>, mode: SortMode): List<ItemEntity> = when (mode) {
+        SortMode.DATE_DESC -> list.sortedByDescending { it.createdAt }
+        SortMode.DATE_ASC -> list.sortedBy { it.createdAt }
+        SortMode.NAME_ASC -> list.sortedBy { it.name }
+        SortMode.PRICE_DESC -> list.sortedByDescending { it.price ?: Double.NEGATIVE_INFINITY }
+        SortMode.EXPIRY_ASC -> list.sortedBy { it.expiryDate ?: Long.MAX_VALUE }
     }
 
     companion object {

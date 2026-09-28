@@ -141,4 +141,44 @@
     <string name="enter_name">물품 이름을 입력하세요</string>
     <string name="enter_category">카테고리를 입력하세요</string>
     <string name="photo_failed">사진 추가 실패, 다시 시도하세요</string>
+
+    <!-- 가격 및 자산 -->
+    <string name="price">가격</string>
+    <string name="price_hint">0.00</string>
+    <string name="price_format">₩%1$.2f</string>
+    <string name="asset_stats">자산 및 대여</string>
+    <string name="total_value">총 가치</string>
+    <string name="avg_value">평균 가치</string>
+
+    <!-- 대여 관리 -->
+    <string name="borrow_info">대여 정보</string>
+    <string name="borrower">대여자</string>
+    <string name="borrower_hint">누구에게 빌려주셨나요?</string>
+    <string name="borrow_date">대여일</string>
+    <string name="expected_return">반납 예정</string>
+    <string name="expected_return_hint">탭하여 반납일 선택 (선택사항)</string>
+    <string name="lend_item">물건 대여</string>
+    <string name="mark_returned">반납 완료로 표시</string>
+    <string name="borrowed">대여 중</string>
+    <string name="borrowed_count">대여 중</string>
+    <string name="return_tomorrow">내일 반납</string>
+    <string name="return_today">오늘 반납</string>
+    <string name="return_overdue">%1$d일 연체</string>
+
+    <!-- 정렬 -->
+    <string name="sort_date_desc">추가일 (최신→오래된)</string>
+    <string name="sort_date_asc">추가일 (오래된→최신)</string>
+    <string name="sort_name">이름순</string>
+    <string name="sort_price">가격 (높음→낮음)</string>
+    <string name="sort_expiry">유통기한 (가까움→먼)</string>
+
+    <!-- CSV 내보내기 -->
+    <string name="export_csv">CSV 목록 내보내기</string>
+    <string name="csv_ready">CSV가 생성되었습니다. 앱을 선택하여 저장 또는 공유</string>
+    <string name="share_csv_title">CSV 목록 공유…</string>
+
+    <!-- 공유 (가격/대여) -->
+    <string name="share_price">가격: </string>
+    <string name="share_borrower">대여자: </string>
+    <string name="share_expected_return">반납 예정: </string>
 </resources>

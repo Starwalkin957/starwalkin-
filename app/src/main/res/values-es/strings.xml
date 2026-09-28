@@ -141,4 +141,44 @@
     <string name="enter_name">Introduce el nombre del objeto</string>
     <string name="enter_category">Introduce la categoría</string>
     <string name="photo_failed">Error al añadir la foto, inténtalo de nuevo</string>
+
+    <!-- Precio & Activos -->
+    <string name="price">Precio</string>
+    <string name="price_hint">0.00</string>
+    <string name="price_format">%1$.2f €</string>
+    <string name="asset_stats">Activos y Préstamos</string>
+    <string name="total_value">Valor Total</string>
+    <string name="avg_value">Valor Medio</string>
+
+    <!-- Gestión de préstamos -->
+    <string name="borrow_info">Info de Préstamo</string>
+    <string name="borrower">Prestatario</string>
+    <string name="borrower_hint">¿A quién se lo prestaste?</string>
+    <string name="borrow_date">Fecha de Préstamo</string>
+    <string name="expected_return">Devolución Prevista</string>
+    <string name="expected_return_hint">Toca para elegir fecha de devolución (opcional)</string>
+    <string name="lend_item">Prestar Artículo</string>
+    <string name="mark_returned">Marcar Devuelto</string>
+    <string name="borrowed">Prestado</string>
+    <string name="borrowed_count">Prestado</string>
+    <string name="return_tomorrow">Devolver mañana</string>
+    <string name="return_today">Devolver hoy</string>
+    <string name="return_overdue">Vencido hace %1$d días</string>
+
+    <!-- Ordenación -->
+    <string name="sort_date_desc">Fecha (nuevo→viejo)</string>
+    <string name="sort_date_asc">Fecha (viejo→nuevo)</string>
+    <string name="sort_name">Por Nombre</string>
+    <string name="sort_price">Precio (alto→bajo)</string>
+    <string name="sort_expiry">Caducidad (cerca→lejos)</string>
+
+    <!-- Exportar CSV -->
+    <string name="export_csv">Exportar Lista CSV</string>
+    <string name="csv_ready">CSV generado, elige una app para guardar o compartir</string>
+    <string name="share_csv_title">Compartir lista CSV a…</string>
+
+    <!-- Compartir (precio/préstamo) -->
+    <string name="share_price">Precio: </string>
+    <string name="share_borrower">Prestatario: </string>
+    <string name="share_expected_return">Devolución prevista: </string>
 </resources>

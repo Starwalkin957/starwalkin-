@@ -3,15 +3,20 @@ package com.example.itemmanager.util
 import com.example.itemmanager.data.local.ItemEntity
 
 /**
- * 有效期提醒工具
+ * 有效期与借出提醒工具
  * - 保质期：到期前一天（含当天）弹窗提醒
  * - 保修期：到期前一周（7 天内，含当天）弹窗提醒
+ * - 借出归还：预计归还前一天、当天、已逾期弹窗提醒
  * 已过期的不在此提醒（详情页会显示）。
  * 返回类型标识，由界面结合多语言资源生成提示文字。
  */
 object ExpiryReminder {
 
-    enum class Kind { EXPIRY_TOMORROW, EXPIRY_TODAY, WARRANTY_DAYS, WARRANTY_TODAY }
+    enum class Kind {
+        EXPIRY_TOMORROW, EXPIRY_TODAY,
+        WARRANTY_DAYS, WARRANTY_TODAY,
+        RETURN_TOMORROW, RETURN_TODAY, RETURN_OVERDUE
+    }
 
     /** 单条提醒 */
     data class Reminder(
@@ -41,6 +46,19 @@ object ExpiryReminder {
                         result.add(Reminder(item.name, Kind.WARRANTY_TODAY))
                     } else {
                         result.add(Reminder(item.name, Kind.WARRANTY_DAYS, days.toInt()))
+                    }
+                }
+            }
+            // 借出归还：前一天、当天、已逾期（仅当有借出人时）
+            if (!item.borrower.isNullOrBlank()) {
+                item.expectedReturnDate?.let { ts ->
+                    val days = DateUtils.daysUntil(ts)
+                    when {
+                        days < 0 -> result.add(
+                            Reminder(item.name, Kind.RETURN_OVERDUE, (-days).toInt())
+                        )
+                        days == 1L -> result.add(Reminder(item.name, Kind.RETURN_TOMORROW))
+                        days == 0L -> result.add(Reminder(item.name, Kind.RETURN_TODAY))
                     }
                 }
             }

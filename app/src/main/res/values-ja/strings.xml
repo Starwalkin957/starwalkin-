@@ -141,4 +141,44 @@
     <string name="enter_name">アイテム名を入力してください</string>
     <string name="enter_category">カテゴリーを入力してください</string>
     <string name="photo_failed">写真の追加に失敗しました。もう一度お試しください</string>
+
+    <!-- 価格と資産 -->
+    <string name="price">価格</string>
+    <string name="price_hint">0.00</string>
+    <string name="price_format">¥%1$.2f</string>
+    <string name="asset_stats">資産と貸出</string>
+    <string name="total_value">総価値</string>
+    <string name="avg_value">平均価値</string>
+
+    <!-- 貸出管理 -->
+    <string name="borrow_info">貸出情報</string>
+    <string name="borrower">借り手</string>
+    <string name="borrower_hint">誰に貸しましたか？</string>
+    <string name="borrow_date">貸出日</string>
+    <string name="expected_return">返却予定</string>
+    <string name="expected_return_hint">タップして返却日を選択（任意）</string>
+    <string name="lend_item">物品を貸す</string>
+    <string name="mark_returned">返却済みにする</string>
+    <string name="borrowed">貸出中</string>
+    <string name="borrowed_count">貸出中</string>
+    <string name="return_tomorrow">明日返却</string>
+    <string name="return_today">今日返却</string>
+    <string name="return_overdue">%1$d 日延滞</string>
+
+    <!-- 並び替え -->
+    <string name="sort_date_desc">追加日（新→旧）</string>
+    <string name="sort_date_asc">追加日（旧→新）</string>
+    <string name="sort_name">名前順</string>
+    <string name="sort_price">価格（高→低）</string>
+    <string name="sort_expiry">賞味期限（近→遠）</string>
+
+    <!-- CSVエクスポート -->
+    <string name="export_csv">CSVリストをエクスポート</string>
+    <string name="csv_ready">CSVが生成されました。アプリを選んで保存または共有</string>
+    <string name="share_csv_title">CSVリストを共有…</string>
+
+    <!-- 共有（価格/貸出） -->
+    <string name="share_price">価格：</string>
+    <string name="share_borrower">借り手：</string>
+    <string name="share_expected_return">返却予定：</string>
 </resources>

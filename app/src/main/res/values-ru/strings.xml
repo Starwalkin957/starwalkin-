@@ -141,4 +141,44 @@
     <string name="enter_name">Введите название вещи</string>
     <string name="enter_category">Введите категорию</string>
     <string name="photo_failed">Не удалось добавить фото, попробуйте снова</string>
+
+    <!-- Цена и активы -->
+    <string name="price">Цена</string>
+    <string name="price_hint">0.00</string>
+    <string name="price_format">%1$.2f ₽</string>
+    <string name="asset_stats">Активы и Займы</string>
+    <string name="total_value">Общая Стоимость</string>
+    <string name="avg_value">Средняя Стоимость</string>
+
+    <!-- Управление займами -->
+    <string name="borrow_info">Информация о Займе</string>
+    <string name="borrower">Заёмщик</string>
+    <string name="borrower_hint">Кому одолжили?</string>
+    <string name="borrow_date">Дата Займа</string>
+    <string name="expected_return">Ожидаемый Возврат</string>
+    <string name="expected_return_hint">Нажмите для выбора даты возврата (необязательно)</string>
+    <string name="lend_item">Одолжить Предмет</string>
+    <string name="mark_returned">Отметить Возвращённым</string>
+    <string name="borrowed">В Займе</string>
+    <string name="borrowed_count">В Займе</string>
+    <string name="return_tomorrow">Вернуть завтра</string>
+    <string name="return_today">Вернуть сегодня</string>
+    <string name="return_overdue">Просрочено на %1$d дн.</string>
+
+    <!-- Сортировка -->
+    <string name="sort_date_desc">Дата добавления (новое→старое)</string>
+    <string name="sort_date_asc">Дата добавления (старое→новое)</string>
+    <string name="sort_name">По Названию</string>
+    <string name="sort_price">Цена (высокая→низкая)</string>
+    <string name="sort_expiry">Срок годности (близко→далеко)</string>
+
+    <!-- Экспорт CSV -->
+    <string name="export_csv">Экспорт CSV Списка</string>
+    <string name="csv_ready">CSV создан, выберите приложение для сохранения или отправки</string>
+    <string name="share_csv_title">Отправить CSV список в…</string>
+
+    <!-- Поделиться (цена/займ) -->
+    <string name="share_price">Цена: </string>
+    <string name="share_borrower">Заёмщик: </string>
+    <string name="share_expected_return">Возврат: </string>
 </resources>

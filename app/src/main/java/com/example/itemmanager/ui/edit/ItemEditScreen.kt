@@ -91,6 +91,10 @@ fun ItemEditScreen(
     val expiryDateText by viewModel.expiryDateText.collectAsState()
     val warrantyDate by viewModel.warrantyDate.collectAsState()
     val warrantyDateText by viewModel.warrantyDateText.collectAsState()
+    val priceText by viewModel.priceText.collectAsState()
+    val borrower by viewModel.borrower.collectAsState()
+    val expectedReturnDate by viewModel.expectedReturnDate.collectAsState()
+    val expectedReturnDateText by viewModel.expectedReturnDateText.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val saveCompleted by viewModel.saveCompleted.collectAsState()
     val pendingDraft by viewModel.pendingDraft.collectAsState()
@@ -282,6 +286,19 @@ fun ItemEditScreen(
             )
             Spacer(Modifier.height(12.dp))
 
+            // ---- 价格 ----
+            OutlinedTextField(
+                value = priceText,
+                onValueChange = viewModel::onPriceTextChange,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.price)) },
+                placeholder = { Text(stringResource(R.string.price_hint)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                shape = RoundedCornerShape(12.dp)
+            )
+            Spacer(Modifier.height(12.dp))
+
             // ---- 存放位置 ----
             OutlinedTextField(
                 value = location,
@@ -292,6 +309,34 @@ fun ItemEditScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
+            Spacer(Modifier.height(16.dp))
+
+            // ---- 借出信息 ----
+            Text(
+                stringResource(R.string.borrow_info),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(Modifier.height(8.dp))
+            OutlinedTextField(
+                value = borrower,
+                onValueChange = viewModel::onBorrowerChanged,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.borrower)) },
+                placeholder = { Text(stringResource(R.string.borrower_hint)) },
+                singleLine = true,
+                shape = RoundedCornerShape(12.dp)
+            )
+            Spacer(Modifier.height(8.dp))
+            DateField(
+                label = stringResource(R.string.expected_return),
+                text = expectedReturnDateText,
+                onTextChange = viewModel::onExpectedReturnDateTextChange,
+                onPick = { datePickerTarget = 3 },
+                onClear = { viewModel.setExpectedReturnDate(null) }
+            )
+
             Spacer(Modifier.height(16.dp))
 
             // ---- 有效期信息 ----
@@ -397,7 +442,8 @@ fun ItemEditScreen(
         val initial = when (target) {
             0 -> purchaseDate
             1 -> expiryDate
-            else -> warrantyDate
+            2 -> warrantyDate
+            else -> expectedReturnDate
         }
         val datePickerState = rememberDatePickerState(
             initialSelectedDateMillis = initial
@@ -410,7 +456,8 @@ fun ItemEditScreen(
                     when (target) {
                         0 -> viewModel.setPurchaseDate(millis)
                         1 -> viewModel.setExpiryDate(millis)
-                        else -> viewModel.setWarrantyDate(millis)
+                        2 -> viewModel.setWarrantyDate(millis)
+                        else -> viewModel.setExpectedReturnDate(millis)
                     }
                     datePickerTarget = null
                 }) { Text(stringResource(R.string.confirm)) }

@@ -59,9 +59,12 @@ private val chartColors = listOf(
 @Composable
 fun StatsScreen(dashboardViewModel: DashboardViewModel) {
     val items by dashboardViewModel.items.collectAsState()
+    val totalValue by dashboardViewModel.totalValue.collectAsState()
+    val borrowedCount by dashboardViewModel.borrowedCount.collectAsState()
 
     val totalKinds = items.size                       // 物品种类（条目）数
     val totalQuantity = items.sumOf { it.quantity }  // 物品总数量
+    val avgValue = if (totalKinds > 0) totalValue / totalKinds else 0.0
     val categoryCountMap = items.groupingBy { it.category }.eachCount()
     val categoryCount = categoryCountMap.size        // 分类数量
 
@@ -117,6 +120,33 @@ fun StatsScreen(dashboardViewModel: DashboardViewModel) {
                     label = stringResource(R.string.category_count),
                     color = Color(0xFFF59E0B)
                 )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // ---- 资产与借出 ----
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(2.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = stringResource(R.string.asset_stats),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    AssetRow(
+                        stringResource(R.string.total_value),
+                        stringResource(R.string.price_format, totalValue)
+                    )
+                    AssetRow(
+                        stringResource(R.string.avg_value),
+                        stringResource(R.string.price_format, avgValue)
+                    )
+                    AssetRow(stringResource(R.string.borrowed_count), borrowedCount.toString())
+                }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -230,5 +260,21 @@ private fun CategoryBar(
             color = TextSecondary,
             modifier = Modifier.width(64.dp)
         )
+    }
+}
+
+/**
+ * 资产统计行
+ */
+@Composable
+private fun AssetRow(label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(label, style = MaterialTheme.typography.bodyLarge, color = TextSecondary)
+        Text(value, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
     }
 }

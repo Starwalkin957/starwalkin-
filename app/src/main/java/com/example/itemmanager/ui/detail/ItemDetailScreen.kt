@@ -1,6 +1,8 @@
 package com.example.itemmanager.ui.detail
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,22 +22,29 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -79,6 +88,10 @@ fun ItemDetailScreen(
     val item by viewModel.item.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var showLendDialog by remember { mutableStateOf(false) }
+    var lendBorrower by remember { mutableStateOf("") }
+    var lendReturnDate by remember { mutableStateOf<Long?>(null) }
+    var showLendDatePicker by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Scaffold(
@@ -121,7 +134,11 @@ fun ItemDetailScreen(
                 item == null -> Box(Modifier.fillMaxSize(), Alignment.Center) {
                     Text(stringResource(R.string.not_exist), color = TextSecondary)
                 }
-                else -> ItemDetailContent(item = item!!)
+                else -> ItemDetailContent(
+                    item = item!!,
+                    viewModel = viewModel,
+                    onLendClick = { showLendDialog = true }
+                )
             }
         }
     }
@@ -142,6 +159,68 @@ fun ItemDetailScreen(
             }
         )
     }
+
+    // ---- 借出对话框 ----
+    if (showLendDialog) {
+        AlertDialog(
+            onDismissRequest = { showLendDialog = false },
+            title = { Text(stringResource(R.string.lend_item)) },
+            text = {
+                Column {
+                    OutlinedTextField(
+                        value = lendBorrower,
+                        onValueChange = { lendBorrower = it },
+                        label = { Text(stringResource(R.string.borrower)) },
+                        singleLine = true,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        text = lendReturnDate?.let { DateUtils.formatDate(it) }
+                            ?: stringResource(R.string.expected_return_hint),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (lendReturnDate == null) TextSecondary else Color.Unspecified,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFFF1F5F9))
+                            .padding(14.dp)
+                            .clickable { showLendDatePicker = true }
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    if (lendBorrower.isNotBlank()) {
+                        viewModel.lendItem(lendBorrower, lendReturnDate)
+                        showLendDialog = false
+                        lendBorrower = ""
+                        lendReturnDate = null
+                    }
+                }) { Text(stringResource(R.string.confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showLendDialog = false }) { Text(stringResource(R.string.cancel)) }
+            }
+        )
+    }
+
+    // ---- 借出日期选择 ----
+    if (showLendDatePicker) {
+        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = lendReturnDate)
+        DatePickerDialog(
+            onDismissRequest = { showLendDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    lendReturnDate = datePickerState.selectedDateMillis
+                    showLendDatePicker = false
+                }) { Text(stringResource(R.string.confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showLendDatePicker = false }) { Text(stringResource(R.string.cancel)) }
+            }
+        ) { DatePicker(state = datePickerState) }
+    }
 }
 
 /**
@@ -149,7 +228,7 @@ fun ItemDetailScreen(
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ItemDetailContent(item: ItemEntity) {
+fun ItemDetailContent(item: ItemEntity, viewModel: ItemDetailViewModel, onLendClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -233,6 +312,10 @@ fun ItemDetailContent(item: ItemEntity) {
         // ---- 基本信息 ----
         DetailRow(stringResource(R.string.quantity), item.quantity.toString())
         DetailRow(stringResource(R.string.location), item.location.ifBlank { stringResource(R.string.not_set) })
+        DetailRow(
+            stringResource(R.string.price),
+            item.price?.let { stringResource(R.string.price_format, it) } ?: stringResource(R.string.not_set)
+        )
 
         Spacer(Modifier.height(8.dp))
 
@@ -240,6 +323,26 @@ fun ItemDetailContent(item: ItemEntity) {
         DetailRow(stringResource(R.string.purchase_date), DateUtils.formatDate(item.purchaseDate).ifBlank { stringResource(R.string.not_set) })
         ExpiryStatusRow(stringResource(R.string.label_expiry), item.expiryDate)
         ExpiryStatusRow(stringResource(R.string.label_warranty), item.warrantyDate)
+
+        // ---- 借出信息 ----
+        if (!item.borrower.isNullOrBlank()) {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                stringResource(R.string.borrow_info),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(Modifier.height(4.dp))
+            DetailRow(stringResource(R.string.borrower), item.borrower)
+            DetailRow(
+                stringResource(R.string.borrow_date),
+                item.borrowDate?.let { DateUtils.formatDate(it) } ?: stringResource(R.string.not_set)
+            )
+            DetailRow(
+                stringResource(R.string.expected_return),
+                item.expectedReturnDate?.let { DateUtils.formatDate(it) } ?: stringResource(R.string.not_set)
+            )
+        }
 
         Spacer(Modifier.height(8.dp))
 
@@ -255,6 +358,33 @@ fun ItemDetailContent(item: ItemEntity) {
             style = MaterialTheme.typography.bodyLarge,
             color = if (item.description.isBlank()) TextSecondary else Color.Unspecified
         )
+
+        Spacer(Modifier.height(24.dp))
+
+        // ---- 借出/归还按钮 ----
+        if (item.borrower.isNullOrBlank()) {
+            Button(
+                onClick = onLendClick,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Icon(Icons.Default.Share, contentDescription = null)
+                Spacer(Modifier.size(8.dp))
+                Text(stringResource(R.string.lend_item))
+            }
+        } else {
+            Button(
+                onClick = { viewModel.returnItem() },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = SuccessColor)
+            ) {
+                Icon(Icons.Default.Check, contentDescription = null)
+                Spacer(Modifier.size(8.dp))
+                Text(stringResource(R.string.mark_returned))
+            }
+        }
+        Spacer(Modifier.height(32.dp))
     }
 }
 

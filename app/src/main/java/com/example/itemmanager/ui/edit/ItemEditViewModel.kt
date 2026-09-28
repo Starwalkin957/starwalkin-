@@ -72,6 +72,19 @@ class ItemEditViewModel(
     private val _warrantyDateText = MutableStateFlow("")
     val warrantyDateText: StateFlow<String> = _warrantyDateText
 
+    // ---- 价格（文本输入，保存时解析为 Double）----
+    private val _priceText = MutableStateFlow("")
+    val priceText: StateFlow<String> = _priceText
+
+    // ---- 借出信息 ----
+    private val _borrower = MutableStateFlow("")
+    val borrower: StateFlow<String> = _borrower
+
+    private val _expectedReturnDate = MutableStateFlow<Long?>(null)
+    val expectedReturnDate: StateFlow<Long?> = _expectedReturnDate
+    private val _expectedReturnDateText = MutableStateFlow("")
+    val expectedReturnDateText: StateFlow<String> = _expectedReturnDateText
+
     // ---- 其他状态 ----
     private val _saveCompleted = MutableStateFlow(false)
     val saveCompleted: StateFlow<Boolean> = _saveCompleted
@@ -103,6 +116,9 @@ class ItemEditViewModel(
                 setPurchaseDate(item.purchaseDate)
                 setExpiryDate(item.expiryDate)
                 setWarrantyDate(item.warrantyDate)
+                _priceText.value = item.price?.toString() ?: ""
+                _borrower.value = item.borrower ?: ""
+                setExpectedReturnDate(item.expectedReturnDate)
             }
         }
     }
@@ -180,6 +196,30 @@ class ItemEditViewModel(
         autoSaveDraft()
     }
 
+    // ---- 价格与借出 ----
+
+    fun onPriceTextChange(text: String) {
+        _priceText.value = text
+        autoSaveDraft()
+    }
+
+    fun onBorrowerChanged(value: String) {
+        _borrower.value = value
+        autoSaveDraft()
+    }
+
+    fun setExpectedReturnDate(ts: Long?) {
+        _expectedReturnDate.value = ts
+        _expectedReturnDateText.value = DateUtils.formatDate(ts)
+        autoSaveDraft()
+    }
+
+    fun onExpectedReturnDateTextChange(text: String) {
+        _expectedReturnDateText.value = text
+        _expectedReturnDate.value = DateUtils.parseDate(text)
+        autoSaveDraft()
+    }
+
     // ---- 草稿 ----
 
     private fun autoSaveDraft() {
@@ -193,7 +233,10 @@ class ItemEditViewModel(
             imagePaths = _imagePaths.value,
             purchaseDate = _purchaseDate.value,
             expiryDate = _expiryDate.value,
-            warrantyDate = _warrantyDate.value
+            warrantyDate = _warrantyDate.value,
+            price = _priceText.value,
+            borrower = _borrower.value,
+            expectedReturnDate = _expectedReturnDate.value
         )
         DraftManager.saveDraft(application, draft)
     }
@@ -209,6 +252,9 @@ class ItemEditViewModel(
         setPurchaseDate(d.purchaseDate)
         setExpiryDate(d.expiryDate)
         setWarrantyDate(d.warrantyDate)
+        _priceText.value = d.price
+        _borrower.value = d.borrower
+        setExpectedReturnDate(d.expectedReturnDate)
         _pendingDraft.value = null
     }
 
@@ -243,6 +289,8 @@ class ItemEditViewModel(
 
         viewModelScope.launch {
             val qty = _quantity.value.toIntOrNull() ?: 1
+            val price = _priceText.value.toDoubleOrNull()
+            val borrowerVal = _borrower.value.trim().ifBlank { null }
             val now = System.currentTimeMillis()
 
             if (isEditing && editingItemId != null) {
@@ -262,6 +310,10 @@ class ItemEditViewModel(
                     purchaseDate = _purchaseDate.value,
                     expiryDate = _expiryDate.value,
                     warrantyDate = _warrantyDate.value,
+                    price = price,
+                    borrower = borrowerVal,
+                    borrowDate = if (borrowerVal != null) existing?.borrowDate ?: now else null,
+                    expectedReturnDate = if (borrowerVal != null) _expectedReturnDate.value else null,
                     updatedAt = now
                 )
                 if (updated != null) repository.updateItem(updated)
@@ -276,6 +328,10 @@ class ItemEditViewModel(
                     purchaseDate = _purchaseDate.value,
                     expiryDate = _expiryDate.value,
                     warrantyDate = _warrantyDate.value,
+                    price = price,
+                    borrower = borrowerVal,
+                    borrowDate = if (borrowerVal != null) now else null,
+                    expectedReturnDate = if (borrowerVal != null) _expectedReturnDate.value else null,
                     createdAt = now,
                     updatedAt = now
                 )

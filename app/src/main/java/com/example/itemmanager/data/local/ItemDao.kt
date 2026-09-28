@@ -54,4 +54,12 @@ interface ItemDao {
     /** 获取物品总数 */
     @Query("SELECT COUNT(*) FROM items")
     suspend fun getItemCount(): Int
+
+    /** 获取借出中的物品（按预计归还日期升序） */
+    @Query("SELECT * FROM items WHERE borrower IS NOT NULL AND borrower != '' ORDER BY expectedReturnDate ASC")
+    fun getBorrowedItems(): Flow<List<ItemEntity>>
+
+    /** 物品总价值（price 非空的求和，全为空时返回 null） */
+    @Query("SELECT SUM(price) FROM items")
+    fun getTotalValue(): Flow<Double?>
 }

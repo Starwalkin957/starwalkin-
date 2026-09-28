@@ -33,6 +33,17 @@ object ShareUtils {
             item.warrantyDate?.let {
                 append(context.getString(R.string.share_warranty) + DateUtils.formatDate(it) + "\n")
             }
+            item.price?.let {
+                append(context.getString(R.string.share_price) +
+                    context.getString(R.string.price_format, it) + "\n")
+            }
+            item.borrower?.takeIf { it.isNotBlank() }?.let { borrower ->
+                append(context.getString(R.string.share_borrower) + borrower + "\n")
+                item.expectedReturnDate?.let {
+                    append(context.getString(R.string.share_expected_return) +
+                        DateUtils.formatDate(it) + "\n")
+                }
+            }
             if (item.description.isNotBlank())
                 append(context.getString(R.string.share_note) + item.description + "\n")
         }.trimEnd()

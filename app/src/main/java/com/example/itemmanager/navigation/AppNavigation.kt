@@ -339,6 +339,12 @@ fun AppNavigation() {
                                         stringResource(R.string.warranty_days, r.days)
                                     ExpiryReminder.Kind.WARRANTY_TODAY ->
                                         stringResource(R.string.warranty_today)
+                                    ExpiryReminder.Kind.RETURN_TOMORROW ->
+                                        stringResource(R.string.return_tomorrow)
+                                    ExpiryReminder.Kind.RETURN_TODAY ->
+                                        stringResource(R.string.return_today)
+                                    ExpiryReminder.Kind.RETURN_OVERDUE ->
+                                        stringResource(R.string.return_overdue, r.days)
                                 }
                                 Text("• ${r.itemName}：$msg")
                             }

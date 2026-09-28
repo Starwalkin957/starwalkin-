@@ -140,4 +140,44 @@
     <string name="enter_name">Please enter the item name</string>
     <string name="enter_category">Please enter the category</string>
     <string name="photo_failed">Failed to add photo, please try again</string>
+
+    <!-- Price & Assets -->
+    <string name="price">Price</string>
+    <string name="price_hint">0.00</string>
+    <string name="price_format">$%1$.2f</string>
+    <string name="asset_stats">Assets &amp; Loans</string>
+    <string name="total_value">Total Value</string>
+    <string name="avg_value">Average Value</string>
+
+    <!-- Loan Management -->
+    <string name="borrow_info">Loan Info</string>
+    <string name="borrower">Borrower</string>
+    <string name="borrower_hint">Who borrowed it?</string>
+    <string name="borrow_date">Loan Date</string>
+    <string name="expected_return">Expected Return</string>
+    <string name="expected_return_hint">Tap to pick expected return date (optional)</string>
+    <string name="lend_item">Lend Item</string>
+    <string name="mark_returned">Mark Returned</string>
+    <string name="borrowed">On Loan</string>
+    <string name="borrowed_count">On Loan</string>
+    <string name="return_tomorrow">Due back tomorrow</string>
+    <string name="return_today">Due back today</string>
+    <string name="return_overdue">Overdue by %1$d days</string>
+
+    <!-- Sorting -->
+    <string name="sort_date_desc">Date added (new→old)</string>
+    <string name="sort_date_asc">Date added (old→new)</string>
+    <string name="sort_name">By Name</string>
+    <string name="sort_price">Price (high→low)</string>
+    <string name="sort_expiry">Expiry (soon→late)</string>
+
+    <!-- CSV Export -->
+    <string name="export_csv">Export CSV List</string>
+    <string name="csv_ready">CSV generated, choose an app to save or share</string>
+    <string name="share_csv_title">Share CSV list to…</string>
+
+    <!-- Share (price/loan) -->
+    <string name="share_price">Price: </string>
+    <string name="share_borrower">Borrower: </string>
+    <string name="share_expected_return">Expected return: </string>
 </resources>
