@@ -312,10 +312,6 @@ fun ItemDetailContent(item: ItemEntity, viewModel: ItemDetailViewModel, onLendCl
         // ---- 基本信息 ----
         DetailRow(stringResource(R.string.quantity), item.quantity.toString())
         DetailRow(stringResource(R.string.location), item.location.ifBlank { stringResource(R.string.not_set) })
-        DetailRow(
-            stringResource(R.string.price),
-            item.price?.let { stringResource(R.string.price_format, it) } ?: stringResource(R.string.not_set)
-        )
 
         Spacer(Modifier.height(8.dp))
 

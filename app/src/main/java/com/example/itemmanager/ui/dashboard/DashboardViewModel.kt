@@ -35,11 +35,6 @@ class DashboardViewModel(
     val categories: StateFlow<List<String>> = repository.getAllCategories()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    // 物品总价值（price 求和，全为空则 0）
-    val totalValue: StateFlow<Double> = repository.getTotalValue()
-        .map { it ?: 0.0 }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.0)
-
     // 借出中的物品数量
     val borrowedCount: StateFlow<Int> = repository.getBorrowedItems()
         .map { it.size }

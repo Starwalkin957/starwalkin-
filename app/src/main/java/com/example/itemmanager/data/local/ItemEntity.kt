@@ -39,9 +39,6 @@ data class ItemEntity(
     /** 保修期截止（毫秒），可为空 */
     val warrantyDate: Long? = null,
 
-    /** 物品价格/价值（元），可为空 */
-    val price: Double? = null,
-
     /** 当前借出人（为空表示未借出） */
     val borrower: String? = null,
 

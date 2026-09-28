@@ -59,6 +59,7 @@ object ExpiryReminder {
                         )
                         days == 1L -> result.add(Reminder(item.name, Kind.RETURN_TOMORROW))
                         days == 0L -> result.add(Reminder(item.name, Kind.RETURN_TODAY))
+                        else -> {}
                     }
                 }
             }

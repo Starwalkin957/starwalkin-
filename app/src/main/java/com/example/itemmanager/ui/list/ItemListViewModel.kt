@@ -9,7 +9,6 @@ import com.example.itemmanager.R
 import com.example.itemmanager.data.local.ItemEntity
 import com.example.itemmanager.data.repository.ItemRepository
 import com.example.itemmanager.util.BackupUtils
-import com.example.itemmanager.util.CsvExporter
 import com.example.itemmanager.util.ImageUtils
 import com.example.itemmanager.util.ShareUtils
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +41,7 @@ class ItemListViewModel(
     val selectedCategory: StateFlow<String?> = _selectedCategory
 
     // 排序方式
-    enum class SortMode { DATE_DESC, DATE_ASC, NAME_ASC, PRICE_DESC, EXPIRY_ASC }
+    enum class SortMode { DATE_DESC, DATE_ASC, NAME_ASC, EXPIRY_ASC }
     private val _sortMode = MutableStateFlow(SortMode.DATE_DESC)
     val sortMode: StateFlow<SortMode> = _sortMode
 
@@ -114,23 +113,6 @@ class ItemListViewModel(
     }
 
     /**
-     * 导出当前列表为 CSV 并调起系统分享
-     */
-    fun exportCsvAndShare() {
-        viewModelScope.launch {
-            val file = CsvExporter.export(application, items.value)
-            if (file != null) {
-                _message.value = application.getString(R.string.csv_ready)
-                ShareUtils.shareFile(
-                    application, file, application.getString(R.string.share_csv_title)
-                )
-            } else {
-                _message.value = application.getString(R.string.export_failed)
-            }
-        }
-    }
-
-    /**
      * 从用户选择的备份文件导入恢复
      */
     fun importFrom(uri: Uri) {
@@ -149,7 +131,6 @@ class ItemListViewModel(
         SortMode.DATE_DESC -> list.sortedByDescending { it.createdAt }
         SortMode.DATE_ASC -> list.sortedBy { it.createdAt }
         SortMode.NAME_ASC -> list.sortedBy { it.name }
-        SortMode.PRICE_DESC -> list.sortedByDescending { it.price ?: Double.NEGATIVE_INFINITY }
         SortMode.EXPIRY_ASC -> list.sortedBy { it.expiryDate ?: Long.MAX_VALUE }
     }
 

@@ -91,7 +91,6 @@ fun ItemEditScreen(
     val expiryDateText by viewModel.expiryDateText.collectAsState()
     val warrantyDate by viewModel.warrantyDate.collectAsState()
     val warrantyDateText by viewModel.warrantyDateText.collectAsState()
-    val priceText by viewModel.priceText.collectAsState()
     val borrower by viewModel.borrower.collectAsState()
     val expectedReturnDate by viewModel.expectedReturnDate.collectAsState()
     val expectedReturnDateText by viewModel.expectedReturnDateText.collectAsState()
@@ -282,19 +281,6 @@ fun ItemEditScreen(
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(stringResource(R.string.quantity)) },
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp)
-            )
-            Spacer(Modifier.height(12.dp))
-
-            // ---- 价格 ----
-            OutlinedTextField(
-                value = priceText,
-                onValueChange = viewModel::onPriceTextChange,
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(stringResource(R.string.price)) },
-                placeholder = { Text(stringResource(R.string.price_hint)) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 shape = RoundedCornerShape(12.dp)
             )
             Spacer(Modifier.height(12.dp))

@@ -142,14 +142,6 @@
     <string name="enter_category">請輸入物品分類</string>
     <string name="photo_failed">圖片新增失敗，請重試</string>
 
-    <!-- 價格與資產 -->
-    <string name="price">價格</string>
-    <string name="price_hint">0.00</string>
-    <string name="price_format">¥%1$.2f</string>
-    <string name="asset_stats">資產與借出</string>
-    <string name="total_value">總價值</string>
-    <string name="avg_value">平均價值</string>
-
     <!-- 借出管理 -->
     <string name="borrow_info">借出資訊</string>
     <string name="borrower">借出人</string>
@@ -169,16 +161,7 @@
     <string name="sort_date_desc">新增時間（新→舊）</string>
     <string name="sort_date_asc">新增時間（舊→新）</string>
     <string name="sort_name">按名稱</string>
-    <string name="sort_price">價格（高→低）</string>
     <string name="sort_expiry">保質期（近→遠）</string>
-
-    <!-- CSV 匯出 -->
-    <string name="export_csv">匯出 CSV 清單</string>
-    <string name="csv_ready">CSV 已生成，選擇應用程式儲存或分享</string>
-    <string name="share_csv_title">分享 CSV 清單到…</string>
-
-    <!-- 分享（價格/借出） -->
-    <string name="share_price">價格：</string>
     <string name="share_borrower">借出人：</string>
     <string name="share_expected_return">預計歸還：</string>
 </resources>

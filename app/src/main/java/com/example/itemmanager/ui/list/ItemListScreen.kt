@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Restore
@@ -150,16 +149,6 @@ fun ItemListScreen(
                                 onClick = {
                                     menuExpanded = false
                                     backupPicker.launch(arrayOf("application/zip"))
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.export_csv)) },
-                                leadingIcon = {
-                                    Icon(Icons.Default.Description, contentDescription = null)
-                                },
-                                onClick = {
-                                    menuExpanded = false
-                                    viewModel.exportCsvAndShare()
                                 }
                             )
                         }
@@ -474,6 +463,5 @@ private fun sortLabel(mode: ItemListViewModel.SortMode): String = when (mode) {
     ItemListViewModel.SortMode.DATE_DESC -> stringResource(R.string.sort_date_desc)
     ItemListViewModel.SortMode.DATE_ASC -> stringResource(R.string.sort_date_asc)
     ItemListViewModel.SortMode.NAME_ASC -> stringResource(R.string.sort_name)
-    ItemListViewModel.SortMode.PRICE_DESC -> stringResource(R.string.sort_price)
     ItemListViewModel.SortMode.EXPIRY_ASC -> stringResource(R.string.sort_expiry)
 }

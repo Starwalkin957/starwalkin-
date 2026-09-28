@@ -142,14 +142,6 @@
     <string name="enter_category">Bitte die Kategorie eingeben</string>
     <string name="photo_failed">Foto konnte nicht hinzugefügt werden, bitte erneut versuchen</string>
 
-    <!-- Preis & Vermögen -->
-    <string name="price">Preis</string>
-    <string name="price_hint">0.00</string>
-    <string name="price_format">%1$.2f €</string>
-    <string name="asset_stats">Vermögen &amp; Verleih</string>
-    <string name="total_value">Gesamtwert</string>
-    <string name="avg_value">Durchschnittswert</string>
-
     <!-- Verleihverwaltung -->
     <string name="borrow_info">Verleih-Info</string>
     <string name="borrower">Entleiher</string>
@@ -169,16 +161,7 @@
     <string name="sort_date_desc">Hinzugefügt (neu→alt)</string>
     <string name="sort_date_asc">Hinzugefügt (alt→neu)</string>
     <string name="sort_name">Nach Name</string>
-    <string name="sort_price">Preis (hoch→niedrig)</string>
     <string name="sort_expiry">Haltbarkeit (nah→fern)</string>
-
-    <!-- CSV-Export -->
-    <string name="export_csv">CSV-Liste Exportieren</string>
-    <string name="csv_ready">CSV erstellt, App zum Speichern oder Teilen wählen</string>
-    <string name="share_csv_title">CSV-Liste teilen an…</string>
-
-    <!-- Teilen (Preis/Verleih) -->
-    <string name="share_price">Preis: </string>
     <string name="share_borrower">Entleiher: </string>
     <string name="share_expected_return">Rückgabe: </string>
 </resources>

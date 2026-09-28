@@ -63,7 +63,6 @@ object BackupUtils {
                     item.purchaseDate?.let { obj.put("purchaseDate", it) }
                     item.expiryDate?.let { obj.put("expiryDate", it) }
                     item.warrantyDate?.let { obj.put("warrantyDate", it) }
-                    item.price?.let { obj.put("price", it) }
                     item.borrower?.let { obj.put("borrower", it) }
                     item.borrowDate?.let { obj.put("borrowDate", it) }
                     item.expectedReturnDate?.let { obj.put("expectedReturnDate", it) }
@@ -151,7 +150,6 @@ object BackupUtils {
                     purchaseDate = optDate("purchaseDate"),
                     expiryDate = optDate("expiryDate"),
                     warrantyDate = optDate("warrantyDate"),
-                    price = if (obj.has("price") && !obj.isNull("price")) obj.getDouble("price") else null,
                     borrower = if (obj.has("borrower") && !obj.isNull("borrower"))
                         obj.getString("borrower").ifBlank { null } else null,
                     borrowDate = optDate("borrowDate"),

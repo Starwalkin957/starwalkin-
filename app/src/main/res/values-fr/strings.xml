@@ -142,14 +142,6 @@
     <string name="enter_category">Veuillez saisir la catégorie</string>
     <string name="photo_failed">Échec de l\'ajout de la photo, veuillez réessayer</string>
 
-    <!-- Prix & Actifs -->
-    <string name="price">Prix</string>
-    <string name="price_hint">0.00</string>
-    <string name="price_format">%1$.2f €</string>
-    <string name="asset_stats">Actifs &amp; Prêts</string>
-    <string name="total_value">Valeur Totale</string>
-    <string name="avg_value">Valeur Moyenne</string>
-
     <!-- Gestion des prêts -->
     <string name="borrow_info">Infos de Prêt</string>
     <string name="borrower">Emprunteur</string>
@@ -169,16 +161,7 @@
     <string name="sort_date_desc">Date d\'ajout (récent→ancien)</string>
     <string name="sort_date_asc">Date d\'ajout (ancien→récent)</string>
     <string name="sort_name">Par Nom</string>
-    <string name="sort_price">Prix (élevé→bas)</string>
     <string name="sort_expiry">Expiration (proche→loin)</string>
-
-    <!-- Export CSV -->
-    <string name="export_csv">Exporter en CSV</string>
-    <string name="csv_ready">CSV généré, choisissez une appli pour enregistrer ou partager</string>
-    <string name="share_csv_title">Partager la liste CSV vers…</string>
-
-    <!-- Partage (prix/prêt) -->
-    <string name="share_price">Prix : </string>
     <string name="share_borrower">Emprunteur : </string>
     <string name="share_expected_return">Retour prévu : </string>
 </resources>

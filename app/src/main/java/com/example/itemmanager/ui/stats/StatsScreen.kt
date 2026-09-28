@@ -59,12 +59,10 @@ private val chartColors = listOf(
 @Composable
 fun StatsScreen(dashboardViewModel: DashboardViewModel) {
     val items by dashboardViewModel.items.collectAsState()
-    val totalValue by dashboardViewModel.totalValue.collectAsState()
     val borrowedCount by dashboardViewModel.borrowedCount.collectAsState()
 
     val totalKinds = items.size                       // 物品种类（条目）数
     val totalQuantity = items.sumOf { it.quantity }  // 物品总数量
-    val avgValue = if (totalKinds > 0) totalValue / totalKinds else 0.0
     val categoryCountMap = items.groupingBy { it.category }.eachCount()
     val categoryCount = categoryCountMap.size        // 分类数量
 
@@ -124,7 +122,7 @@ fun StatsScreen(dashboardViewModel: DashboardViewModel) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // ---- 资产与借出 ----
+            // ---- 借出统计 ----
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -132,19 +130,11 @@ fun StatsScreen(dashboardViewModel: DashboardViewModel) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = stringResource(R.string.asset_stats),
+                        text = stringResource(R.string.borrow_info),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    AssetRow(
-                        stringResource(R.string.total_value),
-                        stringResource(R.string.price_format, totalValue)
-                    )
-                    AssetRow(
-                        stringResource(R.string.avg_value),
-                        stringResource(R.string.price_format, avgValue)
-                    )
                     AssetRow(stringResource(R.string.borrowed_count), borrowedCount.toString())
                 }
             }
