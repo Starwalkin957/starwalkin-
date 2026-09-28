@@ -164,4 +164,24 @@
     <string name="sort_expiry">Срок годности (близко→далеко)</string>
     <string name="share_borrower">Заёмщик: </string>
     <string name="share_expected_return">Возврат: </string>
+    <!-- 预设分类（跟随应用语言） -->
+    <string name="cat_electronics">Электроника</string>
+    <string name="cat_digital_accessories">Цифровые аксессуары</string>
+    <string name="cat_clothing">Одежда</string>
+    <string name="cat_shoes_bags">Обувь и сумки</string>
+    <string name="cat_books_stationery">Книги и канцелярия</string>
+    <string name="cat_food_drinks">Еда и напитки</string>
+    <string name="cat_daily_necessities">Товары повседневного спроса</string>
+    <string name="cat_kitchen">Кухонные принадлежности</string>
+    <string name="cat_furniture_appliances">Мебель и техника</string>
+    <string name="cat_tools">Инструменты</string>
+    <string name="cat_cosmetics">Косметика</string>
+    <string name="cat_sports">Спортивное снаряжение</string>
+    <string name="cat_baby">Товары для мам и малышей</string>
+    <string name="cat_pet">Товары для животных</string>
+    <string name="cat_jewelry">Украшения и аксессуары</string>
+    <string name="cat_medicine">Лекарства и медтовары</string>
+    <string name="cat_documents">Документы и удостоверения</string>
+    <string name="cat_automotive">Автотовары</string>
+    <string name="cat_other">Другое</string>
 </resources>

@@ -164,4 +164,24 @@
     <string name="sort_expiry">Caducidad (cerca→lejos)</string>
     <string name="share_borrower">Prestatario: </string>
     <string name="share_expected_return">Devolución prevista: </string>
+    <!-- 预设分类（跟随应用语言） -->
+    <string name="cat_electronics">Electrónica</string>
+    <string name="cat_digital_accessories">Accesorios digitales</string>
+    <string name="cat_clothing">Ropa</string>
+    <string name="cat_shoes_bags">Zapatos y bolsos</string>
+    <string name="cat_books_stationery">Libros y papelería</string>
+    <string name="cat_food_drinks">Comida y bebidas</string>
+    <string name="cat_daily_necessities">Artículos de uso diario</string>
+    <string name="cat_kitchen">Artículos de cocina</string>
+    <string name="cat_furniture_appliances">Muebles y electrodomésticos</string>
+    <string name="cat_tools">Herramientas</string>
+    <string name="cat_cosmetics">Cosméticos</string>
+    <string name="cat_sports">Equipamiento deportivo</string>
+    <string name="cat_baby">Bebés y maternidad</string>
+    <string name="cat_pet">Artículos para mascotas</string>
+    <string name="cat_jewelry">Joyería y accesorios</string>
+    <string name="cat_medicine">Medicina y salud</string>
+    <string name="cat_documents">Documentos e identificaciones</string>
+    <string name="cat_automotive">Artículos para automóvil</string>
+    <string name="cat_other">Otros</string>
 </resources>

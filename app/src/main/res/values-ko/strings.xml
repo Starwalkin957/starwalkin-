@@ -164,4 +164,24 @@
     <string name="sort_expiry">유통기한 (가까움→먼)</string>
     <string name="share_borrower">대여자: </string>
     <string name="share_expected_return">반납 예정: </string>
+    <!-- 预设分类（跟随应用语言） -->
+    <string name="cat_electronics">전자제품</string>
+    <string name="cat_digital_accessories">디지털 액세서리</string>
+    <string name="cat_clothing">의류</string>
+    <string name="cat_shoes_bags">신발 및 가방</string>
+    <string name="cat_books_stationery">책 및 문구</string>
+    <string name="cat_food_drinks">식품 및 음료</string>
+    <string name="cat_daily_necessities">생활용품</string>
+    <string name="cat_kitchen">주방용품</string>
+    <string name="cat_furniture_appliances">가구 및 가전</string>
+    <string name="cat_tools">공구</string>
+    <string name="cat_cosmetics">화장품</string>
+    <string name="cat_sports">운동기구</string>
+    <string name="cat_baby">육아용품</string>
+    <string name="cat_pet">반려동물 용품</string>
+    <string name="cat_jewelry">주얼리 및 액세서리</string>
+    <string name="cat_medicine">의약품 및 의료용품</string>
+    <string name="cat_documents">서류 및 증명서</string>
+    <string name="cat_automotive">자동차 용품</string>
+    <string name="cat_other">기타</string>
 </resources>

@@ -63,7 +63,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.itemmanager.R
-import com.example.itemmanager.navigation.CategoryPresets
+import com.example.itemmanager.navigation.CategoryPresetRes
 import com.example.itemmanager.util.ImageUtils
 import java.io.File
 
@@ -252,7 +252,8 @@ fun ItemEditScreen(
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                CategoryPresets.forEach { cat ->
+                CategoryPresetRes.forEach { catRes ->
+                    val cat = stringResource(catRes)
                     val selected = category == cat
                     Surface(
                         modifier = Modifier

@@ -164,4 +164,24 @@
     <string name="sort_expiry">賞味期限（近→遠）</string>
     <string name="share_borrower">借り手：</string>
     <string name="share_expected_return">返却予定：</string>
+    <!-- 预设分类（跟随应用语言） -->
+    <string name="cat_electronics">電子製品</string>
+    <string name="cat_digital_accessories">デジタルアクセサリー</string>
+    <string name="cat_clothing">衣類</string>
+    <string name="cat_shoes_bags">靴・バッグ</string>
+    <string name="cat_books_stationery">本・文房具</string>
+    <string name="cat_food_drinks">食品・飲料</string>
+    <string name="cat_daily_necessities">日用品</string>
+    <string name="cat_kitchen">キッチン用品</string>
+    <string name="cat_furniture_appliances">家具・家電</string>
+    <string name="cat_tools">工具</string>
+    <string name="cat_cosmetics">化粧品</string>
+    <string name="cat_sports">スポーツ用品</string>
+    <string name="cat_baby">ベビー・マタニティ</string>
+    <string name="cat_pet">ペット用品</string>
+    <string name="cat_jewelry">ジュエリー・アクセサリー</string>
+    <string name="cat_medicine">医薬品・医療用品</string>
+    <string name="cat_documents">証明書・書類</string>
+    <string name="cat_automotive">カー用品</string>
+    <string name="cat_other">その他</string>
 </resources>

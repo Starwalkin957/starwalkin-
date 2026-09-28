@@ -176,4 +176,24 @@
     <!-- 分享（借出） -->
     <string name="share_borrower">借出人：</string>
     <string name="share_expected_return">预计归还：</string>
+    <!-- 预设分类（跟随应用语言） -->
+    <string name="cat_electronics">电子产品</string>
+    <string name="cat_digital_accessories">数码配件</string>
+    <string name="cat_clothing">衣物</string>
+    <string name="cat_shoes_bags">鞋靴箱包</string>
+    <string name="cat_books_stationery">书籍文具</string>
+    <string name="cat_food_drinks">食品饮料</string>
+    <string name="cat_daily_necessities">日用品</string>
+    <string name="cat_kitchen">厨房用品</string>
+    <string name="cat_furniture_appliances">家具家电</string>
+    <string name="cat_tools">工具</string>
+    <string name="cat_cosmetics">化妆品</string>
+    <string name="cat_sports">运动器材</string>
+    <string name="cat_baby">母婴用品</string>
+    <string name="cat_pet">宠物用品</string>
+    <string name="cat_jewelry">首饰饰品</string>
+    <string name="cat_medicine">医疗药品</string>
+    <string name="cat_documents">证件文件</string>
+    <string name="cat_automotive">汽车用品</string>
+    <string name="cat_other">其他</string>
 </resources>

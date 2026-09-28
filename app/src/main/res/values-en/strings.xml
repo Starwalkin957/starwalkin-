@@ -163,4 +163,24 @@
     <string name="sort_expiry">Expiry (soon→late)</string>
     <string name="share_borrower">Borrower: </string>
     <string name="share_expected_return">Expected return: </string>
+    <!-- 预设分类（跟随应用语言） -->
+    <string name="cat_electronics">Electronics</string>
+    <string name="cat_digital_accessories">Digital Accessories</string>
+    <string name="cat_clothing">Clothing</string>
+    <string name="cat_shoes_bags">Shoes &amp; Bags</string>
+    <string name="cat_books_stationery">Books &amp; Stationery</string>
+    <string name="cat_food_drinks">Food &amp; Beverages</string>
+    <string name="cat_daily_necessities">Daily Necessities</string>
+    <string name="cat_kitchen">Kitchenware</string>
+    <string name="cat_furniture_appliances">Furniture &amp; Appliances</string>
+    <string name="cat_tools">Tools</string>
+    <string name="cat_cosmetics">Cosmetics</string>
+    <string name="cat_sports">Sports Equipment</string>
+    <string name="cat_baby">Baby &amp; Maternity</string>
+    <string name="cat_pet">Pet Supplies</string>
+    <string name="cat_jewelry">Jewelry &amp; Accessories</string>
+    <string name="cat_medicine">Medicine &amp; Medical</string>
+    <string name="cat_documents">Documents &amp; IDs</string>
+    <string name="cat_automotive">Automotive Supplies</string>
+    <string name="cat_other">Others</string>
 </resources>

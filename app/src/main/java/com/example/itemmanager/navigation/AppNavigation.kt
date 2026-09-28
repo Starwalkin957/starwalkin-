@@ -95,28 +95,29 @@ private val bottomTabs = listOf(
 )
 
 /**
- * 预设分类示例，供添加物品时快速选择（覆盖生活常见类别）
+ * 预设分类示例（字符串资源 id），供添加物品时快速选择。
+ * 标签文本通过 stringResource 解析，跟随应用当前语言显示对应翻译。
  */
-val CategoryPresets = listOf(
-    "电子产品",
-    "数码配件",
-    "衣物",
-    "鞋靴箱包",
-    "书籍文具",
-    "食品饮料",
-    "日用品",
-    "厨房用品",
-    "家具家电",
-    "工具",
-    "化妆品",
-    "运动器材",
-    "母婴用品",
-    "宠物用品",
-    "首饰饰品",
-    "医疗药品",
-    "证件文件",
-    "汽车用品",
-    "其他"
+val CategoryPresetRes = listOf(
+    R.string.cat_electronics,
+    R.string.cat_digital_accessories,
+    R.string.cat_clothing,
+    R.string.cat_shoes_bags,
+    R.string.cat_books_stationery,
+    R.string.cat_food_drinks,
+    R.string.cat_daily_necessities,
+    R.string.cat_kitchen,
+    R.string.cat_furniture_appliances,
+    R.string.cat_tools,
+    R.string.cat_cosmetics,
+    R.string.cat_sports,
+    R.string.cat_baby,
+    R.string.cat_pet,
+    R.string.cat_jewelry,
+    R.string.cat_medicine,
+    R.string.cat_documents,
+    R.string.cat_automotive,
+    R.string.cat_other
 )
 
 /**
