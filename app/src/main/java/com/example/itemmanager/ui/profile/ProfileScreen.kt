@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.SettingsBackupRestore
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.AlertDialog
@@ -77,7 +78,8 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ProfileScreen(
     dashboardViewModel: DashboardViewModel,
-    onShowOnboarding: () -> Unit
+    onShowOnboarding: () -> Unit,
+    onPrivacy: () -> Unit
 ) {
     val items by dashboardViewModel.items.collectAsState()
     val message by dashboardViewModel.message.collectAsState()
@@ -264,6 +266,14 @@ fun ProfileScreen(
                 elevation = CardDefaults.cardElevation(2.dp)
             ) {
                 Column {
+                    ProfileItem(
+                        icon = Icons.Default.Lock,
+                        iconTint = Color(0xFFEF4444),
+                        title = stringResource(R.string.privacy_vault),
+                        subtitle = stringResource(R.string.privacy_vault_desc),
+                        onClick = onPrivacy
+                    )
+                    ProfileDivider()
                     ProfileItem(
                         icon = Icons.Default.Backup,
                         iconTint = Color(0xFF2563EB),

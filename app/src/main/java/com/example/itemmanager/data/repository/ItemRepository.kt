@@ -11,22 +11,28 @@ import kotlinx.coroutines.flow.Flow
  */
 class ItemRepository(private val itemDao: ItemDao) {
 
-    /** 获取所有物品 */
+    /** 获取所有物品（含隐私，用于备份/提醒） */
     fun getAllItems(): Flow<List<ItemEntity>> = itemDao.getAllItems()
 
-    /** 按分类筛选 */
+    /** 获取非隐私物品（主列表） */
+    fun getPublicItems(): Flow<List<ItemEntity>> = itemDao.getPublicItems()
+
+    /** 获取加密箱隐私物品 */
+    fun getPrivateItems(): Flow<List<ItemEntity>> = itemDao.getPrivateItems()
+
+    /** 按分类筛选（非隐私） */
     fun getItemsByCategory(category: String): Flow<List<ItemEntity>> =
         itemDao.getItemsByCategory(category)
 
-    /** 搜索物品 */
+    /** 搜索物品（名称/描述/品牌，非隐私） */
     fun searchItems(query: String): Flow<List<ItemEntity>> =
         itemDao.searchItems(query)
 
-    /** 在指定分类下搜索物品 */
+    /** 在指定分类下搜索物品（非隐私） */
     fun searchItemsInCategory(query: String, category: String): Flow<List<ItemEntity>> =
         itemDao.searchItemsInCategory(query, category)
 
-    /** 获取所有分类 */
+    /** 获取所有分类（非隐私） */
     fun getAllCategories(): Flow<List<String>> = itemDao.getAllCategories()
 
     /** 根据 ID 获取单个物品 */

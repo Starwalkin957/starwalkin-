@@ -57,7 +57,7 @@ class ItemListViewModel(
                     repository.searchItemsInCategory(query, category)
                 query.isNotBlank() -> repository.searchItems(query)
                 category != null -> repository.getItemsByCategory(category)
-                else -> repository.getAllItems()
+                else -> repository.getPublicItems()
             }
         }
         .flatMapLatest { it }

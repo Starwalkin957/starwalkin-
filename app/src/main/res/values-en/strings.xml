@@ -7,7 +7,7 @@
     <string name="tab_profile">Profile</string>
 
     <string name="my_items">My Items</string>
-    <string name="search_hint">Search item name or description…</string>
+    <string name="search_hint">Search by name, description or brand…</string>
     <string name="export_share">Export backup &amp; share</string>
     <string name="import_restore">Import backup</string>
     <string name="item_count">%1$d items total</string>
@@ -163,6 +163,28 @@
     <string name="sort_expiry">Expiry (soon→late)</string>
     <string name="share_borrower">Borrower: </string>
     <string name="share_expected_return">Expected return: </string>
+    <!-- Brand and privacy vault -->
+    <string name="brand">Brand</string>
+    <string name="brand_hint">e.g. Apple, Xiaomi, Nike</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="privacy_vault">Privacy Vault</string>
+    <string name="privacy_vault_desc">Protect private items with a password</string>
+    <string name="vault_choose_type">Choose an unlock method</string>
+    <string name="vault_use_pin">Use a 6-digit PIN</string>
+    <string name="vault_use_pattern">Use a pattern</string>
+    <string name="vault_setup_pin">Set up PIN</string>
+    <string name="vault_confirm_pin">Enter again to confirm</string>
+    <string name="vault_enter_pin">Enter your PIN</string>
+    <string name="vault_pin_mismatch">PINs do not match, please set again</string>
+    <string name="vault_setup_pattern">Draw a pattern</string>
+    <string name="vault_confirm_pattern">Draw again to confirm</string>
+    <string name="vault_enter_pattern">Draw your pattern</string>
+    <string name="vault_pattern_mismatch">Patterns do not match, please set again</string>
+    <string name="vault_pattern_hint">Connect at least 4 dots</string>
+    <string name="vault_empty">The vault is empty</string>
+    <string name="remove_from_vault">Remove from vault</string>
+    <string name="removed_from_vault">Removed from vault</string>
+
     <!-- 预设分类（跟随应用语言） -->
     <string name="cat_electronics">Electronics</string>
     <string name="cat_digital_accessories">Digital Accessories</string>

@@ -310,6 +310,9 @@ fun ItemDetailContent(item: ItemEntity, viewModel: ItemDetailViewModel, onLendCl
         Spacer(Modifier.height(20.dp))
 
         // ---- 基本信息 ----
+        if (item.brand.isNotBlank()) {
+            DetailRow(stringResource(R.string.brand), item.brand)
+        }
         DetailRow(stringResource(R.string.quantity), item.quantity.toString())
         DetailRow(stringResource(R.string.location), item.location.ifBlank { stringResource(R.string.not_set) })
 

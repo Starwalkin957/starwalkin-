@@ -31,24 +31,44 @@ interface ItemDao {
     @Query("SELECT * FROM items WHERE id = :id")
     suspend fun getItemById(id: Long): ItemEntity?
 
-    /** 获取所有物品，按更新时间倒序排列 */
+    /** 获取所有物品（含隐私，用于备份、提醒扫描），按更新时间倒序 */
     @Query("SELECT * FROM items ORDER BY updatedAt DESC")
     fun getAllItems(): Flow<List<ItemEntity>>
 
-    /** 按分类筛选物品 */
-    @Query("SELECT * FROM items WHERE category = :category ORDER BY updatedAt DESC")
+    /** 获取非隐私物品（主列表显示），按更新时间倒序 */
+    @Query("SELECT * FROM items WHERE isPrivate = 0 ORDER BY updatedAt DESC")
+    fun getPublicItems(): Flow<List<ItemEntity>>
+
+    /** 获取加密箱内的隐私物品，按更新时间倒序 */
+    @Query("SELECT * FROM items WHERE isPrivate = 1 ORDER BY updatedAt DESC")
+    fun getPrivateItems(): Flow<List<ItemEntity>>
+
+    /** 按分类筛选非隐私物品 */
+    @Query("SELECT * FROM items WHERE isPrivate = 0 AND category = :category ORDER BY updatedAt DESC")
     fun getItemsByCategory(category: String): Flow<List<ItemEntity>>
 
-    /** 按名称或描述模糊搜索 */
-    @Query("SELECT * FROM items WHERE name LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%' ORDER BY updatedAt DESC")
+    /** 按名称、描述或品牌模糊搜索（仅非隐私物品） */
+    @Query(
+        "SELECT * FROM items WHERE isPrivate = 0 AND (" +
+            "name LIKE '%' || :query || '%' OR " +
+            "description LIKE '%' || :query || '%' OR " +
+            "brand LIKE '%' || :query || '%'" +
+            ") ORDER BY updatedAt DESC"
+    )
     fun searchItems(query: String): Flow<List<ItemEntity>>
 
-    /** 在指定分类下按名称或描述模糊搜索（搜索 + 分类组合） */
-    @Query("SELECT * FROM items WHERE (name LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%') AND category = :category ORDER BY updatedAt DESC")
+    /** 在指定分类下按名称、描述或品牌模糊搜索（仅非隐私物品） */
+    @Query(
+        "SELECT * FROM items WHERE isPrivate = 0 AND (" +
+            "name LIKE '%' || :query || '%' OR " +
+            "description LIKE '%' || :query || '%' OR " +
+            "brand LIKE '%' || :query || '%'" +
+            ") AND category = :category ORDER BY updatedAt DESC"
+    )
     fun searchItemsInCategory(query: String, category: String): Flow<List<ItemEntity>>
 
-    /** 获取所有不重复的分类名称，用于筛选下拉 */
-    @Query("SELECT DISTINCT category FROM items ORDER BY category ASC")
+    /** 获取所有不重复的分类名称（非隐私），用于筛选下拉 */
+    @Query("SELECT DISTINCT category FROM items WHERE isPrivate = 0 ORDER BY category ASC")
     fun getAllCategories(): Flow<List<String>>
 
     /** 获取物品总数 */

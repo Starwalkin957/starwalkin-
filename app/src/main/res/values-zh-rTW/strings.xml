@@ -7,7 +7,7 @@
     <string name="tab_profile">我的</string>
 
     <string name="my_items">我的物品</string>
-    <string name="search_hint">搜尋物品名稱或描述…</string>
+    <string name="search_hint">搜尋名稱、描述或品牌…</string>
     <string name="export_share">匯出備份並分享</string>
     <string name="import_restore">匯入備份還原</string>
     <string name="item_count">共 %1$d 件物品</string>
@@ -164,6 +164,28 @@
     <string name="sort_expiry">保質期（近→遠）</string>
     <string name="share_borrower">借出人：</string>
     <string name="share_expected_return">預計歸還：</string>
+    <!-- 品牌與加密箱 -->
+    <string name="brand">品牌</string>
+    <string name="brand_hint">如：Apple、小米、Nike</string>
+    <string name="move_to_vault">移入加密箱</string>
+    <string name="privacy_vault">加密箱</string>
+    <string name="privacy_vault_desc">用密碼保護隱私物品</string>
+    <string name="vault_choose_type">請選擇解鎖方式</string>
+    <string name="vault_use_pin">使用 6 位數字密碼</string>
+    <string name="vault_use_pattern">使用手勢密碼</string>
+    <string name="vault_setup_pin">設定數字密碼</string>
+    <string name="vault_confirm_pin">再次輸入以確認</string>
+    <string name="vault_enter_pin">請輸入密碼</string>
+    <string name="vault_pin_mismatch">兩次輸入不一致，請重新設定</string>
+    <string name="vault_setup_pattern">繪製手勢密碼</string>
+    <string name="vault_confirm_pattern">再次繪製以確認</string>
+    <string name="vault_enter_pattern">請繪製手勢密碼</string>
+    <string name="vault_pattern_mismatch">兩次繪製不一致，請重新設定</string>
+    <string name="vault_pattern_hint">至少連接 4 個點</string>
+    <string name="vault_empty">加密箱為空</string>
+    <string name="remove_from_vault">移出加密箱</string>
+    <string name="removed_from_vault">已移出加密箱</string>
+
     <!-- 预设分类（跟随应用语言） -->
     <string name="cat_electronics">電子產品</string>
     <string name="cat_digital_accessories">數碼配件</string>

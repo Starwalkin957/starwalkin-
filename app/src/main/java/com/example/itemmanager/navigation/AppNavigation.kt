@@ -52,11 +52,14 @@ import com.example.itemmanager.ui.edit.ItemEditViewModel
 import com.example.itemmanager.ui.list.ItemListScreen
 import com.example.itemmanager.ui.list.ItemListViewModel
 import com.example.itemmanager.ui.onboarding.OnboardingScreen
+import com.example.itemmanager.ui.privacy.PrivacyScreen
+import com.example.itemmanager.ui.privacy.PrivacyViewModel
 import com.example.itemmanager.ui.profile.ProfileScreen
 import com.example.itemmanager.ui.stats.StatsScreen
 import com.example.itemmanager.util.BackgroundManager
 import com.example.itemmanager.util.ExpiryReminder
 import com.example.itemmanager.util.OnboardingManager
+import com.example.itemmanager.util.PrivacyManager
 import com.example.itemmanager.util.SelectedItemHolder
 import com.example.itemmanager.util.ThemeManager
 import java.io.File
@@ -76,6 +79,7 @@ object Routes {
     const val TAB_PROFILE = "tab_profile"
     const val ITEM_DETAIL = "item_detail"
     const val ITEM_EDIT = "item_edit"
+    const val PRIVACY = "privacy"
 }
 
 /**
@@ -133,6 +137,7 @@ fun AppNavigation() {
     LaunchedEffect(Unit) {
         ThemeManager.init(context)
         BackgroundManager.init(context)
+        PrivacyManager.init(context)
     }
     val themeId by ThemeManager.themeId.collectAsState()
     val customColor by ThemeManager.customColor.collectAsState()
@@ -159,7 +164,8 @@ fun AppNavigation() {
     var hasCheckedReminders by remember { mutableStateOf(false) }
     LaunchedEffect(allItems) {
         if (!hasCheckedReminders && allItems.isNotEmpty()) {
-            val list = ExpiryReminder.collect(allItems)
+            // 提醒扫描排除加密箱内隐私物品，避免在未解锁时暴露其名称
+            val list = ExpiryReminder.collect(allItems.filter { !it.isPrivate })
             if (list.isNotEmpty()) reminders = list
             hasCheckedReminders = true
         }
@@ -294,6 +300,9 @@ fun AppNavigation() {
                             onShowOnboarding = {
                                 onboardingFromProfile = true
                                 navController.navigate(Routes.ONBOARDING)
+                            },
+                            onPrivacy = {
+                                navController.navigate(Routes.PRIVACY)
                             }
                         )
                     }
@@ -324,6 +333,22 @@ fun AppNavigation() {
                             viewModel = vm,
                             onBack = { navController.popBackStack() },
                             onSaveComplete = { navController.popBackStack() }
+                        )
+                    }
+
+                    // ---- 加密箱（覆盖页，无底部栏）----
+                    composable(Routes.PRIVACY) { backStackEntry ->
+                        val vm: PrivacyViewModel = viewModel(
+                            viewModelStoreOwner = backStackEntry,
+                            factory = PrivacyViewModel.provideFactory(application, repository)
+                        )
+                        PrivacyScreen(
+                            viewModel = vm,
+                            onBack = { navController.popBackStack() },
+                            onItemClick = { itemId ->
+                                SelectedItemHolder.select(itemId)
+                                navController.navigate(Routes.ITEM_DETAIL)
+                            }
                         )
                     }
                 }

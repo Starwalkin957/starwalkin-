@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.AlertDialog
@@ -40,6 +41,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -81,7 +83,9 @@ fun ItemEditScreen(
 ) {
     val name by viewModel.name.collectAsState()
     val category by viewModel.category.collectAsState()
+    val brand by viewModel.brand.collectAsState()
     val description by viewModel.description.collectAsState()
+    val isPrivate by viewModel.isPrivate.collectAsState()
     val location by viewModel.location.collectAsState()
     val quantity by viewModel.quantity.collectAsState()
     val imagePaths by viewModel.imagePaths.collectAsState()
@@ -273,6 +277,16 @@ fun ItemEditScreen(
                 }
             }
 
+            // ---- 品牌 ----
+            OutlinedTextField(
+                value = brand,
+                onValueChange = viewModel::onBrandChanged,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.brand)) },
+                placeholder = { Text(stringResource(R.string.brand_hint)) },
+                singleLine = true,
+                shape = RoundedCornerShape(12.dp)
+            )
             Spacer(Modifier.height(12.dp))
 
             // ---- 数量 ----
@@ -358,6 +372,32 @@ fun ItemEditScreen(
                 onPick = { datePickerTarget = 2 },
                 onClear = { viewModel.setWarrantyDate(null) }
             )
+
+            // ---- 隐私设置：移入加密箱 ----
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color(0xFFF1F5F9))
+                    .padding(horizontal = 14.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Lock,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    stringResource(R.string.move_to_vault),
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.weight(1f)
+                )
+                Switch(
+                    checked = isPrivate,
+                    onCheckedChange = viewModel::setPrivate
+                )
+            }
 
             Spacer(Modifier.height(16.dp))
 

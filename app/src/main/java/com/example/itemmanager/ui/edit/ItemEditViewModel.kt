@@ -41,8 +41,15 @@ class ItemEditViewModel(
     private val _category = MutableStateFlow("")
     val category: StateFlow<String> = _category
 
+    private val _brand = MutableStateFlow("")
+    val brand: StateFlow<String> = _brand
+
     private val _description = MutableStateFlow("")
     val description: StateFlow<String> = _description
+
+    // 是否移入加密箱（仅新建/编辑时可设置）
+    private val _isPrivate = MutableStateFlow(false)
+    val isPrivate: StateFlow<Boolean> = _isPrivate
 
     private val _location = MutableStateFlow("")
     val location: StateFlow<String> = _location
@@ -104,7 +111,9 @@ class ItemEditViewModel(
             repository.getItemById(id)?.let { item ->
                 _name.value = item.name
                 _category.value = item.category
+                _brand.value = item.brand
                 _description.value = item.description
+                _isPrivate.value = item.isPrivate
                 _location.value = item.location
                 _quantity.value = item.quantity.toString()
                 _imagePaths.value = item.imagePaths
@@ -217,6 +226,7 @@ class ItemEditViewModel(
         val draft = ItemDraft(
             name = _name.value,
             category = _category.value,
+            brand = _brand.value,
             description = _description.value,
             location = _location.value,
             quantity = _quantity.value,
@@ -234,6 +244,7 @@ class ItemEditViewModel(
         val d = _pendingDraft.value ?: return
         _name.value = d.name
         _category.value = d.category
+        _brand.value = d.brand
         _description.value = d.description
         _location.value = d.location
         _quantity.value = d.quantity
@@ -255,8 +266,10 @@ class ItemEditViewModel(
 
     fun onNameChanged(value: String) { _name.value = value; autoSaveDraft() }
     fun onCategoryChanged(value: String) { _category.value = value; autoSaveDraft() }
+    fun onBrandChanged(value: String) { _brand.value = value; autoSaveDraft() }
     fun onDescriptionChanged(value: String) { _description.value = value; autoSaveDraft() }
     fun onLocationChanged(value: String) { _location.value = value; autoSaveDraft() }
+    fun setPrivate(value: Boolean) { _isPrivate.value = value; autoSaveDraft() }
     fun onQuantityChanged(value: String) {
         if (value.all { it.isDigit() }) {
             _quantity.value = value
@@ -290,7 +303,9 @@ class ItemEditViewModel(
                 val updated = existing?.copy(
                     name = _name.value.trim(),
                     category = _category.value.trim(),
+                    brand = _brand.value.trim(),
                     description = _description.value.trim(),
+                    isPrivate = _isPrivate.value,
                     location = _location.value.trim(),
                     quantity = qty,
                     imagePaths = _imagePaths.value,
@@ -307,7 +322,9 @@ class ItemEditViewModel(
                 val newItem = ItemEntity(
                     name = _name.value.trim(),
                     category = _category.value.trim(),
+                    brand = _brand.value.trim(),
                     description = _description.value.trim(),
+                    isPrivate = _isPrivate.value,
                     location = _location.value.trim(),
                     quantity = qty,
                     imagePaths = _imagePaths.value,

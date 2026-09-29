@@ -7,7 +7,7 @@
     <string name="tab_profile">Perfil</string>
 
     <string name="my_items">Mis objetos</string>
-    <string name="search_hint">Buscar por nombre o descripción…</string>
+    <string name="search_hint">Buscar por nombre, descripción o marca…</string>
     <string name="export_share">Exportar y compartir</string>
     <string name="import_restore">Importar copia de seguridad</string>
     <string name="item_count">%1$d objetos en total</string>
@@ -164,6 +164,28 @@
     <string name="sort_expiry">Caducidad (cerca→lejos)</string>
     <string name="share_borrower">Prestatario: </string>
     <string name="share_expected_return">Devolución prevista: </string>
+    <!-- Marca y caja fuerte -->
+    <string name="brand">Marca</string>
+    <string name="brand_hint">p. ej. Apple, Xiaomi, Nike</string>
+    <string name="move_to_vault">Mover a la caja fuerte</string>
+    <string name="privacy_vault">Caja fuerte</string>
+    <string name="privacy_vault_desc">Protege los objetos privados con contraseña</string>
+    <string name="vault_choose_type">Elige un método de desbloqueo</string>
+    <string name="vault_use_pin">Usar un PIN de 6 dígitos</string>
+    <string name="vault_use_pattern">Usar un patrón</string>
+    <string name="vault_setup_pin">Configurar PIN</string>
+    <string name="vault_confirm_pin">Introduce de nuevo para confirmar</string>
+    <string name="vault_enter_pin">Introduce tu PIN</string>
+    <string name="vault_pin_mismatch">Los PIN no coinciden, inténtalo de nuevo</string>
+    <string name="vault_setup_pattern">Dibuja un patrón</string>
+    <string name="vault_confirm_pattern">Dibuja de nuevo para confirmar</string>
+    <string name="vault_enter_pattern">Dibuja tu patrón</string>
+    <string name="vault_pattern_mismatch">Los patrones no coinciden, inténtalo de nuevo</string>
+    <string name="vault_pattern_hint">Conecta al menos 4 puntos</string>
+    <string name="vault_empty">La caja fuerte está vacía</string>
+    <string name="remove_from_vault">Sacar de la caja fuerte</string>
+    <string name="removed_from_vault">Sacado de la caja fuerte</string>
+
     <!-- 预设分类（跟随应用语言） -->
     <string name="cat_electronics">Electrónica</string>
     <string name="cat_digital_accessories">Accesorios digitales</string>

@@ -58,9 +58,11 @@ private val chartColors = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsScreen(dashboardViewModel: DashboardViewModel) {
-    val items by dashboardViewModel.items.collectAsState()
+    val allItems by dashboardViewModel.items.collectAsState()
     val borrowedCount by dashboardViewModel.borrowedCount.collectAsState()
 
+    // 统计仅包含非隐私物品，隐私物品不在任何普通视图中出现
+    val items = allItems.filter { !it.isPrivate }
     val totalKinds = items.size                       // 物品种类（条目）数
     val totalQuantity = items.sumOf { it.quantity }  // 物品总数量
     val categoryCountMap = items.groupingBy { it.category }.eachCount()

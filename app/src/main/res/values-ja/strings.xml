@@ -7,7 +7,7 @@
     <string name="tab_profile">マイページ</string>
 
     <string name="my_items">マイアイテム</string>
-    <string name="search_hint">名前や説明で検索…</string>
+    <string name="search_hint">名前、説明、ブランドで検索…</string>
     <string name="export_share">バックアップを書き出して共有</string>
     <string name="import_restore">バックアップを取り込む</string>
     <string name="item_count">合計 %1$d 点</string>
@@ -164,6 +164,28 @@
     <string name="sort_expiry">賞味期限（近→遠）</string>
     <string name="share_borrower">借り手：</string>
     <string name="share_expected_return">返却予定：</string>
+    <!-- ブランドとプライベート保管庫 -->
+    <string name="brand">ブランド</string>
+    <string name="brand_hint">例：Apple、Xiaomi、Nike</string>
+    <string name="move_to_vault">保管庫に移動</string>
+    <string name="privacy_vault">プライベート保管庫</string>
+    <string name="privacy_vault_desc">パスワードでプライベートな物を保護</string>
+    <string name="vault_choose_type">ロック解除方法を選択</string>
+    <string name="vault_use_pin">6桁のPINを使用</string>
+    <string name="vault_use_pattern">パターンを使用</string>
+    <string name="vault_setup_pin">PINを設定</string>
+    <string name="vault_confirm_pin">確認のため再入力</string>
+    <string name="vault_enter_pin">PINを入力</string>
+    <string name="vault_pin_mismatch">PINが一致しません。もう一度設定してください</string>
+    <string name="vault_setup_pattern">パターンを描画</string>
+    <string name="vault_confirm_pattern">確認のため再描画</string>
+    <string name="vault_enter_pattern">パターンを描画</string>
+    <string name="vault_pattern_mismatch">パターンが一致しません。もう一度設定してください</string>
+    <string name="vault_pattern_hint">4つ以上の点を結んでください</string>
+    <string name="vault_empty">保管庫は空です</string>
+    <string name="remove_from_vault">保管庫から出す</string>
+    <string name="removed_from_vault">保管庫から出しました</string>
+
     <!-- 预设分类（跟随应用语言） -->
     <string name="cat_electronics">電子製品</string>
     <string name="cat_digital_accessories">デジタルアクセサリー</string>

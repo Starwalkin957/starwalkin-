@@ -7,7 +7,7 @@
     <string name="tab_profile">Profil</string>
 
     <string name="my_items">Meine Gegenstände</string>
-    <string name="search_hint">Name oder Beschreibung suchen…</string>
+    <string name="search_hint">Nach Name, Beschreibung oder Marke suchen…</string>
     <string name="export_share">Backup exportieren und teilen</string>
     <string name="import_restore">Backup importieren</string>
     <string name="item_count">%1$d Gegenstände insgesamt</string>
@@ -164,6 +164,28 @@
     <string name="sort_expiry">Haltbarkeit (nah→fern)</string>
     <string name="share_borrower">Entleiher: </string>
     <string name="share_expected_return">Rückgabe: </string>
+    <!-- Marke und Tresor -->
+    <string name="brand">Marke</string>
+    <string name="brand_hint">z. B. Apple, Xiaomi, Nike</string>
+    <string name="move_to_vault">In den Tresor verschieben</string>
+    <string name="privacy_vault">Tresor</string>
+    <string name="privacy_vault_desc">Private Gegenstände mit Passwort schützen</string>
+    <string name="vault_choose_type">Entsperrmethode wählen</string>
+    <string name="vault_use_pin">6-stellige PIN verwenden</string>
+    <string name="vault_use_pattern">Muster verwenden</string>
+    <string name="vault_setup_pin">PIN einrichten</string>
+    <string name="vault_confirm_pin">Zur Bestätigung erneut eingeben</string>
+    <string name="vault_enter_pin">PIN eingeben</string>
+    <string name="vault_pin_mismatch">PINs stimmen nicht überein, bitte neu setzen</string>
+    <string name="vault_setup_pattern">Muster zeichnen</string>
+    <string name="vault_confirm_pattern">Zur Bestätigung erneut zeichnen</string>
+    <string name="vault_enter_pattern">Muster zeichnen</string>
+    <string name="vault_pattern_mismatch">Muster stimmen nicht überein, bitte neu setzen</string>
+    <string name="vault_pattern_hint">Mindestens 4 Punkte verbinden</string>
+    <string name="vault_empty">Der Tresor ist leer</string>
+    <string name="remove_from_vault">Aus dem Tresor entfernen</string>
+    <string name="removed_from_vault">Aus dem Tresor entfernt</string>
+
     <!-- 预设分类（跟随应用语言） -->
     <string name="cat_electronics">Elektronik</string>
     <string name="cat_digital_accessories">Digitalzubehör</string>

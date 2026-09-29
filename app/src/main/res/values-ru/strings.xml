@@ -7,7 +7,7 @@
     <string name="tab_profile">Профиль</string>
 
     <string name="my_items">Мои вещи</string>
-    <string name="search_hint">Поиск по названию или описанию…</string>
+    <string name="search_hint">Поиск по названию, описанию или бренду…</string>
     <string name="export_share">Экспорт и обмен</string>
     <string name="import_restore">Импорт резервной копии</string>
     <string name="item_count">Всего вещей: %1$d</string>
@@ -164,6 +164,28 @@
     <string name="sort_expiry">Срок годности (близко→далеко)</string>
     <string name="share_borrower">Заёмщик: </string>
     <string name="share_expected_return">Возврат: </string>
+    <!-- Бренд и хранилище -->
+    <string name="brand">Бренд</string>
+    <string name="brand_hint">напр. Apple, Xiaomi, Nike</string>
+    <string name="move_to_vault">Переместить в хранилище</string>
+    <string name="privacy_vault">Хранилище</string>
+    <string name="privacy_vault_desc">Защита личных вещей паролем</string>
+    <string name="vault_choose_type">Выберите способ разблокировки</string>
+    <string name="vault_use_pin">Использовать 6-значный PIN</string>
+    <string name="vault_use_pattern">Использовать графический ключ</string>
+    <string name="vault_setup_pin">Установить PIN</string>
+    <string name="vault_confirm_pin">Введите ещё раз для подтверждения</string>
+    <string name="vault_enter_pin">Введите PIN</string>
+    <string name="vault_pin_mismatch">PIN-коды не совпадают, задайте заново</string>
+    <string name="vault_setup_pattern">Нарисуйте графический ключ</string>
+    <string name="vault_confirm_pattern">Нарисуйте ещё раз для подтверждения</string>
+    <string name="vault_enter_pattern">Нарисуйте графический ключ</string>
+    <string name="vault_pattern_mismatch">Ключи не совпадают, задайте заново</string>
+    <string name="vault_pattern_hint">Соедините минимум 4 точки</string>
+    <string name="vault_empty">Хранилище пусто</string>
+    <string name="remove_from_vault">Убрать из хранилища</string>
+    <string name="removed_from_vault">Убрано из хранилища</string>
+
     <!-- 预设分类（跟随应用语言） -->
     <string name="cat_electronics">Электроника</string>
     <string name="cat_digital_accessories">Цифровые аксессуары</string>

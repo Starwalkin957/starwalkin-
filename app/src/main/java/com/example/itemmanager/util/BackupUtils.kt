@@ -21,6 +21,7 @@ import java.util.zip.ZipOutputStream
 object BackupUtils {
 
     private const val JSON_NAME = "items.json"
+    private const val PRIVACY_NAME = "privacy.json"
     private const val IMAGE_DIR = "images/"
 
     /** 导出全部物品为备份 zip，失败返回 null */
@@ -57,7 +58,9 @@ object BackupUtils {
                     val obj = JSONObject()
                     obj.put("name", item.name)
                     obj.put("category", item.category)
+                    obj.put("brand", item.brand)
                     obj.put("description", item.description)
+                    obj.put("isPrivate", item.isPrivate)
                     obj.put("location", item.location)
                     obj.put("quantity", item.quantity)
                     item.purchaseDate?.let { obj.put("purchaseDate", it) }
@@ -76,6 +79,14 @@ object BackupUtils {
                 zos.putNextEntry(ZipEntry(JSON_NAME))
                 zos.write(jsonArray.toString().toByteArray(Charsets.UTF_8))
                 zos.closeEntry()
+
+                // 3. 写入加密箱密码配置 privacy.json，使隐私设置随备份同步
+                PrivacyManager.init(context)
+                zos.putNextEntry(ZipEntry(PRIVACY_NAME))
+                zos.write(
+                    PrivacyManager.exportConfig().toString().toByteArray(Charsets.UTF_8)
+                )
+                zos.closeEntry()
             }
             zipFile
         } catch (e: Exception) {
@@ -93,6 +104,7 @@ object BackupUtils {
         return try {
             val imageNameToPath = HashMap<String, String>()
             var jsonText: String? = null
+            var privacyText: String? = null
             var restoreCounter = 0L
 
             context.contentResolver.openInputStream(zipUri)?.use { input ->
@@ -114,6 +126,9 @@ object BackupUtils {
                             }
                             entry.name == JSON_NAME -> {
                                 jsonText = zis.bufferedReader(Charsets.UTF_8).readText()
+                            }
+                            entry.name == PRIVACY_NAME -> {
+                                privacyText = zis.bufferedReader(Charsets.UTF_8).readText()
                             }
                         }
                         zis.closeEntry()
@@ -143,7 +158,9 @@ object BackupUtils {
                 val item = ItemEntity(
                     name = obj.getString("name"),
                     category = obj.optString("category", "其他"),
+                    brand = obj.optString("brand", ""),
                     description = obj.optString("description", ""),
+                    isPrivate = obj.optBoolean("isPrivate", false),
                     location = obj.optString("location", ""),
                     quantity = obj.optInt("quantity", 1),
                     imagePaths = paths,
@@ -159,6 +176,12 @@ object BackupUtils {
                 )
                 repository.insertItem(item)
                 count++
+            }
+
+            // 恢复加密箱密码配置（隐私箱设置随备份同步）
+            privacyText?.let { text ->
+                PrivacyManager.init(context)
+                runCatching { PrivacyManager.importConfig(JSONObject(text)) }
             }
             count
         } catch (e: Exception) {

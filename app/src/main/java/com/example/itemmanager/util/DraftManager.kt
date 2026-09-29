@@ -10,6 +10,7 @@ import android.content.Context
 data class ItemDraft(
     val name: String = "",
     val category: String = "",
+    val brand: String = "",
     val description: String = "",
     val location: String = "",
     val quantity: String = "1",
@@ -36,6 +37,7 @@ object DraftManager {
     private const val PREFS_NAME = "item_draft_prefs"
     private const val KEY_NAME = "name"
     private const val KEY_CATEGORY = "category"
+    private const val KEY_BRAND = "brand"
     private const val KEY_DESCRIPTION = "description"
     private const val KEY_LOCATION = "location"
     private const val KEY_QUANTITY = "quantity"
@@ -56,6 +58,7 @@ object DraftManager {
         prefs(context).edit().apply {
             putString(KEY_NAME, draft.name)
             putString(KEY_CATEGORY, draft.category)
+            putString(KEY_BRAND, draft.brand)
             putString(KEY_DESCRIPTION, draft.description)
             putString(KEY_LOCATION, draft.location)
             putString(KEY_QUANTITY, draft.quantity)
@@ -81,6 +84,7 @@ object DraftManager {
         val draft = ItemDraft(
             name = p.getString(KEY_NAME, "") ?: "",
             category = p.getString(KEY_CATEGORY, "") ?: "",
+            brand = p.getString(KEY_BRAND, "") ?: "",
             description = p.getString(KEY_DESCRIPTION, "") ?: "",
             location = p.getString(KEY_LOCATION, "") ?: "",
             quantity = p.getString(KEY_QUANTITY, "1") ?: "1",

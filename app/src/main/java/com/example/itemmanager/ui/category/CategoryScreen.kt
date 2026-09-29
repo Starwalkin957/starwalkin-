@@ -69,8 +69,10 @@ fun CategoryScreen(
     // 当前展开的分类，null 表示显示分类网格
     var selectedCategory by remember { mutableStateOf<String?>(null) }
 
-    // 按分类分组
-    val grouped: Map<String, List<ItemEntity>> = allItems.groupBy { it.category }
+    // 按分类分组（排除加密箱内的隐私物品）
+    val grouped: Map<String, List<ItemEntity>> = allItems
+        .filter { !it.isPrivate }
+        .groupBy { it.category }
 
     Scaffold(
         topBar = {

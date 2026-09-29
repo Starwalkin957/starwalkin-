@@ -7,7 +7,7 @@
     <string name="tab_profile">Profil</string>
 
     <string name="my_items">Mes objets</string>
-    <string name="search_hint">Rechercher un nom ou une description…</string>
+    <string name="search_hint">Rechercher par nom, description ou marque…</string>
     <string name="export_share">Exporter et partager</string>
     <string name="import_restore">Importer une sauvegarde</string>
     <string name="item_count">%1$d objets au total</string>
@@ -164,6 +164,28 @@
     <string name="sort_expiry">Expiration (proche→loin)</string>
     <string name="share_borrower">Emprunteur : </string>
     <string name="share_expected_return">Retour prévu : </string>
+    <!-- Marque et coffre-fort -->
+    <string name="brand">Marque</string>
+    <string name="brand_hint">ex. Apple, Xiaomi, Nike</string>
+    <string name="move_to_vault">Déplacer dans le coffre</string>
+    <string name="privacy_vault">Coffre-fort</string>
+    <string name="privacy_vault_desc">Protégez vos objets privés avec un mot de passe</string>
+    <string name="vault_choose_type">Choisissez une méthode de déverrouillage</string>
+    <string name="vault_use_pin">Utiliser un code à 6 chiffres</string>
+    <string name="vault_use_pattern">Utiliser un schéma</string>
+    <string name="vault_setup_pin">Configurer le code</string>
+    <string name="vault_confirm_pin">Saisissez à nouveau pour confirmer</string>
+    <string name="vault_enter_pin">Saisissez votre code</string>
+    <string name="vault_pin_mismatch">Les codes ne correspondent pas, veuillez recommencer</string>
+    <string name="vault_setup_pattern">Dessinez un schéma</string>
+    <string name="vault_confirm_pattern">Dessinez à nouveau pour confirmer</string>
+    <string name="vault_enter_pattern">Dessinez votre schéma</string>
+    <string name="vault_pattern_mismatch">Les schémas ne correspondent pas, veuillez recommencer</string>
+    <string name="vault_pattern_hint">Reliez au moins 4 points</string>
+    <string name="vault_empty">Le coffre-fort est vide</string>
+    <string name="remove_from_vault">Retirer du coffre</string>
+    <string name="removed_from_vault">Retiré du coffre</string>
+
     <!-- 预设分类（跟随应用语言） -->
     <string name="cat_electronics">Électronique</string>
     <string name="cat_digital_accessories">Accessoires numériques</string>

@@ -18,8 +18,14 @@ data class ItemEntity(
     /** 物品分类（如：电子产品、衣物、书籍、食品等） */
     val category: String,
 
+    /** 品牌（如：Apple、小米、Nike 等），可作为搜索条件 */
+    val brand: String = "",
+
     /** 物品描述/备注 */
     val description: String = "",
+
+    /** 是否为隐私物品（移入加密箱，不在普通列表显示） */
+    val isPrivate: Boolean = false,
 
     /** 物品的多张图片本地路径（支持多张照片） */
     val imagePaths: List<String> = emptyList(),

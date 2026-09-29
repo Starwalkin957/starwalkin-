@@ -9,9 +9,9 @@ import androidx.room.TypeConverters
 /**
  * App 本地数据库
  * 使用 Room 持久化库，单例模式确保全局只有一个数据库连接
- * v3：新增价格、借出/归还字段
+ * v4：新增品牌 brand、隐私标记 isPrivate 字段
  */
-@Database(entities = [ItemEntity::class], version = 3, exportSchema = false)
+@Database(entities = [ItemEntity::class], version = 4, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class ItemDatabase : RoomDatabase() {
 
