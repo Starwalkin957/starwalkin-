@@ -209,8 +209,10 @@ fun AppNavigation() {
                     if (showBottomBar) {
                         NavigationBar(
                             containerColor = if (bgPath != null)
-                                Color.White.copy(alpha = 0.88f)
-                            else MaterialTheme.colorScheme.surface
+                                Color.White.copy(alpha = 0.95f)
+                            else MaterialTheme.colorScheme.surface,
+                            // 显式指定内容色为深色，避免半透明背景下自动计算出白色导致图标消失
+                            contentColor = Color(0xFF1E293B)
                         ) {
                             bottomTabs.forEach { tab ->
                                 val selected = currentRoute == tab.route
