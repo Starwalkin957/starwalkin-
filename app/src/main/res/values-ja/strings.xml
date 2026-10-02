@@ -88,6 +88,11 @@
     <string name="app_background">アプリ背景</string>
     <string name="choose_background">背景を選択</string>
     <string name="clear_background">背景をクリア</string>
+    <string name="background_gallery">背景ギャラリー</string>
+    <string name="add_background_images">画像を追加</string>
+    <string name="no_background">背景なし</string>
+    <string name="gallery_empty">背景画像がまだありません。下のボタンをタップして追加してください。</string>
+    <string name="delete_bg_image_confirm">この画像をギャラリーから削除しますか？</string>
     <string name="language">言語</string>
     <string name="export_cloud">バックアップをクラウドへ</string>
     <string name="export_cloud_desc">全アイテムをまとめてクラウドにアップロード</string>

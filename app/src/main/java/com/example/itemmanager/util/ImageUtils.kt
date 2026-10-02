@@ -62,9 +62,9 @@ object ImageUtils {
      */
     fun copyImageToInternalStorage(context: Context, uri: Uri): String? {
         return try {
-            // 生成带时间戳的唯一文件名
-            val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val fileName = "item_${timeStamp}.jpg"
+            // 用毫秒时间戳 + 随机数生成唯一文件名，
+            // 避免一次批量添加多张图片时因同一秒而文件名互相覆盖
+            val fileName = "item_${System.currentTimeMillis()}_${(0..999999).random()}.jpg"
 
             // App 私有目录下的 images 文件夹
             val directory = File(context.filesDir, "images")

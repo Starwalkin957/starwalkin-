@@ -87,6 +87,11 @@
     <string name="app_background">App Background</string>
     <string name="choose_background">Choose Background</string>
     <string name="clear_background">Clear Background</string>
+    <string name="background_gallery">Background Gallery</string>
+    <string name="add_background_images">Add Images</string>
+    <string name="no_background">No Background</string>
+    <string name="gallery_empty">No background images yet. Tap the button below to add.</string>
+    <string name="delete_bg_image_confirm">Remove this image from the gallery?</string>
     <string name="language">Language</string>
     <string name="export_cloud">Export Backup to Cloud</string>
     <string name="export_cloud_desc">Pack all items and upload to cloud drive</string>

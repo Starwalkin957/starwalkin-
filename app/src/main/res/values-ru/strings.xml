@@ -88,6 +88,11 @@
     <string name="app_background">Фон приложения</string>
     <string name="choose_background">Выбрать фон</string>
     <string name="clear_background">Убрать фон</string>
+    <string name="background_gallery">Галерея фонов</string>
+    <string name="add_background_images">Добавить изображения</string>
+    <string name="no_background">Без фона</string>
+    <string name="gallery_empty">Пока нет фоновых изображений. Нажмите кнопку ниже, чтобы добавить.</string>
+    <string name="delete_bg_image_confirm">Удалить это изображение из галереи?</string>
     <string name="language">Язык</string>
     <string name="export_cloud">Экспорт копии в облако</string>
     <string name="export_cloud_desc">Упаковать все вещи и загрузить в облако</string>

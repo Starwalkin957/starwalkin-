@@ -88,6 +88,11 @@
     <string name="app_background">Arrière-plan de l\'app</string>
     <string name="choose_background">Choisir l\'arrière-plan</string>
     <string name="clear_background">Effacer l\'arrière-plan</string>
+    <string name="background_gallery">Galerie de fonds</string>
+    <string name="add_background_images">Ajouter des images</string>
+    <string name="no_background">Aucun fond</string>
+    <string name="gallery_empty">Aucune image de fond pour le moment. Touchez le bouton ci-dessous pour ajouter.</string>
+    <string name="delete_bg_image_confirm">Supprimer cette image de la galerie ?</string>
     <string name="language">Langue</string>
     <string name="export_cloud">Exporter la sauvegarde vers le cloud</string>
     <string name="export_cloud_desc">Empaqueter tous les objets et envoyer sur le cloud</string>

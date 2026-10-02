@@ -95,6 +95,11 @@
     <string name="app_background">应用背景</string>
     <string name="choose_background">选择背景图</string>
     <string name="clear_background">清除背景</string>
+    <string name="background_gallery">背景图册</string>
+    <string name="add_background_images">添加图片</string>
+    <string name="no_background">无背景</string>
+    <string name="gallery_empty">还没有背景图，点击下方按钮添加</string>
+    <string name="delete_bg_image_confirm">确定要从图册删除这张图片吗？</string>
     <string name="language">语言</string>
     <string name="export_cloud">导出备份到云端</string>
     <string name="export_cloud_desc">打包全部物品，上传网盘保存</string>

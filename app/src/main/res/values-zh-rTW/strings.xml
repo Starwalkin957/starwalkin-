@@ -88,6 +88,11 @@
     <string name="app_background">應用背景</string>
     <string name="choose_background">選擇背景圖</string>
     <string name="clear_background">清除背景</string>
+    <string name="background_gallery">背景圖冊</string>
+    <string name="add_background_images">新增圖片</string>
+    <string name="no_background">無背景</string>
+    <string name="gallery_empty">尚無背景圖，點擊下方按鈕新增</string>
+    <string name="delete_bg_image_confirm">確定要從圖冊刪除這張圖片嗎？</string>
     <string name="language">語言</string>
     <string name="export_cloud">匯出備份到雲端</string>
     <string name="export_cloud_desc">打包全部物品，上傳網碟儲存</string>

@@ -3,19 +3,10 @@ package com.example.itemmanager.navigation
 import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Category
-import androidx.compose.material.icons.filled.Inventory2
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.darkColorScheme
@@ -29,33 +20,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.itemmanager.R
 import com.example.itemmanager.data.local.ItemDatabase
 import com.example.itemmanager.data.repository.ItemRepository
-import com.example.itemmanager.ui.category.CategoryScreen
+import com.example.itemmanager.ui.background.BackgroundGalleryScreen
 import com.example.itemmanager.ui.dashboard.DashboardViewModel
 import com.example.itemmanager.ui.detail.ItemDetailScreen
 import com.example.itemmanager.ui.detail.ItemDetailViewModel
 import com.example.itemmanager.ui.edit.ItemEditScreen
 import com.example.itemmanager.ui.edit.ItemEditViewModel
-import com.example.itemmanager.ui.list.ItemListScreen
+import com.example.itemmanager.ui.home.HomeScreen
 import com.example.itemmanager.ui.list.ItemListViewModel
 import com.example.itemmanager.ui.onboarding.OnboardingScreen
 import com.example.itemmanager.ui.privacy.PrivacyScreen
 import com.example.itemmanager.ui.privacy.PrivacyViewModel
-import com.example.itemmanager.ui.profile.ProfileScreen
-import com.example.itemmanager.ui.stats.StatsScreen
 import com.example.itemmanager.util.BackgroundManager
 import com.example.itemmanager.util.ExpiryReminder
 import com.example.itemmanager.util.OnboardingManager
@@ -67,36 +53,19 @@ import java.io.File
 /**
  * 应用导航路由定义
  * - onboarding：新用户引导（可跳过）
- * - tab_*：底部导航的四个主 Tab（物品=主页，分类/统计/我的=副页）
- * - item_detail / item_edit：覆盖在 Tab 之上的详情、编辑页
+ * - home：主容器，内部用 HorizontalPager 承载四个 Tab，可左右滑动切换
+ * - item_detail / item_edit：覆盖在主页之上的详情、编辑页
+ * - privacy：加密箱；background_gallery：背景图册选择页
  * 详情/编辑不使用导航参数，通过全局 SelectedItemHolder 传递物品 ID
  */
 object Routes {
     const val ONBOARDING = "onboarding"
-    const val TAB_ITEMS = "tab_items"
-    const val TAB_CATEGORY = "tab_category"
-    const val TAB_STATS = "tab_stats"
-    const val TAB_PROFILE = "tab_profile"
+    const val HOME = "home"
     const val ITEM_DETAIL = "item_detail"
     const val ITEM_EDIT = "item_edit"
     const val PRIVACY = "privacy"
+    const val BACKGROUND_GALLERY = "background_gallery"
 }
-
-/**
- * 底部导航 Tab 数据（label 使用字符串资源以支持多语言）
- */
-private data class BottomTab(
-    val route: String,
-    val labelRes: Int,
-    val icon: ImageVector
-)
-
-private val bottomTabs = listOf(
-    BottomTab(Routes.TAB_ITEMS, R.string.tab_items, Icons.Default.Inventory2),
-    BottomTab(Routes.TAB_CATEGORY, R.string.tab_category, Icons.Default.Category),
-    BottomTab(Routes.TAB_STATS, R.string.tab_stats, Icons.Default.BarChart),
-    BottomTab(Routes.TAB_PROFILE, R.string.tab_profile, Icons.Default.Person)
-)
 
 /**
  * 预设分类示例（字符串资源 id），供添加物品时快速选择。
@@ -125,7 +94,7 @@ val CategoryPresetRes = listOf(
 )
 
 /**
- * 应用主导航图：底部导航 + 首次引导 + 到期提醒 + 动态主题/背景
+ * 应用主导航图：主容器（可滑动切 Tab）+ 首次引导 + 到期提醒 + 动态主题/背景
  */
 @Composable
 fun AppNavigation() {
@@ -153,9 +122,12 @@ fun AppNavigation() {
     val database = ItemDatabase.getDatabase(context)
     val repository = ItemRepository(database.itemDao())
 
-    // 副页共享的 ViewModel，绑定 Activity 级别，分类/统计/我的共用同一份数据
+    // Activity 级共享 ViewModel：主页列表与副页共用同一份数据
     val dashboardViewModel: DashboardViewModel = viewModel(
         factory = DashboardViewModel.provideFactory(application, repository)
+    )
+    val listViewModel: ItemListViewModel = viewModel(
+        factory = ItemListViewModel.provideFactory(application, repository)
     )
 
     // 到期提醒：本次启动只检查一次，数据加载后扫描
@@ -173,11 +145,6 @@ fun AppNavigation() {
 
     // 记录引导页是否由"我的"页触发
     var onboardingFromProfile by remember { mutableStateOf(false) }
-
-    // 当前路由，用于决定是否显示底部导航栏
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    val showBottomBar = currentRoute in bottomTabs.map { it.route }
 
     MaterialTheme(colorScheme = appColorScheme) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -202,157 +169,106 @@ fun AppNavigation() {
                 )
             }
 
-            Scaffold(
-                containerColor = if (bgPath != null) Color.Transparent
-                else MaterialTheme.colorScheme.background,
-                bottomBar = {
-                    if (showBottomBar) {
-                        NavigationBar(
-                            containerColor = if (bgPath != null)
-                                Color.White.copy(alpha = 0.95f)
-                            else MaterialTheme.colorScheme.surface,
-                            // 显式指定内容色为深色，避免半透明背景下自动计算出白色导致图标消失
-                            contentColor = Color(0xFF1E293B)
-                        ) {
-                            bottomTabs.forEach { tab ->
-                                val selected = currentRoute == tab.route
-                                NavigationBarItem(
-                                    selected = selected,
-                                    onClick = {
-                                        navController.navigate(tab.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
-                                    },
-                                    icon = {
-                                        Icon(tab.icon, contentDescription = null)
-                                    },
-                                    label = { Text(stringResource(tab.labelRes)) }
-                                )
-                            }
-                        }
-                    }
-                }
-            ) { innerPadding ->
-                NavHost(
-                    navController = navController,
-                    startDestination = if (OnboardingManager.shouldShow(context))
-                        Routes.ONBOARDING else Routes.TAB_ITEMS,
-                    modifier = Modifier.padding(innerPadding)
-                ) {
-                    // ---- 新用户引导页 ----
-                    composable(Routes.ONBOARDING) {
-                        OnboardingScreen(
-                            onFinished = {
-                                OnboardingManager.setCompleted(context)
-                                if (onboardingFromProfile) {
-                                    onboardingFromProfile = false
-                                    navController.popBackStack()
-                                } else {
-                                    navController.navigate(Routes.TAB_ITEMS) {
-                                        popUpTo(Routes.ONBOARDING) { inclusive = true }
-                                    }
+            NavHost(
+                navController = navController,
+                startDestination = if (OnboardingManager.shouldShow(context))
+                    Routes.ONBOARDING else Routes.HOME,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                // ---- 新用户引导页 ----
+                composable(Routes.ONBOARDING) {
+                    OnboardingScreen(
+                        onFinished = {
+                            OnboardingManager.setCompleted(context)
+                            if (onboardingFromProfile) {
+                                onboardingFromProfile = false
+                                navController.popBackStack()
+                            } else {
+                                navController.navigate(Routes.HOME) {
+                                    popUpTo(Routes.ONBOARDING) { inclusive = true }
                                 }
                             }
-                        )
-                    }
+                        }
+                    )
+                }
 
-                    // ---- Tab 1：物品（主页）----
-                    composable(Routes.TAB_ITEMS) { backStackEntry ->
-                        val vm: ItemListViewModel = viewModel(
-                            viewModelStoreOwner = backStackEntry,
-                            factory = ItemListViewModel.provideFactory(application, repository)
-                        )
-                        ItemListScreen(
-                            viewModel = vm,
-                            onAddClick = {
-                                SelectedItemHolder.clear()
-                                navController.navigate(Routes.ITEM_EDIT)
-                            },
-                            onItemClick = { itemId ->
-                                SelectedItemHolder.select(itemId)
-                                navController.navigate(Routes.ITEM_DETAIL)
-                            }
-                        )
-                    }
+                // ---- 主容器：四个 Tab，可左右滑动切换 ----
+                composable(Routes.HOME) {
+                    HomeScreen(
+                        listViewModel = listViewModel,
+                        dashboardViewModel = dashboardViewModel,
+                        backgroundPath = bgPath,
+                        onAddClick = {
+                            SelectedItemHolder.clear()
+                            navController.navigate(Routes.ITEM_EDIT)
+                        },
+                        onItemClick = { itemId ->
+                            SelectedItemHolder.select(itemId)
+                            navController.navigate(Routes.ITEM_DETAIL)
+                        },
+                        onShowOnboarding = {
+                            onboardingFromProfile = true
+                            navController.navigate(Routes.ONBOARDING)
+                        },
+                        onBackgroundGallery = {
+                            navController.navigate(Routes.BACKGROUND_GALLERY)
+                        },
+                        onPrivacy = {
+                            navController.navigate(Routes.PRIVACY)
+                        }
+                    )
+                }
 
-                    // ---- Tab 2：分类（副页）----
-                    composable(Routes.TAB_CATEGORY) {
-                        CategoryScreen(
-                            dashboardViewModel = dashboardViewModel,
-                            onItemClick = { itemId ->
-                                SelectedItemHolder.select(itemId)
-                                navController.navigate(Routes.ITEM_DETAIL)
-                            }
-                        )
-                    }
+                // ---- 物品详情页（覆盖页，无底部栏）----
+                composable(Routes.ITEM_DETAIL) { backStackEntry ->
+                    val vm: ItemDetailViewModel = viewModel(
+                        viewModelStoreOwner = backStackEntry,
+                        factory = ItemDetailViewModel.provideFactory(repository)
+                    )
+                    ItemDetailScreen(
+                        viewModel = vm,
+                        onBack = { navController.popBackStack() },
+                        onEdit = { itemId ->
+                            SelectedItemHolder.select(itemId)
+                            navController.navigate(Routes.ITEM_EDIT)
+                        }
+                    )
+                }
 
-                    // ---- Tab 3：统计（副页）----
-                    composable(Routes.TAB_STATS) {
-                        StatsScreen(dashboardViewModel = dashboardViewModel)
-                    }
+                // ---- 添加/编辑页（覆盖页，无底部栏）----
+                composable(Routes.ITEM_EDIT) { backStackEntry ->
+                    val vm: ItemEditViewModel = viewModel(
+                        viewModelStoreOwner = backStackEntry,
+                        factory = ItemEditViewModel.provideFactory(application, repository)
+                    )
+                    ItemEditScreen(
+                        viewModel = vm,
+                        onBack = { navController.popBackStack() },
+                        onSaveComplete = { navController.popBackStack() }
+                    )
+                }
 
-                    // ---- Tab 4：我的（副页）----
-                    composable(Routes.TAB_PROFILE) {
-                        ProfileScreen(
-                            dashboardViewModel = dashboardViewModel,
-                            onShowOnboarding = {
-                                onboardingFromProfile = true
-                                navController.navigate(Routes.ONBOARDING)
-                            },
-                            onPrivacy = {
-                                navController.navigate(Routes.PRIVACY)
-                            }
-                        )
-                    }
+                // ---- 加密箱（覆盖页，无底部栏）----
+                composable(Routes.PRIVACY) { backStackEntry ->
+                    val vm: PrivacyViewModel = viewModel(
+                        viewModelStoreOwner = backStackEntry,
+                        factory = PrivacyViewModel.provideFactory(application, repository)
+                    )
+                    PrivacyScreen(
+                        viewModel = vm,
+                        onBack = { navController.popBackStack() },
+                        onItemClick = { itemId ->
+                            SelectedItemHolder.select(itemId)
+                            navController.navigate(Routes.ITEM_DETAIL)
+                        }
+                    )
+                }
 
-                    // ---- 物品详情页（覆盖页，无底部栏）----
-                    composable(Routes.ITEM_DETAIL) { backStackEntry ->
-                        val vm: ItemDetailViewModel = viewModel(
-                            viewModelStoreOwner = backStackEntry,
-                            factory = ItemDetailViewModel.provideFactory(repository)
-                        )
-                        ItemDetailScreen(
-                            viewModel = vm,
-                            onBack = { navController.popBackStack() },
-                            onEdit = { itemId ->
-                                SelectedItemHolder.select(itemId)
-                                navController.navigate(Routes.ITEM_EDIT)
-                            }
-                        )
-                    }
-
-                    // ---- 添加/编辑页（覆盖页，无底部栏）----
-                    composable(Routes.ITEM_EDIT) { backStackEntry ->
-                        val vm: ItemEditViewModel = viewModel(
-                            viewModelStoreOwner = backStackEntry,
-                            factory = ItemEditViewModel.provideFactory(application, repository)
-                        )
-                        ItemEditScreen(
-                            viewModel = vm,
-                            onBack = { navController.popBackStack() },
-                            onSaveComplete = { navController.popBackStack() }
-                        )
-                    }
-
-                    // ---- 加密箱（覆盖页，无底部栏）----
-                    composable(Routes.PRIVACY) { backStackEntry ->
-                        val vm: PrivacyViewModel = viewModel(
-                            viewModelStoreOwner = backStackEntry,
-                            factory = PrivacyViewModel.provideFactory(application, repository)
-                        )
-                        PrivacyScreen(
-                            viewModel = vm,
-                            onBack = { navController.popBackStack() },
-                            onItemClick = { itemId ->
-                                SelectedItemHolder.select(itemId)
-                                navController.navigate(Routes.ITEM_DETAIL)
-                            }
-                        )
-                    }
+                // ---- 背景图册选择页（覆盖页，无底部栏）----
+                composable(Routes.BACKGROUND_GALLERY) {
+                    BackgroundGalleryScreen(
+                        onBack = { navController.popBackStack() }
+                    )
                 }
             }
 
@@ -363,7 +279,7 @@ fun AppNavigation() {
                     onDismissRequest = { reminders = emptyList() },
                     title = { Text(stringResource(R.string.reminder_title)) },
                     text = {
-                        androidx.compose.foundation.layout.Column {
+                        Column {
                             currentReminders.forEach { r ->
                                 val msg = when (r.kind) {
                                     ExpiryReminder.Kind.EXPIRY_TOMORROW ->

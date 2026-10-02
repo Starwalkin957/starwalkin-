@@ -88,6 +88,11 @@
     <string name="app_background">앱 배경</string>
     <string name="choose_background">배경 선택</string>
     <string name="clear_background">배경 지우기</string>
+    <string name="background_gallery">배경 갤러리</string>
+    <string name="add_background_images">사진 추가</string>
+    <string name="no_background">배경 없음</string>
+    <string name="gallery_empty">아직 배경 이미지가 없습니다. 아래 버튼을 눌러 추가하세요.</string>
+    <string name="delete_bg_image_confirm">갤러리에서 이 이미지를 삭제할까요?</string>
     <string name="language">언어</string>
     <string name="export_cloud">백업을 클라우드로 내보내기</string>
     <string name="export_cloud_desc">모든 물품을 묶어 클라우드에 업로드</string>

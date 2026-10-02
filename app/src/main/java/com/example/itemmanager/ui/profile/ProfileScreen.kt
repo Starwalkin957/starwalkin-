@@ -62,13 +62,9 @@ import androidx.compose.ui.unit.dp
 import com.example.itemmanager.R
 import com.example.itemmanager.ui.dashboard.DashboardViewModel
 import com.example.itemmanager.ui.theme.TextSecondary
-import com.example.itemmanager.util.BackgroundManager
-import com.example.itemmanager.util.ImageUtils
 import com.example.itemmanager.util.LanguageManager
 import com.example.itemmanager.util.ThemeManager
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * 我的页（副页）
@@ -79,13 +75,13 @@ import kotlinx.coroutines.withContext
 fun ProfileScreen(
     dashboardViewModel: DashboardViewModel,
     onShowOnboarding: () -> Unit,
+    onBackgroundGallery: () -> Unit,
     onPrivacy: () -> Unit
 ) {
     val items by dashboardViewModel.items.collectAsState()
     val message by dashboardViewModel.message.collectAsState()
     val themeId by ThemeManager.themeId.collectAsState()
     val customColor by ThemeManager.customColor.collectAsState()
-    val backgroundPath by BackgroundManager.backgroundPath.collectAsState()
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -100,21 +96,8 @@ fun ProfileScreen(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri -> uri?.let { dashboardViewModel.importFrom(it) } }
 
-    // 选择背景图
-    val backgroundLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri ->
-        uri?.let {
-            scope.launch {
-                val path = withContext(Dispatchers.IO) {
-                    ImageUtils.copyImageToInternalStorage(context, it)
-                }
-                if (path != null) withContext(Dispatchers.IO) {
-                    BackgroundManager.setBackground(context, path)
-                }
-            }
-        }
-    }
+    // 选择背景图：进入"背景图册"页面，可添加多张、挑选或清除，
+    // 由 onBackgroundGallery 回调导航，不再直接打开系统选图后立即应用。
 
     LaunchedEffect(message) {
         message?.let {
@@ -228,21 +211,12 @@ fun ProfileScreen(
                 elevation = CardDefaults.cardElevation(2.dp)
             ) {
                 Column {
-                    val hasBackground = backgroundPath != null
                     ProfileItem(
                         icon = Icons.Default.Wallpaper,
                         iconTint = Color(0xFF8B5CF6),
                         title = stringResource(R.string.app_background),
-                        subtitle = if (hasBackground) stringResource(R.string.clear_background)
-                        else stringResource(R.string.choose_background),
-                        onClick = {
-                            if (hasBackground) scope.launch {
-                                withContext(Dispatchers.IO) {
-                                    BackgroundManager.clearBackground(context)
-                                }
-                            }
-                            else backgroundLauncher.launch("image/*")
-                        }
+                        subtitle = stringResource(R.string.choose_background),
+                        onClick = onBackgroundGallery
                     )
                     ProfileDivider()
                     val currentLangName = LanguageManager.languages
