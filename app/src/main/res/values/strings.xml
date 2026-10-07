@@ -101,7 +101,7 @@
     <string name="gallery_empty">还没有背景图，点击下方按钮添加</string>
     <string name="delete_bg_image_confirm">确定要从图册删除这张图片吗？</string>
     <string name="language">语言</string>
-    <string name="export_cloud">导出备份到云端</string>
+    <string name="export_cloud">导出备份</string>
     <string name="export_cloud_desc">打包全部物品，上传网盘保存</string>
     <string name="import_backup">导入备份恢复</string>
     <string name="import_backup_desc">从备份文件恢复物品</string>

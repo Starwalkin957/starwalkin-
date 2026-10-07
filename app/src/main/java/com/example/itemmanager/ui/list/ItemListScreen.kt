@@ -114,7 +114,7 @@ fun ItemListScreen(
                     Text(
                         text = stringResource(R.string.my_items),
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 actions = {
@@ -124,7 +124,7 @@ fun ItemListScreen(
                             Icon(
                                 Icons.Default.MoreVert,
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = MaterialTheme.colorScheme.onPrimary
                             )
                         }
                         DropdownMenu(
@@ -164,7 +164,7 @@ fun ItemListScreen(
                 onClick = onAddClick,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_item), tint = Color.White)
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_item), tint = MaterialTheme.colorScheme.onPrimary)
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }

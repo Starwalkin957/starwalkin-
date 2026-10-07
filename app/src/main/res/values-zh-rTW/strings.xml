@@ -94,7 +94,7 @@
     <string name="gallery_empty">尚無背景圖，點擊下方按鈕新增</string>
     <string name="delete_bg_image_confirm">確定要從圖冊刪除這張圖片嗎？</string>
     <string name="language">語言</string>
-    <string name="export_cloud">匯出備份到雲端</string>
+    <string name="export_cloud">匯出備份</string>
     <string name="export_cloud_desc">打包全部物品，上傳網碟儲存</string>
     <string name="import_backup">匯入備份還原</string>
     <string name="import_backup_desc">從備份檔案還原物品</string>

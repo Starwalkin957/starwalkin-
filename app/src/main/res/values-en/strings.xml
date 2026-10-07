@@ -93,7 +93,7 @@
     <string name="gallery_empty">No background images yet. Tap the button below to add.</string>
     <string name="delete_bg_image_confirm">Remove this image from the gallery?</string>
     <string name="language">Language</string>
-    <string name="export_cloud">Export Backup to Cloud</string>
+    <string name="export_cloud">Export Backup</string>
     <string name="export_cloud_desc">Pack all items and upload to cloud drive</string>
     <string name="import_backup">Import Backup</string>
     <string name="import_backup_desc">Restore items from a backup file</string>

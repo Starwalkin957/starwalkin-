@@ -71,7 +71,7 @@ fun StatsScreen(dashboardViewModel: DashboardViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.stats), fontWeight = FontWeight.Bold, color = Color.White) },
+                title = { Text(stringResource(R.string.stats), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )

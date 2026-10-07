@@ -97,22 +97,22 @@ fun ItemDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.item_detail), fontWeight = FontWeight.Bold, color = Color.White) },
+                title = { Text(stringResource(R.string.item_detail), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, null, tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, null, tint = MaterialTheme.colorScheme.onPrimary)
                     }
                 },
                 actions = {
                     if (item != null) {
                         IconButton(onClick = { ShareUtils.shareItem(context, item!!) }) {
-                            Icon(Icons.Default.Share, null, tint = Color.White)
+                            Icon(Icons.Default.Share, null, tint = MaterialTheme.colorScheme.onPrimary)
                         }
                         IconButton(onClick = { onEdit(item!!.id) }) {
-                            Icon(Icons.Default.Edit, null, tint = Color.White)
+                            Icon(Icons.Default.Edit, null, tint = MaterialTheme.colorScheme.onPrimary)
                         }
                         IconButton(onClick = { showDeleteDialog = true }) {
-                            Icon(Icons.Default.Delete, stringResource(R.string.delete), tint = Color.White)
+                            Icon(Icons.Default.Delete, stringResource(R.string.delete), tint = MaterialTheme.colorScheme.onPrimary)
                         }
                     }
                 },

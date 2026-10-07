@@ -94,7 +94,7 @@
     <string name="gallery_empty">背景画像がまだありません。下のボタンをタップして追加してください。</string>
     <string name="delete_bg_image_confirm">この画像をギャラリーから削除しますか？</string>
     <string name="language">言語</string>
-    <string name="export_cloud">バックアップをクラウドへ</string>
+    <string name="export_cloud">バックアップをエクスポート</string>
     <string name="export_cloud_desc">全アイテムをまとめてクラウドにアップロード</string>
     <string name="import_backup">バックアップを取り込む</string>
     <string name="import_backup_desc">バックアップファイルから復元</string>

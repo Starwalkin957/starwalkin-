@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -380,18 +381,25 @@ private fun buildAppColorScheme(themeId: Int, customColor: Color) = when (themeI
  */
 private fun buildCustomColorScheme(base: Color) = lightColorScheme(
     primary = base,
-    onPrimary = Color.White,
+    onPrimary = onColorFor(base),
     primaryContainer = base.copy(alpha = 0.16f),
     onPrimaryContainer = base,
     secondary = base,
-    onSecondary = Color.White,
+    onSecondary = onColorFor(base),
     secondaryContainer = base.copy(alpha = 0.11f),
     onSecondaryContainer = base,
     tertiary = base,
-    onTertiary = Color.White,
+    onTertiary = onColorFor(base),
     background = Color(0xFFF8FAFC),
     onBackground = Color(0xFF1E293B),
     surface = Color.White,
     onSurface = Color(0xFF1E293B),
     error = Color(0xFFEF4444)
 )
+
+/**
+ * 根据背景色亮度返回可读前景色：亮底用深色文字，暗底用白色文字，
+ * 保证自定义主题下顶部栏、按钮等处的对比度。
+ */
+private fun onColorFor(bg: Color): Color =
+    if (bg.luminance() > 0.5f) Color(0xFF1E293B) else Color.White

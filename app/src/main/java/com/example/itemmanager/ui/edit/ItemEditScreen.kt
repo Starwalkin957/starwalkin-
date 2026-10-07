@@ -147,12 +147,12 @@ fun ItemEditScreen(
                     Text(
                         if (viewModel.isEditing) stringResource(R.string.edit_item)
                         else stringResource(R.string.add_item),
-                        fontWeight = FontWeight.Bold, color = Color.White
+                        fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, null, tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, null, tint = MaterialTheme.colorScheme.onPrimary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

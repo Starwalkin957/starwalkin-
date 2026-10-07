@@ -94,7 +94,7 @@
     <string name="gallery_empty">Aún no hay imágenes de fondo. Toca el botón de abajo para añadir.</string>
     <string name="delete_bg_image_confirm">¿Eliminar esta imagen de la galería?</string>
     <string name="language">Idioma</string>
-    <string name="export_cloud">Exportar copia a la nube</string>
+    <string name="export_cloud">Exportar copia</string>
     <string name="export_cloud_desc">Empaquetar todos los objetos y subirlos a la nube</string>
     <string name="import_backup">Importar copia de seguridad</string>
     <string name="import_backup_desc">Restaurar objetos desde un archivo de copia</string>

@@ -112,7 +112,7 @@ fun ProfileScreen(
                 title = {
                     Text(
                         stringResource(R.string.profile),
-                        fontWeight = FontWeight.Bold, color = Color.White
+                        fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

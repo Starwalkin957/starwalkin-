@@ -94,7 +94,7 @@
     <string name="gallery_empty">Noch keine Hintergrundbilder. Tippe auf die Schaltfläche unten, um hinzuzufügen.</string>
     <string name="delete_bg_image_confirm">Dieses Bild aus der Galerie löschen?</string>
     <string name="language">Sprache</string>
-    <string name="export_cloud">Backup in die Cloud exportieren</string>
+    <string name="export_cloud">Backup exportieren</string>
     <string name="export_cloud_desc">Alle Gegenstände packen und in die Cloud hochladen</string>
     <string name="import_backup">Backup importieren</string>
     <string name="import_backup_desc">Gegenstände aus einer Backup-Datei wiederherstellen</string>

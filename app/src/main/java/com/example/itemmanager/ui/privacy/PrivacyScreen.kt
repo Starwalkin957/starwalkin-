@@ -118,12 +118,12 @@ fun PrivacyScreen(
                 title = {
                     Text(
                         stringResource(R.string.privacy_vault),
-                        fontWeight = FontWeight.Bold, color = Color.White
+                        fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.Lock, null, tint = Color.White)
+                        Icon(Icons.Default.Lock, null, tint = MaterialTheme.colorScheme.onPrimary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -313,12 +313,12 @@ private fun VaultContent(
                 title = {
                     Text(
                         stringResource(R.string.privacy_vault),
-                        fontWeight = FontWeight.Bold, color = Color.White
+                        fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.LockOpen, null, tint = Color.White)
+                        Icon(Icons.Default.LockOpen, null, tint = MaterialTheme.colorScheme.onPrimary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

@@ -105,14 +105,14 @@ fun BackgroundGalleryScreen(
                 title = {
                     Text(
                         stringResource(R.string.background_gallery),
-                        fontWeight = FontWeight.Bold, color = Color.White
+                        fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null, tint = Color.White
+                            contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
@@ -127,7 +127,7 @@ fun BackgroundGalleryScreen(
                         Icon(
                             Icons.Default.AddCircle,
                             contentDescription = stringResource(R.string.add_background_images),
-                            tint = Color.White,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier.size(28.dp)
                         )
                     }

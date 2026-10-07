@@ -94,7 +94,7 @@
     <string name="gallery_empty">Пока нет фоновых изображений. Нажмите кнопку ниже, чтобы добавить.</string>
     <string name="delete_bg_image_confirm">Удалить это изображение из галереи?</string>
     <string name="language">Язык</string>
-    <string name="export_cloud">Экспорт копии в облако</string>
+    <string name="export_cloud">Экспорт копии</string>
     <string name="export_cloud_desc">Упаковать все вещи и загрузить в облако</string>
     <string name="import_backup">Импорт резервной копии</string>
     <string name="import_backup_desc">Восстановить вещи из файла копии</string>

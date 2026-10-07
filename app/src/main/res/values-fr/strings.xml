@@ -94,7 +94,7 @@
     <string name="gallery_empty">Aucune image de fond pour le moment. Touchez le bouton ci-dessous pour ajouter.</string>
     <string name="delete_bg_image_confirm">Supprimer cette image de la galerie ?</string>
     <string name="language">Langue</string>
-    <string name="export_cloud">Exporter la sauvegarde vers le cloud</string>
+    <string name="export_cloud">Exporter la sauvegarde</string>
     <string name="export_cloud_desc">Empaqueter tous les objets et envoyer sur le cloud</string>
     <string name="import_backup">Importer une sauvegarde</string>
     <string name="import_backup_desc">Restaurer les objets depuis un fichier de sauvegarde</string>
